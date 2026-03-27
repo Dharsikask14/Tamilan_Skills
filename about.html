@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronous | Our Heritage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Core Theme Variables --- */
+        :root { --bg-color: #0a0a0a; --surface-color: #1a1a1a; --text-main: #f4f4f4; --text-muted: #a0a0a0; --accent-gold: #c5a059; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* --- Standard Typography --- */
+        body { 
+            font-family: 'Lato', sans-serif; 
+            font-size: 0.95rem; /* Synced base font */
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            line-height: 1.6; 
+        }
+        h1, h2, h3, h4 { 
+            font-family: 'Playfair Display', serif; 
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        a { text-decoration: none; color: inherit; }
+        
+        /* --- Navigation (Synced with Cart Page) --- */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(10, 10, 10, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #222; }
+        
+        /* Logo: Reduced boldness (400) and aligned size (1.6rem) */
+        .logo { 
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem; 
+            font-weight: 400; 
+            color: var(--accent-gold); 
+            letter-spacing: 2px;
+        }
+
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        
+        /* Nav Links: Reduced size and sentence case */
+        .nav-links a { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            transition: color 0.3s; 
+            letter-spacing: 0.5px; 
+        }
+        .nav-links a:hover { color: var(--accent-gold); }
+        
+        .nav-icons { display: flex; align-items: center; gap: 20px; }
+        .nav-icons > a:not(.cart-link) { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            letter-spacing: 0.5px; 
+            transition: color 0.3s; 
+        }
+        .nav-icons > a:not(.cart-link):hover { color: var(--accent-gold); }
+        
+        /* Appealing Cart Link */
+        .cart-link {
+            background: linear-gradient(135deg, var(--accent-gold), #dfb668);
+            color: var(--bg-color) !important;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+            transition: all 0.3s ease;
+        }
+        .cart-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(197, 160, 89, 0.6);
+        }
+        .cart-badge {
+            background: var(--bg-color);
+            color: var(--accent-gold);
+            padding: 2px 7px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* --- Mobile Menu --- */
+        .hamburger { display: none; font-size: 1.5rem; cursor: pointer; color: var(--accent-gold); user-select: none; }
+        @media (max-width: 768px) {
+            .hamburger { display: block; order: 1; } .nav-icons { order: 2; } .logo { order: 0; }
+            #nav-menu { position: absolute; top: 100%; left: 0; width: 100%; background: rgba(10, 10, 10, 0.98); border-bottom: 1px solid #333; display: none; flex-direction: column; padding: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.5); }
+            #nav-menu.active { display: flex; } .nav-links { flex-direction: column; align-items: center; gap: 20px; }
+        }
+
+        /* --- Standard Layout Classes --- */
+        .container { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: var(--accent-gold); }
+        .mb-20 { margin-bottom: 20px; } .mb-60 { margin-bottom: 60px; } .mt-60 { margin-top: 60px; }
+        .text-center { text-align: center; } .text-muted { color: var(--text-muted); } .text-gold { color: var(--accent-gold); }
+
+        /* --- 1. Minimal Intro --- */
+        .intro-text { max-width: 800px; margin: 0 auto 50px; font-size: 1.2rem; line-height: 1.8; color: var(--text-muted); }
+        .hero-image { width: 100%; height: 500px; object-fit: cover; border: 1px solid #333; border-radius: 4px; filter: grayscale(20%); }
+
+        /* --- 2. Visual Grid (Lookbook Style but matching site borders) --- */
+        .visual-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px; }
+        .visual-card { background: var(--surface-color); border: 1px solid #222; padding: 15px; border-radius: 4px; }
+        .visual-card img { width: 100%; height: 350px; object-fit: cover; border: 1px solid #333; margin-bottom: 15px; }
+        .visual-card h3 { font-size: 1.4rem; margin-bottom: 10px; color: var(--text-main); }
+
+        /* --- 3. Heritage Timeline (Using standard site cards) --- */
+        .timeline-grid { display: grid; grid-template-columns: 1fr; gap: 30px; max-width: 800px; margin: 0 auto; border-left: 2px solid #333; padding-left: 30px; }
+        .timeline-card { background: var(--surface-color); border: 1px solid #222; padding: 30px; border-radius: 4px; position: relative; transition: border-color 0.3s; }
+        .timeline-card:hover { border-color: var(--accent-gold); }
+        
+        /* The dot connecting the card to the line */
+        .timeline-card::before { content: ''; position: absolute; left: -37px; top: 35px; width: 12px; height: 12px; background: var(--accent-gold); border-radius: 50%; box-shadow: 0 0 10px rgba(197, 160, 89, 0.5); }
+        
+        .timeline-year { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent-gold); margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo"><a href="index.html">CHRONOUS</a></div>
+        <div class="hamburger" id="hamburger-menu">☰</div>
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div class="nav-icons">
+            <a href="profile.html"><span>Profile</span></a>
+            <a href="cart.html" class="cart-link">
+                Cart <span class="cart-badge" id="nav-cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <h1 class="section-title">The Chronous Philosophy</h1>
+        <div class="intro-text text-center">
+            <p class="mb-20"><span class="text-gold" style="font-size: 1.5rem; font-family: 'Playfair Display', serif;">"A watch is more than a tool; it is a legacy worn on the wrist."</span></p>
+            <p>Founded on the principles of absolute precision and timeless design, Chronous represents the pinnacle of modern horology curation. We partner exclusively with distinguished Swiss houses and master independent watchmakers to bring you a collection that is completely unparalleled.</p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?q=80&w=2000&auto=format&fit=crop" alt="Watch mechanism macro" class="hero-image mb-60">
+
+        <h2 class="section-title mt-60">The Art of Watchmaking</h2>
+        <div class="visual-grid">
+            <div class="visual-card">
+                <img src="https://images.unsplash.com/photo-1635334659424-8743126388e4?q=80&w=1000&auto=format&fit=crop" alt="Craftsmanship">
+                <h3>Master Craftsmanship</h3>
+                <p class="text-muted">Every piece in our vault is selected for its extraordinary attention to micro-mechanical detail.</p>
+            </div>
+            <div class="visual-card">
+                <img src="https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?q=80&w=1000&auto=format&fit=crop" alt="Design">
+                <h3>Timeless Design</h3>
+                <p class="text-muted">From minimalist dials to complex tourbillons, we celebrate horological artistry in all its forms.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title mt-60">Our Heritage</h2>
+        <div class="timeline-grid mb-60">
+            <div class="timeline-card">
+                <div class="timeline-year">2015</div>
+                <h3 class="mb-20 text-main">The Inception</h3>
+                <p class="text-muted">Chronous was founded with a singular vision: to bridge the gap between master horologists and true enthusiasts seeking guaranteed authenticity.</p>
+            </div>
+            <div class="timeline-card">
+                <div class="timeline-year">2018</div>
+                <h3 class="mb-20 text-main">The First Vault</h3>
+                <p class="text-muted">Opening our inaugural boutique and establishing direct partnerships with premier Maisons, ensuring every timepiece is directly sourced.</p>
+            </div>
+            <div class="timeline-card">
+                <div class="timeline-year">2022</div>
+                <h3 class="mb-20 text-main">Global Curation</h3>
+                <p class="text-muted">Expanding our collection to include top Indian wearables and highly sought-after international fashion brands alongside our luxury staples.</p>
+            </div>
+            <div class="timeline-card">
+                <div class="timeline-year">2026</div>
+                <h3 class="mb-20 text-main">The Modern Era</h3>
+                <p class="text-muted">Launching the unified Chronous digital platform, providing collectors worldwide with seamless access to the finest watches.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- Shared Cart & Mobile Menu Logic ---
+        let cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+        function updateCartCount() { 
+            const countElement = document.getElementById('nav-cart-count'); 
+            if (countElement) countElement.innerText = cart.length; 
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            
+            const hamburger = document.getElementById('hamburger-menu');
+            const navMenu = document.getElementById('nav-menu');
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronous | Cart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Core Theme Variables --- */
+        :root { --bg-color: #0a0a0a; --surface-color: #1a1a1a; --text-main: #f4f4f4; --text-muted: #a0a0a0; --accent-gold: #c5a059; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* --- Standard Typography --- */
+        body { 
+            font-family: 'Lato', sans-serif; 
+            font-size: 0.95rem; /* Base font reduced slightly */
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            line-height: 1.6; 
+        }
+        h1, h2, h3, h4 { 
+            font-family: 'Playfair Display', serif; 
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        a { text-decoration: none; color: inherit; }
+        
+        /* --- Navigation --- */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(10, 10, 10, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #222; }
+        
+        /* Logo: Reduced font size slightly */
+        .logo { 
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem; 
+            font-weight: 400; 
+            color: var(--accent-gold); 
+            letter-spacing: 2px;
+        }
+
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        
+        /* Nav Links */
+        .nav-links a { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            transition: color 0.3s; 
+            letter-spacing: 0.5px; 
+        }
+        .nav-links a:hover { color: var(--accent-gold); }
+        
+        .nav-icons { display: flex; align-items: center; gap: 20px; }
+        .nav-icons > a:not(.cart-link) { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            letter-spacing: 0.5px; 
+            transition: color 0.3s; 
+        }
+        .nav-icons > a:not(.cart-link):hover { color: var(--accent-gold); }
+        
+        /* --- Appealing Cart Link --- */
+        .cart-link {
+            background: linear-gradient(135deg, var(--accent-gold), #dfb668);
+            color: var(--bg-color) !important;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+            transition: all 0.3s ease;
+        }
+        .cart-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(197, 160, 89, 0.6);
+        }
+        .cart-badge {
+            background: var(--bg-color);
+            color: var(--accent-gold);
+            padding: 2px 7px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* --- Buttons --- */
+        .btn-primary { display: inline-block; width: 100%; padding: 12px; background: transparent; border: 1px solid var(--accent-gold); color: var(--accent-gold); text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; font-size: 0.85rem; font-weight: bold;}
+        .btn-primary:hover { background: var(--accent-gold); color: var(--bg-color); }
+        
+        /* --- Cart Layout --- */
+        .container { padding: 50px 5%; max-width: 1300px; margin: 0 auto; }
+        
+        /* Reduced Page Title */
+        .page-title { text-align: center; font-size: 2.5rem; margin-bottom: 40px; color: var(--accent-gold); }
+        
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* --- Cart Items (Left Side) --- */
+        .cart-items-container { display: flex; flex-direction: column; gap: 15px; }
+        .cart-item-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--surface-color);
+            padding: 15px;
+            border: 1px solid #222;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+        }
+        .cart-item-card:hover { border-color: #444; }
+        
+        /* Reduced Thumbnail Size */
+        .cart-item-img { width: 100px; height: 100px; object-fit: cover; border-radius: 4px; }
+        .cart-item-details { flex-grow: 1; }
+        
+        /* Reduced Item Title & Price */
+        .cart-item-title { font-size: 1.4rem; margin-bottom: 3px; color: var(--text-main); }
+        .cart-item-price { font-size: 1rem; color: var(--text-muted); }
+        
+        .remove-btn {
+            background: transparent;
+            border: none;
+            color: #ff4d4d;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: color 0.3s;
+        }
+        .remove-btn:hover { color: #ff1a1a; text-decoration: underline; }
+
+        /* Reduced Empty Cart Text */
+        .empty-cart-msg { text-align: center; font-size: 1.2rem; color: var(--text-muted); padding: 40px; background: var(--surface-color); border-radius: 6px; border: 1px dashed #444; }
+
+        /* --- Checkout Summary (Right Side) --- */
+        .summary-card {
+            background: var(--surface-color);
+            padding: 30px;
+            border: 1px solid var(--accent-gold);
+            border-radius: 6px;
+            position: sticky;
+            top: 100px;
+        }
+        
+        /* Reduced Summary Headers */
+        .summary-card h3 { font-size: 1.6rem; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 12px; }
+        
+        .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; font-size: 1.2rem; }
+        .total-price { font-size: 1.3rem; color: var(--accent-gold); font-weight: bold; }
+
+        /* Checkout Form */
+        .form-group { margin-bottom: 15px; }
+        
+        /* Reduced Labels */
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.9rem; }
+        .form-control { 
+            width: 100%; padding: 10px; background: var(--bg-color); border: 1px solid #333; 
+            color: var(--text-main); border-radius: 4px; font-family: inherit; font-size: 0.95rem;
+        }
+        .form-control:focus { border-color: var(--accent-gold); outline: none; }
+
+        /* --- Mobile Responsiveness --- */
+        .hamburger { display: none; font-size: 1.5rem; cursor: pointer; color: var(--accent-gold); }
+        @media (max-width: 900px) {
+            .cart-layout { grid-template-columns: 1fr; }
+            .hamburger { display: block; order: 1; } .nav-icons { order: 2; } .logo { order: 0; }
+            #nav-menu { position: absolute; top: 100%; left: 0; width: 100%; background: rgba(10, 10, 10, 0.98); border-bottom: 1px solid #333; display: none; flex-direction: column; padding: 20px 0; }
+            #nav-menu.active { display: flex; } .nav-links { flex-direction: column; align-items: center; gap: 20px; }
+            .cart-item-card { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo"><a href="index.html">CHRONOUS</a></div>
+        <div class="hamburger" id="hamburger-menu">☰</div>
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div class="nav-icons">
+            <a href="profile.html"><span>Profile</span></a>
+            <a href="cart.html" class="cart-link">
+                Cart <span class="cart-badge" id="nav-cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Your Private Vault</h1>
+        
+        <div class="cart-layout">
+            
+            <div class="cart-items-container" id="cart-items-container">
+                </div>
+
+            <div class="summary-card">
+                <h3>Order Summary</h3>
+                <div class="total-row">
+                    <span>Grand Total:</span>
+                    <span class="total-price">$<span id="cart-total-price">0</span></span>
+                </div>
+
+                <form id="checkout-form">
+                    <div class="form-group">
+                        <label>Name on Card</label>
+                        <input type="text" class="form-control" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Secure Shipping Address</label>
+                        <input type="text" class="form-control" placeholder="123 Luxury Lane" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="text" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" required>
+                    </div>
+                    <button type="button" class="btn-primary" style="margin-top: 15px;" onclick="alert('Transaction Approved. Welcome to the legacy.')">Complete Acquisition</button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+        
+        function saveCart() { 
+            localStorage.setItem('chronous_cart', JSON.stringify(cart)); 
+            updateCartCount(); 
+        }
+        
+        function removeFromCart(index) { 
+            cart.splice(index, 1); 
+            saveCart(); 
+            renderCartPage(); 
+        }
+        
+        function updateCartCount() { 
+            const countElement = document.getElementById('nav-cart-count'); 
+            if (countElement) countElement.innerText = cart.length; 
+        }
+        
+        function renderCartPage() {
+            const container = document.getElementById('cart-items-container');
+            const totalEl = document.getElementById('cart-total-price');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart-msg">
+                        Your vault is currently empty.<br><br>
+                        <a href="collection.html" style="color: var(--accent-gold); font-size: 1rem; text-decoration: underline; font-family: 'Playfair Display', serif;">Discover Timepieces</a>
+                    </div>`;
+                totalEl.innerText = "0"; 
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map((item, index) => {
+                total += item.price;
+                return `
+                    <div class="cart-item-card">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <h4 class="cart-item-title">${item.name}</h4>
+                            <p class="cart-item-price">$${item.price.toLocaleString()}</p>
+                            <button class="remove-btn" onclick="removeFromCart(${index})">Remove Item</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            totalEl.innerText = total.toLocaleString();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount(); 
+            renderCartPage();
+            
+            // Mobile Menu Toggle
+            const hamburger = document.getElementById('hamburger-menu');
+            const navMenu = document.getElementById('nav-menu');
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
+            }
+        });
+    </script>
+</body>
+</html>

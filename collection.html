@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronous | Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Core Theme Variables --- */
+        :root { --bg-color: #0a0a0a; --surface-color: #1a1a1a; --text-main: #f4f4f4; --text-muted: #a0a0a0; --accent-gold: #c5a059; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* --- Standard Typography --- */
+        body { 
+            font-family: 'Lato', sans-serif; 
+            font-size: 0.95rem; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            line-height: 1.6; 
+        }
+        h1, h2, h3, h4 { 
+            font-family: 'Playfair Display', serif; 
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        a { text-decoration: none; color: inherit; }
+        
+        /* --- Buttons --- */
+        .btn-primary { display: inline-block; padding: 12px 24px; background: transparent; border: 1px solid var(--accent-gold); color: var(--accent-gold); text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; font-size: 0.85rem; font-weight: bold;}
+        .btn-primary:hover { background: var(--accent-gold); color: var(--bg-color); }
+        
+        /* --- Navigation --- */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(10, 10, 10, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #222; }
+        
+        .logo { 
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem; 
+            font-weight: 400; 
+            color: var(--accent-gold); 
+            letter-spacing: 2px;
+        }
+
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            transition: color 0.3s; 
+            letter-spacing: 0.5px; 
+        }
+        .nav-links a:hover { color: var(--accent-gold); }
+        
+        .nav-icons { display: flex; align-items: center; gap: 20px; }
+        .nav-icons > a:not(.cart-link) { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            letter-spacing: 0.5px; 
+            transition: color 0.3s; 
+        }
+        .nav-icons > a:not(.cart-link):hover { color: var(--accent-gold); }
+        
+        .cart-link {
+            background: linear-gradient(135deg, var(--accent-gold), #dfb668);
+            color: var(--bg-color) !important;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+            transition: all 0.3s ease;
+        }
+        .cart-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(197, 160, 89, 0.6); }
+        .cart-badge { background: var(--bg-color); color: var(--accent-gold); padding: 2px 7px; border-radius: 50%; font-size: 0.8rem; font-weight: bold; }
+        
+        /* --- Mobile Menu --- */
+        .hamburger { display: none; font-size: 1.5rem; cursor: pointer; color: var(--accent-gold); user-select: none; }
+        @media (max-width: 768px) {
+            .hamburger { display: block; order: 1; } .nav-icons { order: 2; } .logo { order: 0; }
+            #nav-menu { position: absolute; top: 100%; left: 0; width: 100%; background: rgba(10, 10, 10, 0.98); border-bottom: 1px solid #333; display: none; flex-direction: column; padding: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.5); }
+            #nav-menu.active { display: flex; } .nav-links { flex-direction: column; align-items: center; gap: 20px; }
+            .category-links { flex-direction: column; gap: 15px; }
+        }
+
+        /* --- Page Layout --- */
+        .container { padding: 60px 5%; max-width: 1400px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 3rem; margin-bottom: 20px; color: var(--accent-gold); }
+        
+        /* --- Gender Category Links --- */
+        .category-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 50px; border-bottom: 1px solid #333; padding-bottom: 20px; }
+        .category-link { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text-muted); transition: all 0.3s ease; position: relative; padding-bottom: 5px; }
+        .category-link:hover { color: var(--text-main); }
+        .category-link.active { color: var(--accent-gold); }
+        .category-link.active::after { content: ''; position: absolute; left: 0; bottom: -21px; width: 100%; height: 3px; background: var(--accent-gold); }
+
+        /* --- Collection Layout --- */
+        .watch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; }
+        .watch-card { background: var(--surface-color); padding: 20px; text-align: center; transition: 0.3s; border: 1px solid #222; border-radius: 6px; display: flex; flex-direction: column;}
+        .watch-card:hover { transform: translateY(-5px); border-color: var(--accent-gold); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .watch-image { width: 100%; height: 300px; object-fit: cover; margin-bottom: 20px; cursor: pointer; border-radius: 4px; }
+        .watch-card h3 { font-size: 1.4rem; margin-bottom: 5px; color: var(--text-main); }
+        .watch-card p.watch-desc { color: var(--text-muted); font-size: 0.9rem; flex-grow: 1; margin-bottom: 15px; }
+        .watch-price { color: var(--accent-gold); font-size: 1.2rem; margin-bottom: 15px; font-weight: bold; }
+        
+        /* --- Filters --- */
+        .filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
+        .filter-bar input, .filter-bar select { padding: 12px 15px; background: var(--surface-color); border: 1px solid #333; color: var(--text-main); font-family: inherit; border-radius: 4px; outline: none; font-size: 0.95rem; cursor: pointer; }
+        .filter-bar input:focus, .filter-bar select:focus { border-color: var(--accent-gold); }
+        .filter-bar input { width: 100%; max-width: 400px; cursor: text; }
+        
+        .empty-cart-msg { text-align: center; padding: 40px; grid-column: 1 / -1; font-size: 1.2rem; color: var(--text-muted); background: var(--surface-color); border: 1px dashed #444; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo"><a href="index.html">CHRONOUS</a></div>
+        <div class="hamburger" id="hamburger-menu">☰</div>
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div class="nav-icons">
+            <a href="profile.html"><span>Profile</span></a>
+            <a href="cart.html" class="cart-link">
+                Cart <span class="cart-badge">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="section-title" id="page-heading">The Collection</h2>
+        
+        <div class="category-links">
+            <a href="collection.html" class="category-link" id="link-all">All Timepieces</a>
+            <a href="collection.html?gender=men" class="category-link" id="link-men">Men's</a>
+            <a href="collection.html?gender=women" class="category-link" id="link-women">Women's</a>
+        </div>
+
+        <div class="filter-bar">
+            <input type="text" id="search-input" placeholder="Search by name or feature...">
+            <div class="price-filter">
+                <label for="price-select" style="color: var(--text-muted); margin-right: 10px;">Max Price:</label>
+                <select id="price-select">
+                    <option value="all">All Prices</option>
+                    <option value="1000">Under $1,000</option>
+                    <option value="1500">Under $1,500</option>
+                    <option value="2500">Under $2,500</option>
+                    <option value="5000">Under $5,000</option>
+                    <option value="10000">Under $10,000</option>
+                </select>
+            </div>
+        </div>
+        
+        <div id="collection-grid" class="watch-grid"></div>
+    </main>
+
+    <script>
+        // Updated array with 'gender' properties added
+        const watches = [
+            { id: 1, name: "Chronous Apex", price: 1250, gender: "men", desc: "Automatic movement, sapphire crystal.", image: "watch2.jpg" },
+            { id: 2, name: "Starlight Chrono", price: 850, gender: "women", desc: "Quartz precision with a midnight dial.", image: "watch5.jpg" },
+            { id: 3, name: "Deep Sea Diver", price: 1400, gender: "men", desc: "Water resistant to 300m, luminescent hands.", image: "watch3.jpg" },
+            { id: 4, name: "Heritage Gold", price: 2100, gender: "women", desc: "18k gold plated, vintage aesthetic.", image: "watch4.jpg" },
+            { id: 5, name: "Obsidian Skeleton", price: 3200, gender: "men", desc: "Exposed automatic movement, titanium case.", image: "watch6.jpg" },
+            { id: 6, name: "Lunar Phase", price: 1850, gender: "women", desc: "Moonphase complication, genuine leather strap.", image: "watch7.jpg" },
+            { id: 7, name: "Velocity Racing", price: 950, gender: "men", desc: "Tachymeter bezel, perforated rubber strap.", image: "watch8.jpg" },
+            { id: 8, name: "Minimalist Rose", price: 650, gender: "women", desc: "Ultra-thin profile, rose gold finish.", image: "watch9.jpg" },
+            { id: 9, name: "Aviation Pro", price: 1100, gender: "men", desc: "Pilot's watch with slide rule bezel.", image: "watch10.jpg" },
+            { id: 10, name: "Sapphire Tourbillon", price: 8500, gender: "unisex", desc: "Hand-wound tourbillon, limited edition.", image: "watch11.jpg" }
+        ];
+        
+        // --- Setup URL Parameter Logic ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentGenderFilter = urlParams.get('gender'); // Returns 'men', 'women', or null
+
+        // Highlight the correct tab based on the URL
+        if (currentGenderFilter === 'men') {
+            document.getElementById('link-men').classList.add('active');
+            document.getElementById('page-heading').innerText = "Men's Collection";
+        } else if (currentGenderFilter === 'women') {
+            document.getElementById('link-women').classList.add('active');
+            document.getElementById('page-heading').innerText = "Women's Collection";
+        } else {
+            document.getElementById('link-all').classList.add('active');
+        }
+
+        // --- Cart Logic ---
+        let cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+        function saveCart() { localStorage.setItem('chronous_cart', JSON.stringify(cart)); }
+        
+        function addToCart(id) { 
+            const watch = watches.find(w => w.id === id); 
+            if(watch) { 
+                cart.push(watch); 
+                saveCart(); 
+                alert(`${watch.name} added to cart!`); 
+            } 
+        }
+        
+        function goToProduct(id) { window.location.href = `product.html?id=${id}`; }
+        
+        // --- Filtering Logic ---
+        function filterCollection() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const maxPrice = document.getElementById('price-select').value;
+            const container = document.getElementById('collection-grid');
+            
+            const filteredWatches = watches.filter(w => {
+                const matchesSearch = w.name.toLowerCase().includes(searchTerm) || w.desc.toLowerCase().includes(searchTerm);
+                const matchesPrice = maxPrice === 'all' || w.price <= parseInt(maxPrice);
+                
+                // Check if the watch matches the URL gender parameter (allow unisex for all)
+                let matchesGender = true; 
+                if (currentGenderFilter) {
+                    matchesGender = (w.gender === currentGenderFilter || w.gender === 'unisex');
+                }
+
+                return matchesSearch && matchesPrice && matchesGender;
+            });
+            
+            if (filteredWatches.length === 0) { 
+                container.innerHTML = `<div class="empty-cart-msg">No timepieces match your criteria.</div>`; 
+                return; 
+            }
+            
+            container.innerHTML = filteredWatches.map(watch => `
+                <div class="watch-card">
+                    <img src="${watch.image}" alt="${watch.name}" class="watch-image" onclick="goToProduct(${watch.id})">
+                    <h3>${watch.name}</h3>
+                    <p class="watch-desc">${watch.desc}</p>
+                    <p class="watch-price">$${watch.price.toLocaleString()}</p>
+                    <button class="btn-primary" onclick="addToCart(${watch.id})">Add to Cart</button>
+                </div>`).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            filterCollection();
+            
+            document.getElementById('search-input').addEventListener('input', filterCollection);
+            document.getElementById('price-select').addEventListener('change', filterCollection);
+            
+            const hamburger = document.getElementById('hamburger-menu');
+            const navMenu = document.getElementById('nav-menu');
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
+            }
+        });
+    </script>
+</body>
+</html>

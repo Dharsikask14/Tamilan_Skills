@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronous | Brands</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Core Theme Variables --- */
+        :root { --bg-color: #0a0a0a; --surface-color: #1a1a1a; --text-main: #f4f4f4; --text-muted: #a0a0a0; --accent-gold: #c5a059; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* --- Standard Typography --- */
+        body { 
+            font-family: 'Lato', sans-serif; 
+            font-size: 0.95rem; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            line-height: 1.6; 
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4 { 
+            font-family: 'Playfair Display', serif; 
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        a { text-decoration: none; color: inherit; }
+        
+        /* --- Navigation (Synced with Cart Page) --- */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(10, 10, 10, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #222; }
+        
+        .logo { 
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem; 
+            font-weight: 400; 
+            color: var(--accent-gold); 
+            letter-spacing: 2px;
+        }
+
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { font-size: 0.95rem; font-weight: 600; transition: color 0.3s; letter-spacing: 0.5px; }
+        .nav-links a:hover { color: var(--accent-gold); }
+        
+        .nav-icons { display: flex; align-items: center; gap: 20px; }
+        .nav-icons > a:not(.cart-link) { font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; transition: color 0.3s; }
+        .nav-icons > a:not(.cart-link):hover { color: var(--accent-gold); }
+        
+        .cart-link {
+            background: linear-gradient(135deg, var(--accent-gold), #dfb668);
+            color: var(--bg-color) !important;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+            transition: all 0.3s ease;
+        }
+        .cart-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(197, 160, 89, 0.6); }
+        .cart-badge { background: var(--bg-color); color: var(--accent-gold); padding: 2px 7px; border-radius: 50%; font-size: 0.8rem; font-weight: bold; }
+
+        /* --- Mobile Menu --- */
+        .hamburger { display: none; font-size: 1.5rem; cursor: pointer; color: var(--accent-gold); user-select: none; }
+        @media (max-width: 768px) {
+            .hamburger { display: block; order: 1; } .nav-icons { order: 2; } .logo { order: 0; }
+            #nav-menu { position: absolute; top: 100%; left: 0; width: 100%; background: rgba(10, 10, 10, 0.98); border-bottom: 1px solid #333; display: none; flex-direction: column; padding: 20px 0; box-shadow: 0 10px 15px rgba(0,0,0,0.5); }
+            #nav-menu.active { display: flex; } .nav-links { flex-direction: column; align-items: center; gap: 20px; }
+        }
+
+        /* --- Page Layout --- */
+        .container { padding: 60px 5%; max-width: 1400px; margin: 0 auto; }
+        .page-title { text-align: center; font-size: 3rem; margin-bottom: 10px; color: var(--accent-gold); }
+        .page-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 80px; font-size: 1.1rem; }
+
+        /* --- Brand Categories --- */
+        .category-section { margin-bottom: 100px; }
+        .category-title { text-align: center; font-size: 2rem; color: var(--text-main); margin-bottom: 50px; position: relative; }
+        .category-title::after { content: ''; display: block; width: 60px; height: 2px; background: var(--accent-gold); margin: 15px auto 0; }
+        
+        /* --- UNIQUE FLOATING BRAND GRID --- */
+        .brand-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            gap: 60px 30px; /* Large vertical gap to allow for stagger */
+            padding-bottom: 50px;
+        }
+
+        .brand-card { 
+            background: transparent; 
+            padding: 20px; 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+        }
+
+        /* Stagger every second item down to create a unique zigzag/masonry flow */
+        @media (min-width: 768px) {
+            .brand-card:nth-child(even) {
+                transform: translateY(40px);
+            }
+        }
+
+        /* --- Logo Styling (Ghost to Glowing Reveal) --- */
+        .logo-container { 
+            width: 160px; 
+            height: 160px; 
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%); 
+            border-radius: 50%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-bottom: 20px; 
+            padding: 25px; 
+            transition: all 0.5s ease;
+        }
+        
+        /* Base state: Grayscale, slightly faded, subtle white shadow so dark logos are visible */
+        .logo-container img { 
+            max-width: 100%; 
+            max-height: 100%; 
+            object-fit: contain; 
+            filter: grayscale(100%) opacity(0.6) drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.2)); 
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .brand-card h3 { 
+            font-size: 1.4rem; 
+            margin-bottom: 5px; 
+            color: var(--text-main); 
+            transition: color 0.4s;
+        }
+        
+        /* Description is hidden initially and slides up on hover */
+        .brand-card p { 
+            font-size: 0.9rem; 
+            color: var(--text-muted); 
+            opacity: 0; 
+            transform: translateY(15px);
+            transition: all 0.4s ease;
+        }
+
+        /* --- HOVER EFFECTS --- */
+        .brand-card:hover {
+            z-index: 10;
+        }
+        
+        /* If it's an even child, we have to keep the Y translation while scaling so it doesn't jump */
+        @media (min-width: 768px) {
+            .brand-card:nth-child(odd):hover { transform: scale(1.05); }
+            .brand-card:nth-child(even):hover { transform: translateY(40px) scale(1.05); }
+        }
+        @media (max-width: 767px) {
+            .brand-card:hover { transform: scale(1.05); }
+        }
+
+        /* Make background glow */
+        .brand-card:hover .logo-container {
+            background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, transparent 70%);
+        }
+
+        /* Logo bursts into color, scales up, and gets a gold shadow */
+        .brand-card:hover .logo-container img {
+            filter: grayscale(0%) opacity(1) drop-shadow(0px 10px 20px rgba(197, 160, 89, 0.5));
+            transform: scale(1.2);
+        }
+
+        /* Text highlights and slides up */
+        .brand-card:hover h3 { color: var(--accent-gold); }
+        .brand-card:hover p { opacity: 1; transform: translateY(0); }
+
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo"><a href="index.html">CHRONOUS</a></div>
+        <div class="hamburger" id="hamburger-menu">☰</div>
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div class="nav-icons">
+            <a href="profile.html"><span>Profile</span></a>
+            <a href="cart.html" class="cart-link">
+                Cart <span class="cart-badge" id="nav-cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Our Partnered Maisons</h1>
+        <p class="page-subtitle">Discover timepieces from the world's most distinguished watchmakers.</p>
+
+        <section class="category-section">
+            <h2 class="category-title">Luxury & Premium Brands</h2>
+            <div class="brand-grid">
+                <div class="brand-card">
+                    <div class="logo-container"><img src="rolex.jpg" alt="Rolex" onerror="fallback(this)"></div>
+                    <h3>Rolex</h3><p>Luxury market leader</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="omega.png" alt="Omega" onerror="fallback(this)"></div>
+                    <h3>Omega</h3><p>Swiss luxury & precision</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="tagheuer.png" alt="Tag Heuer" onerror="fallback(this)"></div>
+                    <h3>Tag Heuer</h3><p>Premium Swiss luxury</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="breitling.png" alt="Breitling" onerror="fallback(this)"></div>
+                    <h3>Breitling</h3><p>Aviation inspired luxury</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="hublot.png" alt="Hublot" onerror="fallback(this)"></div>
+                    <h3>Hublot</h3><p>The art of fusion</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="panerai.png" alt="Panerai" onerror="fallback(this)"></div>
+                    <h3>Panerai</h3><p>Italian design, Swiss tech</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="rado.jpg" alt="Rado" onerror="fallback(this)"></div>
+                    <h3>Rado</h3><p>Master of materials</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="tissot.jpg" alt="Tissot" onerror="fallback(this)"></div>
+                    <h3>Tissot</h3><p>Top Swiss brand in India</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="longines.jpg" alt="Longines" onerror="fallback(this)"></div>
+                    <h3>Longines</h3><p>Elegance is an attitude</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="movado.jpg" alt="Movado" onerror="fallback(this)"></div>
+                    <h3>Movado</h3><p>Known for its signature dial</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="frederique_constant.png" alt="Frederique Constant" onerror="fallback(this)"></div>
+                    <h3>Frederique Constant</h3><p>Accessible luxury</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <h2 class="category-title">Top Indian Brands</h2>
+            <div class="brand-grid">
+                <div class="brand-card">
+                    <div class="logo-container"><img src="titan.jpg" alt="Titan" onerror="fallback(this)"></div>
+                    <h3>Titan</h3><p>Wide range, daily to premium</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="sonata.jpg" alt="Sonata" onerror="fallback(this)"></div>
+                    <h3>Sonata</h3><p>Budget-friendly reliability</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="fasttrack.png" alt="Fastrack" onerror="fallback(this)"></div>
+                    <h3>Fastrack</h3><p>Youth-focused fashion</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="xylys.png" alt="Xylys" onerror="fallback(this)"></div>
+                    <h3>Xylys</h3><p>Premium Swiss-made by Titan</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="nebula.jpg" alt="Nebula" onerror="fallback(this)"></div>
+                    <h3>Nebula</h3><p>18k solid gold watches</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="edge.png" alt="Edge" onerror="fallback(this)"></div>
+                    <h3>Edge</h3><p>Ultra-slim profile</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <h2 class="category-title">Popular International & Fashion</h2>
+            <div class="brand-grid">
+                <div class="brand-card">
+                    <div class="logo-container"><img src="fossil.png" alt="Fossil" onerror="fallback(this)"></div>
+                    <h3>Fossil</h3><p>Versatile fashion watches</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="casio.jpg" alt="Casio" onerror="fallback(this)"></div>
+                    <h3>Casio</h3><p>G-Shock, Edifice & Vintage</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="seiko.png" alt="Seiko" onerror="fallback(this)"></div>
+                    <h3>Seiko / Alba</h3><p>Japanese reliability</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="citizen.png" alt="Citizen" onerror="fallback(this)"></div>
+                    <h3>Citizen</h3><p>Eco-drive technology</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="skagen.png" alt="Skagen" onerror="fallback(this)"></div>
+                    <h3>Skagen</h3><p>Minimalist Danish design</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="tommyhilfiger.jpg" alt="Tommy Hilfiger" onerror="fallback(this)"></div>
+                    <h3>Tommy Hilfiger</h3><p>Popular fashion</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="guess.jpg" alt="Guess" onerror="fallback(this)"></div>
+                    <h3>Guess</h3><p>Iconic fashion</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="police.png" alt="Police" onerror="fallback(this)"></div>
+                    <h3>Police</h3><p>Bold & rebellious</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="mk.png" alt="Michael Kors" onerror="fallback(this)"></div>
+                    <h3>Michael Kors</h3><p>Premium fashion</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="daniel_wellington.png" alt="Daniel Wellington" onerror="fallback(this)"></div>
+                    <h3>Daniel Wellington</h3><p>Minimalist fashion</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <h2 class="category-title">Smartwatch & Specialized</h2>
+            <div class="brand-grid">
+                <div class="brand-card">
+                    <div class="logo-container"><img src="apple.png" alt="Apple" onerror="fallback(this)"></div>
+                    <h3>Apple</h3><p>Premium smartwatch leader</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="garmin.png" alt="Garmin" onerror="fallback(this)"></div>
+                    <h3>Garmin</h3><p>GPS and fitness tracking</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="samsung.png" alt="Samsung" onerror="fallback(this)"></div>
+                    <h3>Samsung</h3><p>Android-focused wearables</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="fire_boltt.png" alt="Fire-Boltt" onerror="fallback(this)"></div>
+                    <h3>Fire-Boltt</h3><p>Top Indian wearables</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="noise.png" alt="Noise" onerror="fallback(this)"></div>
+                    <h3>Noise</h3><p>Top Indian wearables</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="boat.png" alt="BoAt" onerror="fallback(this)"></div>
+                    <h3>BoAt</h3><p>Top Indian wearables</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="victorinox.png" alt="Victorinox" onerror="fallback(this)"></div>
+                    <h3>Victorinox</h3><p>Swiss functionality</p>
+                </div>
+                <div class="brand-card">
+                    <div class="logo-container"><img src="alpina.png" alt="Alpina" onerror="fallback(this)"></div>
+                    <h3>Alpina</h3><p>Swiss sports watches</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // --- JS Fallback for Broken Logos ---
+        function fallback(imgElement) {
+            imgElement.onerror = null; 
+            const brandName = imgElement.alt;
+            imgElement.src = `https://via.placeholder.com/200x100/1a1a1a/c5a059?text=${brandName}`;
+            imgElement.style.filter = "none"; 
+        }
+
+        // --- Cart & Navigation Logic ---
+        let cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+        function updateCartCount() { 
+            const countElement = document.getElementById('nav-cart-count'); 
+            if (countElement) countElement.innerText = cart.length; 
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            
+            // Mobile Menu Toggle
+            const hamburger = document.getElementById('hamburger-menu');
+            const navMenu = document.getElementById('nav-menu');
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
+            }
+        });
+    </script>
+</body>
+</html>
