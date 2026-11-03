@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oryx | My Wishlist</title>
+    <!-- Authentication Gate -->
+    <script>
+        (function() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+            }
+        })();
+    </script>
+    <!-- Google Fonts: Lora (Editorial Luxury Serif) & Open Sans (Modern Clean Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-page: #F8F5F0;            /* Warm luxury ivory canvas */
+            --bg-card: #FFFFFF;            /* Pure white surface */
+            --olive-primary: #687547;      /* Sage / Olive accent */
+            --olive-dark: #4F5A31;         /* Deep olive */
+            --olive-subtle: rgba(104, 117, 71, 0.08);
+            --text-dark: #1E1E1E;          /* Rich charcoal */
+            --text-muted: #6B685F;         /* Soft taupe */
+            --border-soft: #E2DDD3;        /* Warm sand border */
+            --gold-accent: #C5A059;        /* Champagne gold */
+            --danger-red: #C0392B;         /* Luxury ruby red */
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --font-serif: 'Lora', Georgia, serif;
+            --font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+        /* ─── CANONICAL LUXURY NAVBAR (COMMON FOR ALL PAGES) ─── */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 7%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #FFFFFF;
+            border-bottom: 1px solid #DCD6CA;
+            box-shadow: 0 4px 24px rgba(30, 30, 30, 0.05);
+            transition: var(--transition-smooth);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .oryx-saturn-logo {
+            width: 48px;
+            height: 34px;
+            display: block;
+            color: #9E7D3B; /* Elegant golden bronze matching the designed logo */
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 2px 5px rgba(158, 125, 59, 0.18));
+            flex-shrink: 0;
+        }
+
+        .saturn-globe-base {
+            fill: #FAF8F5;
+        }
+
+        .logo-group:hover .oryx-saturn-logo {
+            transform: scale(1.10) rotate(-4deg);
+            color: #B88E3F;
+            filter: drop-shadow(0 4px 10px rgba(184, 142, 63, 0.35));
+        }
+
+        .logo-text {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dark, #1E1E1E);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 42px;
+        }
+
+        .nav-links a {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: var(--text-dark, #1E1E1E);
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--olive-primary, #687547);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--olive-primary, #687547);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Luxury Integrated Searchbar */
+        .nav-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft, #E2DDD3);
+            border-radius: 30px;
+            padding: 8px 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            width: 230px;
+        }
+
+        .nav-search-bar:focus-within {
+            border-color: var(--olive-primary, #687547);
+            box-shadow: 0 4px 16px rgba(104, 117, 71, 0.18);
+            width: 270px;
+        }
+
+        .search-bar-icon {
+            width: 17px;
+            height: 17px;
+            stroke: var(--text-muted, #6B685F);
+            stroke-width: 1.8;
+            fill: none;
+            flex-shrink: 0;
+            transition: stroke 0.3s ease;
+        }
+
+        .nav-search-bar:focus-within .search-bar-icon {
+            stroke: var(--olive-primary, #687547);
+        }
+
+        .search-bar-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dark, #1E1E1E);
+            width: 100%;
+        }
+
+        .search-bar-input::placeholder {
+            color: #9C978D;
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .action-icon-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark, #1E1E1E);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 4px;
+        }
+
+        .action-icon-btn:hover,
+        .action-icon-btn.active {
+            color: var(--olive-primary, #687547);
+            transform: translateY(-1px);
+        }
+
+        .action-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.6;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--olive-primary, #687547);
+            color: #FFFFFF;
+            font-size: 0.68rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-count-badge.wishlist-badge {
+            background: #C0392B;
+        }
+
+        /* ─── USER BADGE NEAR CART BADGE ─── */
+        .user-badge-dropdown-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px 6px 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            transition: all 0.3s ease;
+            user-select: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .user-badge-pill:hover,
+        .user-badge-dropdown-wrap.active .user-badge-pill {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.15);
+        }
+
+        .user-avatar-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-avatar-circle svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .user-name-text {
+            max-width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-chevron {
+            width: 12px;
+            height: 12px;
+            stroke: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .user-badge-dropdown-wrap.active .user-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 220px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+            animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .user-badge-dropdown-wrap.active .user-dropdown-menu {
+            display: flex;
+        }
+
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-user-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dropdown-user-title {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .dropdown-user-email {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dropdown-session-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--olive-primary);
+            margin-top: 6px;
+        }
+
+        .dropdown-session-tag::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-soft);
+            margin: 2px 0;
+        }
+
+        .dropdown-logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            background: none;
+            border: 1px solid transparent;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: #D32F2F;
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-logout-btn:hover {
+            background: #FFF5F5;
+            border-color: rgba(211, 47, 47, 0.2);
+        }
+
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark, #1E1E1E);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 18px 5%;
+            }
+            .nav-search-bar {
+                display: none;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(248, 245, 240, 0.98);
+                backdrop-filter: blur(12px);
+                flex-direction: column;
+                align-items: center;
+                padding: 24px 0;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+                border-bottom: 1px solid var(--border-soft, #E2DDD3);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+        }
+
+
+        /* ─── PAGE HEADER ─── */
+        .wishlist-header {
+            text-align: center;
+            padding: 50px 7% 24px;
+        }
+
+        .wishlist-subheading {
+            font-family: var(--font-sans);
+            font-size: 0.72rem;
+            letter-spacing: 3.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--olive-primary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .wishlist-heading {
+            font-family: var(--font-serif);
+            font-size: 2.6rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .wishlist-counter-text {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* ─── MAIN WISHLIST CONTAINER ─── */
+        .wishlist-container {
+            flex: 1;
+            padding: 20px 7% 70px;
+            max-width: 1240px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+            gap: 26px;
+        }
+
+        /* ─── LUXURY WISHLIST PRODUCT CARD (MEDIUM SIZE) ─── */
+        .wishlist-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            border: 1px solid var(--border-soft);
+            padding: 20px 18px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .wishlist-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--olive-primary);
+            box-shadow: 0 14px 32px rgba(104, 117, 71, 0.15);
+        }
+
+        /* CARD HEADER (BADGE & BIN BUTTON) */
+        .card-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .product-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 9px;
+            border-radius: 14px;
+            background: rgba(104, 117, 71, 0.1);
+            color: var(--olive-primary);
+        }
+
+        .badge-placeholder {
+            visibility: hidden;
+        }
+
+        /* THE TRASH BIN BUTTON (CLEAN COMPACT ICON BUTTON) */
+        .remove-bin-btn {
+            background: transparent;
+            border: 1px solid rgba(192, 57, 43, 0.2);
+            color: var(--danger-red);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .remove-bin-btn:hover {
+            color: #FFFFFF;
+            background: var(--danger-red);
+            border-color: var(--danger-red);
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(192, 57, 43, 0.25);
+        }
+
+        .bin-icon {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+            display: block;
+        }
+
+        /* CARD IMAGE STAGE (MEDIUM SIZE) */
+        .card-img-stage {
+            width: 100%;
+            height: 200px;
+            display: block;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            background: #EAE6DF;
+        }
+
+        .card-img-stage img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .wishlist-card:hover .card-img-stage img {
+            transform: scale(1.08);
+        }
+
+        /* CARD DETAILS */
+        .card-title-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 78%;
+        }
+
+        .card-title:hover {
+            color: var(--olive-primary);
+        }
+
+        .card-rating {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #C5A059;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .card-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+            margin-bottom: 14px;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* CARD FOOTER & ACTIONS */
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-soft);
+            margin-top: auto;
+        }
+
+        .card-price {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .btn-acquire {
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            border: 1px solid var(--olive-primary);
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-family: var(--font-sans);
+            font-size: 0.76rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-acquire:hover {
+            background: var(--olive-dark);
+            border-color: var(--olive-dark);
+            box-shadow: 0 4px 12px rgba(104, 117, 71, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* ─── EMPTY WISHLIST STATE ─── */
+        .empty-wishlist-view {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 90px 20px;
+            background: #FFFFFF;
+            border-radius: 18px;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            display: none;
+        }
+
+        .empty-icon-wrap {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: var(--olive-primary);
+        }
+
+        .empty-icon-wrap svg {
+            width: 32px;
+            height: 32px;
+            stroke: currentColor;
+            stroke-width: 1.6;
+            fill: none;
+        }
+
+        .empty-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .empty-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 440px;
+            margin: 0 auto 28px;
+            line-height: 1.6;
+        }
+
+        .btn-explore {
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            padding: 12px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-explore:hover {
+            background: var(--olive-dark);
+            box-shadow: 0 6px 18px rgba(104, 117, 71, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* ─── TOAST NOTIFICATION ─── */
+        .toast-notify {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1E1E1E;
+            color: #FFFFFF;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        .toast-notify.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── MINIMAL FOOTER ─── */
+        .site-footer {
+            margin-top: auto;
+            border-top: 1px solid rgba(226, 221, 211, 0.7);
+            background: #FFFFFF;
+            padding: 24px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-pulse-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--olive-primary);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .footer-right a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-right a:hover {
+            color: var(--olive-primary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 18px 5%;
+            }
+            .nav-links, .nav-search-bar {
+                display: none;
+            }
+            .wishlist-heading {
+                font-size: 2rem;
+            }
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .site-footer {
+                padding: 18px 5%;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── AUTHENTIC NAVBAR ─── -->
+    <header class="navbar">
+        <div class="logo-group">
+            <svg class="oryx-saturn-logo" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ORYX Emblem">
+                <defs>
+                    <clipPath id="saturn-back-clip"><path d="M 0 0 L 100 0 L 100 35 L 0 35 Z"/></clipPath>
+                    <clipPath id="saturn-front-clip"><path d="M 0 35 L 100 35 L 100 70 L 0 70 Z"/></clipPath>
+                    <clipPath id="saturn-sphere-clip"><circle cx="50" cy="35" r="23"/></clipPath>
+                </defs>
+                <!-- Back Ring -->
+                <g clip-path="url(#saturn-back-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+                <!-- Central Planetary Sphere -->
+                <circle cx="50" cy="35" r="23" class="saturn-globe-base" stroke="currentColor" stroke-width="2.6"/>
+                <!-- Longitudinal Fluted Meridian Ribs -->
+                <g clip-path="url(#saturn-sphere-clip)">
+                    <line x1="50" y1="10" x2="50" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 57 18, 57 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 64 18, 64 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 71 20, 71 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 43 18, 43 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 36 18, 36 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 29 20, 29 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+                <!-- Front Ring -->
+                <g clip-path="url(#saturn-front-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+            </svg>
+            <a href="index.html" class="logo-text">ORYX</a>
+        </div>
+
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <!-- Luxury Integrated Searchbar -->
+            <form class="nav-search-bar" action="collection.html" method="GET" role="search">
+                <svg class="search-bar-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="search" class="search-bar-input" placeholder="Search timepieces..." aria-label="Search timepieces">
+            </form>
+            
+            <!-- Wishlist -->
+            <a href="profile.html" class="action-icon-btn active" title="Wishlist">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="cart-count-badge wishlist-badge" id="nav-wishlist-count">0</span>
+            </a>
+
+            <!-- Cart Bag with dynamic count -->
+            <a href="cart.html" class="action-icon-btn" title="Shopping Cart">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-count-badge" id="nav-cart-count">0</span>
+            </a>
+
+            <!-- User Badge near Cart Badge -->
+            <div class="user-badge-dropdown-wrap" id="user-badge-wrap">
+                <button type="button" class="user-badge-pill" id="user-badge-pill" aria-label="User Account">
+                    <span class="user-avatar-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span class="user-name-text" id="nav-user-name">Guest</span>
+                    <svg class="user-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="user-dropdown-menu" id="user-dropdown-menu">
+                    <div class="dropdown-user-header">
+                        <span class="dropdown-user-title" id="dropdown-user-name">Guest</span>
+                        <span class="dropdown-user-email" id="dropdown-user-email">guest@oryx.com</span>
+                        <span class="dropdown-session-tag">Temporary Active</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-logout-btn" id="logout-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="21" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Log Out</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer Hamburger Toggle -->
+            <button class="hamburger-btn" id="mobile-toggle" aria-label="Toggle navigation">
+                <svg width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ─── PAGE HEADER ─── -->
+    <header class="wishlist-header">
+        <span class="wishlist-subheading">Private Allocation</span>
+        <h1 class="wishlist-heading">My Wishlist</h1>
+        <p class="wishlist-counter-text" id="wishlist-counter-text">Loading saved timepieces...</p>
+    </header>
+
+    <!-- ─── WISHLIST CONTENT (ONLY SAVED PRODUCTS) ─── -->
+    <main class="wishlist-container">
+        <div class="wishlist-grid" id="wishlist-grid">
+            <!-- Dynamic Wishlist Cards Generated via JS -->
+            <div class="empty-wishlist-view" id="empty-state">
+                <div class="empty-icon-wrap">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+                <h2 class="empty-title">Your Wishlist is Empty</h2>
+                <p class="empty-subtitle">Discover our handcrafted Swiss horological timepieces and save your favored creations to this private gallery.</p>
+                <a href="collection.html" class="btn-explore">Explore Collection &rarr;</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ─── TOAST NOTIFICATION ─── -->
+    <div class="toast-notify" id="toast"></div>
+
+    <!-- ─── FOOTER ─── -->
+    <footer class="site-footer">
+        <div class="footer-left">
+            <span class="footer-pulse-dot"></span>
+            <span>Geneva Vault Allocation &bull; Private Collector Portal</span>
+        </div>
+        <div class="footer-right">
+            <a href="collection.html">Explore Catalog &rarr;</a>
+        </div>
+    </footer>
+
+    <!-- ─── WISHLIST ENGINE SCRIPT ─── -->
+    <script>
+        // Full Master Watch Database (Matches collection.html & product.html)
+        const WATCH_CATALOG = [
+            { id: 1, name: "Oryx Apex", price: 1450, rating: 4.9, gender: "men", badge: "Trending", desc: "Automatic movement, sapphire crystal with exhibition caseback.", image: "men1.jpg" },
+            { id: 2, name: "Starlight Chrono", price: 799, rating: 4.8, gender: "women", badge: "Offer", desc: "Quartz chronometer precision with a midnight aventurine dial.", image: "women1.webp" },
+            { id: 3, name: "Deep Sea Diver", price: 2499, rating: 4.9, gender: "men", desc: "Water resistant to 300m, luminescent indices and ceramic bezel.", image: "men2.webp" },
+            { id: 4, name: "Heritage Gold", price: 8990, rating: 5.0, gender: "women", badge: "Popular", desc: "18k gold plated bezel with vintage Swiss hand-wound movement.", image: "women2.webp" },
+            { id: 5, name: "Obsidian Skeleton", price: 28500, rating: 4.9, gender: "men", badge: "Limited", desc: "Exposed automatic movement, Grade 5 titanium openworked case.", image: "men3.webp" },
+            { id: 6, name: "Celestial Moonphase", price: 14999, rating: 4.9, gender: "unisex", desc: "Meteorite dial, aventurine glass moonphase astronomical complication.", image: "unisex1.jpg" },
+            { id: 7, name: "Velocity Racing", price: 1850, rating: 4.7, gender: "men", badge: "Special Offer", desc: "Tachymeter bezel, perforated vulcanized rubber racing strap.", image: "men4.webp" },
+            { id: 8, name: "Minimalist Rose", price: 699, rating: 4.8, gender: "women", desc: "Ultra-thin 6.8mm profile, 18k rose gold finish and sunburst dial.", image: "women3.webp" },
+            { id: 9, name: "Aviation Pro", price: 3499, rating: 4.9, gender: "men", desc: "Pilot's watch with circular slide rule bezel and dual time zone.", image: "men5.jpg" },
+            { id: 10, name: "Sapphire Tourbillon", price: 145000, rating: 5.0, gender: "unisex", badge: "Exclusive", desc: "Hand-wound tourbillon escapement, single-crystal sapphire casing.", image: "unisex2.webp" },
+            { id: 11, name: "Aquamaster Chrono", price: 4250, rating: 4.9, gender: "men", badge: "New Arrival", desc: "Ceramic unidirectional bezel, 300m chronometer.", image: "men6.jpg" },
+            { id: 12, name: "Monaco Grand Prix", price: 1299, rating: 4.8, gender: "men", badge: "Special Edition", desc: "Motorsport chronograph, panda sub-dials, calfskin strap.", image: "men7.jpg" },
+            { id: 13, name: "Royal Damascus Steel", price: 45000, rating: 5.0, gender: "men", badge: "Exclusive", desc: "Forged Damascus steel case, hand-wound Swiss calibre.", image: "men8.jpg" },
+            { id: 14, name: "Polaris Field GMT", price: 950, rating: 4.8, gender: "men", badge: "Explorer Series", desc: "Tactical dual-time GMT, high-contrast luminescent dial.", image: "men9.webp" },
+            { id: 15, name: "Vanguard Carbon Phantom", price: 85000, rating: 4.9, gender: "men", badge: "Limited", desc: "Monobloc forged carbon case, stealth matte black finish.", image: "men10.jpg" },
+            { id: 16, name: "Serpentine Diamond", price: 3890, rating: 4.9, gender: "women", badge: "Best Seller", desc: "Curved ergonomic silhouette, pavé diamond bezel, mother-of-pearl dial.", image: "women4.jpg" },
+            { id: 17, name: "Aurora Opaline", price: 850, rating: 4.8, gender: "women", badge: "Elegant", desc: "Shimmering opaline dial with delicate Milanese rose gold mesh bracelet.", image: "women5.webp" },
+            { id: 18, name: "Petite Vendôme", price: 1650, rating: 4.9, gender: "women", badge: "Classic", desc: "Art Deco rectangular tank case, guilloché Roman dial.", image: "women6.webp" },
+            { id: 19, name: "Luna Royale", price: 5490, rating: 5.0, gender: "women", badge: "Popular", desc: "Diamond-embellished bezel with day-and-night complication.", image: "women7.webp" },
+            { id: 20, name: "Blossom Skeleton", price: 19500, rating: 4.9, gender: "women", badge: "Limited", desc: "Intricate floral openworked bridges, exhibition caseback.", image: "women8.webp" },
+            { id: 21, name: "Eclipse Perpetual", price: 215000, rating: 5.0, gender: "unisex", badge: "Masterpiece", desc: "Perpetual calendar complication, smoked sapphire dial.", image: "unisex3.jpg" },
+            { id: 22, name: "Chrono Titan Minimal", price: 2890, rating: 4.8, gender: "unisex", badge: "Contemporary", desc: "Architectural Bauhaus unibody titanium casing.", image: "unisex4.webp" },
+            { id: 23, name: "Solaris Worldtimer", price: 12500, rating: 4.9, gender: "unisex", badge: "Signature", desc: "24-city rotating world-time bezel with engraved relief map.", image: "unisex5.jpg" }
+        ];
+
+        const grid = document.getElementById('wishlist-grid');
+        const emptyState = document.getElementById('empty-state');
+        const counterText = document.getElementById('wishlist-counter-text');
+        const toast = document.getElementById('toast');
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Render Only the Products Added to Wishlist
+        function renderWishlist() {
+            // Remove existing product cards (keep empty state element)
+            grid.querySelectorAll('.wishlist-card').forEach(c => c.remove());
+
+            const wishlistIds = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+            const savedWatches = WATCH_CATALOG.filter(w => wishlistIds.includes(w.id));
+
+            // Sync Nav Wishlist Badge
+            const navBadge = document.getElementById('nav-wishlist-count');
+            if (navBadge) navBadge.innerText = savedWatches.length;
+
+            if (savedWatches.length === 0) {
+                counterText.innerText = "0 timepieces saved";
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            counterText.innerText = `${savedWatches.length} ${savedWatches.length === 1 ? 'timepiece' : 'timepieces'} saved in your private allocation`;
+
+            savedWatches.forEach(watch => {
+                const card = document.createElement('article');
+                card.className = 'wishlist-card';
+
+                // 1. Top row: Badge + Trash Bin Button
+                const topRow = document.createElement('div');
+                topRow.className = 'card-top-row';
+
+                const badge = document.createElement('span');
+                if (watch.badge) {
+                    badge.className = 'product-badge';
+                    badge.innerText = watch.badge;
+                } else {
+                    badge.className = 'product-badge badge-placeholder';
+                    badge.innerText = 'ORYX';
+                }
+
+                // TRASH BIN BUTTON (Replaces text with bin icon)
+                const binBtn = document.createElement('button');
+                binBtn.className = 'remove-bin-btn';
+                binBtn.title = 'Remove from Wishlist';
+                binBtn.setAttribute('aria-label', `Remove ${watch.name} from wishlist`);
+                binBtn.innerHTML = `
+                    <svg class="bin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                `;
+
+                binBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    removeFromWishlist(watch.id, watch.name);
+                });
+
+                topRow.appendChild(badge);
+                topRow.appendChild(binBtn);
+
+                // 2. Image Stage
+                const imgStage = document.createElement('a');
+                imgStage.className = 'card-img-stage';
+                imgStage.href = `product.html?id=${watch.id}`;
+                imgStage.title = watch.name;
+                const img = document.createElement('img');
+                img.src = watch.image;
+                img.alt = watch.name;
+                img.loading = 'lazy';
+                imgStage.appendChild(img);
+
+                // 3. Title & Rating Row
+                const titleRow = document.createElement('div');
+                titleRow.className = 'card-title-row';
+
+                const title = document.createElement('a');
+                title.className = 'card-title';
+                title.href = `product.html?id=${watch.id}`;
+                title.innerText = watch.name;
+
+                const rating = document.createElement('span');
+                rating.className = 'card-rating';
+                rating.innerHTML = `★ ${watch.rating.toFixed(1)}`;
+
+                titleRow.appendChild(title);
+                titleRow.appendChild(rating);
+
+                // 4. Description
+                const desc = document.createElement('p');
+                desc.className = 'card-desc';
+                desc.innerText = watch.desc;
+
+                // 5. Footer: Price & Move to Cart Button
+                const footer = document.createElement('div');
+                footer.className = 'card-footer';
+
+                const price = document.createElement('span');
+                price.className = 'card-price';
+                price.innerText = `₹${watch.price.toLocaleString("en-IN")}`;
+
+                const acquireBtn = document.createElement('button');
+                acquireBtn.className = 'btn-acquire';
+                acquireBtn.innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                    Acquire
+                `;
+                acquireBtn.addEventListener('click', () => {
+                    addToCartFromWishlist(watch);
+                });
+
+                footer.appendChild(price);
+                footer.appendChild(acquireBtn);
+
+                // Assemble Card
+                card.appendChild(topRow);
+                card.appendChild(imgStage);
+                card.appendChild(titleRow);
+                card.appendChild(desc);
+                card.appendChild(footer);
+
+                grid.insertBefore(card, emptyState);
+            });
+        }
+
+        // Remove from Wishlist
+        function removeFromWishlist(id, name) {
+            let wishlistIds = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+            wishlistIds = wishlistIds.filter(item => item !== id);
+            localStorage.setItem('oryx_wishlist', JSON.stringify(wishlistIds));
+            renderWishlist();
+            showToast(`Removed "${name}" from Wishlist`);
+        }
+
+        // Add to Cart from Wishlist
+        function addToCartFromWishlist(watch) {
+            let cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+            const existing = cart.find(item => item.id === watch.id);
+
+            if (existing) {
+                existing.quantity = (existing.quantity || 1) + 1;
+            } else {
+                cart.push({
+                    id: watch.id,
+                    name: watch.name,
+                    price: watch.price,
+                    image: watch.image,
+                    quantity: 1
+                });
+            }
+
+            localStorage.setItem('chronous_cart', JSON.stringify(cart));
+            syncCartCount();
+            showToast(`Added "${watch.name}" to Vault Bag`);
+        }
+
+        // Sync Nav Cart Count
+        function syncCartCount() {
+            const cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+            const count = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+            const cartBadge = document.getElementById('nav-cart-count');
+            if (cartBadge) cartBadge.innerText = count;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderWishlist();
+            syncCartCount();
+        });
+    
+
+        // Header Sync handled by top-level syncCartCount & syncWishlistCount
+
+        // --- User Badge Navigation & Auth Management ---
+        function initUserAuthNav() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+                return;
+            }
+
+            const userName = sessionStorage.getItem('oryx_user_name') || localStorage.getItem('oryx_user_name') || 'Guest';
+            const userEmail = sessionStorage.getItem('oryx_user_email') || localStorage.getItem('oryx_user_email') || 'guest@oryx.com';
+
+            const navNameEl = document.getElementById('nav-user-name');
+            const dropNameEl = document.getElementById('dropdown-user-name');
+            const dropEmailEl = document.getElementById('dropdown-user-email');
+            if (navNameEl) navNameEl.textContent = userName;
+            if (dropNameEl) dropNameEl.textContent = userName;
+            if (dropEmailEl) dropEmailEl.textContent = userEmail;
+
+            const wrap = document.getElementById('user-badge-wrap');
+            const btn = document.getElementById('user-badge-pill');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (btn && wrap) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    wrap.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!wrap.contains(e.target)) {
+                        wrap.classList.remove('active');
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.removeItem('oryx_logged_in');
+                    sessionStorage.removeItem('oryx_user_name');
+                    sessionStorage.removeItem('oryx_user_email');
+                    localStorage.removeItem('oryx_logged_in');
+                    localStorage.removeItem('oryx_user_name');
+                    localStorage.removeItem('oryx_user_email');
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserAuthNav();
+            syncCartCount();
+            syncWishlistCount();
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navMenu = document.querySelector('.nav-links');
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    
+</script>
+</body>
+</html>

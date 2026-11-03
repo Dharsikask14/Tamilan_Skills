@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Oryx | Royal Indian Horology</title>
+    <!-- Auto-redirect if already authenticated -->
+    <script>
+        (function() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (isLoggedIn) {
+                window.location.replace('index.html');
+            }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0B0C0E;
+            --text-light: #F7F5F0;
+            --text-muted: #9E9B95;
+            --gold-accent: #D4AF37;
+            --font-serif: 'Lora', serif;
+            --font-sans: 'Open Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ─── Hero Background Stage ─── */
+        .welcome-hero-stage {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .welcome-hero-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 70% center;
+            filter: brightness(0.72) contrast(1.08);
+            transform: scale(1.02);
+            transition: transform 8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body:hover .welcome-hero-bg {
+            transform: scale(1.05);
+        }
+
+        /* Cinematic Gradient Overlays */
+        .welcome-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg, 
+                rgba(11, 12, 14, 0.94) 0%, 
+                rgba(11, 12, 14, 0.82) 42%, 
+                rgba(11, 12, 14, 0.35) 75%, 
+                rgba(11, 12, 14, 0.70) 100%
+            );
+            pointer-events: none;
+        }
+
+        .welcome-hero-vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 65% 50%, transparent 35%, rgba(11, 12, 14, 0.85) 100%);
+            pointer-events: none;
+        }
+
+        /* ─── Header Navigation Bar ─── */
+        .welcome-nav {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 26px 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .welcome-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+
+        .oryx-saturn-logo {
+            width: 50px;
+            height: 35px;
+            display: block;
+            color: #D4AF37; /* Radiant celestial gold for dark luxury canvas */
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 3px 12px rgba(212, 175, 55, 0.4));
+            flex-shrink: 0;
+        }
+
+        .saturn-globe-base {
+            fill: #0B0C0E;
+        }
+
+        .welcome-brand:hover .oryx-saturn-logo {
+            transform: scale(1.12) rotate(-4deg);
+            color: #F3E5AB;
+            filter: drop-shadow(0 5px 16px rgba(243, 229, 171, 0.6));
+        }
+
+        .welcome-brand-text {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #FFFFFF;
+        }
+
+        .welcome-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .welcome-nav-link {
+            color: rgba(247, 245, 240, 0.75);
+            text-decoration: none;
+            font-size: 0.90rem;
+            font-weight: 500;
+            transition: color 0.25s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .welcome-nav-link:hover {
+            color: #FFFFFF;
+        }
+
+        .welcome-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .nav-icon-link {
+            color: rgba(247, 245, 240, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
+        }
+
+        .nav-icon-link:hover {
+            color: #FFFFFF;
+            transform: scale(1.1);
+        }
+
+        .nav-icon-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-nav-acquire {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+            padding: 9px 22px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 0.4px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.25s ease;
+        }
+
+        .btn-nav-acquire:hover {
+            background: #FFFFFF;
+            color: var(--bg-dark);
+            border-color: #FFFFFF;
+            transform: translateY(-1px);
+        }
+
+        /* ─── Main Hero Content ─── */
+        .welcome-main-content {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 40px 36px 80px 36px;
+        }
+
+        .welcome-narrative-box {
+            max-width: 580px;
+        }
+
+        .brand-overline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.80rem;
+            font-weight: 600;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: rgba(247, 245, 240, 0.65);
+            margin-bottom: 18px;
+        }
+
+        .brand-overline::before {
+            content: "";
+            display: inline-block;
+            width: 24px;
+            height: 1px;
+            background: rgba(247, 245, 240, 0.4);
+        }
+
+        .hero-headline {
+            font-family: var(--font-serif);
+            font-size: 3.8rem;
+            line-height: 1.12;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            color: #FFFFFF;
+            margin-bottom: 22px;
+        }
+
+        .hero-headline em {
+            font-style: italic;
+            font-weight: 400;
+            color: #E2DFD7;
+        }
+
+        .hero-lead-text {
+            font-size: 1.05rem;
+            line-height: 1.65;
+            color: rgba(247, 245, 240, 0.72);
+            margin-bottom: 38px;
+            max-width: 500px;
+            font-weight: 400;
+        }
+
+        /* Primary Action Button (Acquire Your Timepiece) */
+        .acquire-btn-wrap {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 0;
+        }
+
+        .btn-acquire-timepiece {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #FFFFFF;
+            color: #0B0C0E;
+            padding: 16px 36px;
+            border-radius: 40px;
+            font-size: 0.98rem;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.3px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .btn-acquire-timepiece:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 40px rgba(255, 255, 255, 0.18);
+            background: #FDFBF7;
+        }
+
+        .btn-acquire-timepiece svg {
+            transition: transform 0.25s ease;
+        }
+
+        .btn-acquire-timepiece:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Proof & Reviews Social Trust */
+        .proof-trust-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-stack {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid #0B0C0E;
+            margin-left: -10px;
+            background-size: cover;
+            background-position: center;
+            background-color: #2A2C30;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+        }
+
+        .avatar-circle:first-child {
+            margin-left: 0;
+        }
+
+        .proof-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .rating-star-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: #FFFFFF;
+        }
+
+        .star-icon {
+            color: #E2B93B;
+            font-size: 0.95rem;
+        }
+
+        .reviews-count-text {
+            font-size: 0.78rem;
+            color: rgba(247, 245, 240, 0.6);
+            letter-spacing: 0.2px;
+        }
+
+        /* Bottom Carousel Slider Pagination Dots */
+        .welcome-slider-dots {
+            position: absolute;
+            bottom: 34px;
+            right: 48px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: #FFFFFF;
+            width: 22px;
+            border-radius: 10px;
+        }
+
+        /* ─── Responsive Adjustments ─── */
+        @media (max-width: 900px) {
+            .welcome-nav-links {
+                display: none;
+            }
+            .hero-headline {
+                font-size: 2.8rem;
+            }
+            .welcome-hero-bg {
+                object-position: center;
+            }
+            .welcome-hero-overlay {
+                background: rgba(11, 12, 14, 0.88);
+            }
+        }
+
+        @media (max-width: 580px) {
+            .welcome-nav {
+                padding: 20px 20px;
+            }
+            .welcome-main-content {
+                padding: 20px 20px 60px 20px;
+            }
+            .hero-headline {
+                font-size: 2.2rem;
+            }
+            .hero-lead-text {
+                font-size: 0.92rem;
+            }
+            .btn-acquire-timepiece {
+                width: 100%;
+                justify-content: center;
+                padding: 14px 28px;
+            }
+            .welcome-slider-dots {
+                right: 20px;
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Background Stage -->
+    <div class="welcome-hero-stage">
+        <img id="welcome-bg-image" src="watch15.jpg" alt="Haute Horlogerie Luxury Timepiece" class="welcome-hero-bg">
+        <div class="welcome-hero-overlay"></div>
+        <div class="welcome-hero-vignette"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="welcome-nav">
+        <a href="welcome.html" class="welcome-brand">
+            <svg class="oryx-saturn-logo" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ORYX Emblem">
+                <defs>
+                    <clipPath id="saturn-back-clip"><path d="M 0 0 L 100 0 L 100 35 L 0 35 Z"/></clipPath>
+                    <clipPath id="saturn-front-clip"><path d="M 0 35 L 100 35 L 100 70 L 0 70 Z"/></clipPath>
+                    <clipPath id="saturn-sphere-clip"><circle cx="50" cy="35" r="23"/></clipPath>
+                </defs>
+                <!-- Back Ring -->
+                <g clip-path="url(#saturn-back-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+                <!-- Central Planetary Sphere -->
+                <circle cx="50" cy="35" r="23" class="saturn-globe-base" stroke="currentColor" stroke-width="2.6"/>
+                <!-- Longitudinal Fluted Meridian Ribs -->
+                <g clip-path="url(#saturn-sphere-clip)">
+                    <line x1="50" y1="10" x2="50" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 57 18, 57 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 64 18, 64 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 71 20, 71 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 43 18, 43 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 36 18, 36 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 29 20, 29 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+                <!-- Front Ring -->
+                <g clip-path="url(#saturn-front-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+            </svg>
+            <span class="welcome-brand-text">ORYX</span>
+        </a>
+
+        <nav class="welcome-nav-links">
+            <a href="welcome.html" class="welcome-nav-link">Home</a>
+            <a href="login.html" class="welcome-nav-link">Collection</a>
+            <a href="login.html" class="welcome-nav-link">Brands</a>
+            <a href="login.html" class="welcome-nav-link">Heritage</a>
+            <a href="login.html" class="welcome-nav-link">Concierge</a>
+        </nav>
+
+        <div class="welcome-nav-actions">
+            <a href="login.html" class="nav-icon-link" title="Search Timepieces" aria-label="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </a>
+            <a href="login.html" class="nav-icon-link" title="Vault Bag" aria-label="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+            </a>
+            <a href="login.html" class="btn-nav-acquire">Sign In</a>
+        </div>
+    </header>
+
+    <!-- Main Hero Presentation -->
+    <main class="welcome-main-content">
+        <div class="welcome-narrative-box">
+            <div class="brand-overline">Royal Indian Horology • Crafted in India</div>
+            
+            <h1 class="hero-headline">
+                Timeless Elegance<br>
+                <em>on Your Wrist</em>
+            </h1>
+
+            <p class="hero-lead-text">
+                Discover watches crafted with unyielding precision, premium materials, and certified chronometric engineering that transcends generations.
+            </p>
+
+            <div class="acquire-btn-wrap">
+                <!-- User Request: When clicking 'Acquire Your Timepiece', move to login page -->
+                <a href="login.html" class="btn-acquire-timepiece">
+                    <span>Acquire Your Timepiece</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+
+
+        </div>
+    </main>
+
+    <!-- Slide Indicators -->
+    <div class="welcome-slider-dots">
+        <span class="slider-dot active" onclick="switchHeroSlide(0)"></span>
+        <span class="slider-dot" onclick="switchHeroSlide(1)"></span>
+        <span class="slider-dot" onclick="switchHeroSlide(2)"></span>
+        <span class="slider-dot" onclick="switchHeroSlide(3)"></span>
+    </div>
+
+    <!-- Background Slider Script -->
+    <script>
+        const HERO_SLIDES = ['watch15.jpg', 'watch13.jpg', 'watch17.webp', 'watch14.jpg'];
+        let currentSlideIdx = 0;
+        const bgImg = document.getElementById('welcome-bg-image');
+        const dots = document.querySelectorAll('.slider-dot');
+
+        function switchHeroSlide(idx) {
+            currentSlideIdx = idx;
+            bgImg.style.opacity = '0.3';
+            setTimeout(() => {
+                bgImg.src = HERO_SLIDES[idx];
+                bgImg.style.opacity = '1';
+            }, 250);
+
+            dots.forEach((d, i) => {
+                if (i === idx) d.classList.add('active');
+                else d.classList.remove('active');
+            });
+        }
+
+        // Auto subtle rotation every 6 seconds
+        setInterval(() => {
+            currentSlideIdx = (currentSlideIdx + 1) % HERO_SLIDES.length;
+            switchHeroSlide(currentSlideIdx);
+        }, 6000);
+    </script>
+</body>
+</html>

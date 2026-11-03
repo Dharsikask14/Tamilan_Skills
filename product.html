@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oryx | Timepiece Details</title>
+    <!-- Authentication Gate -->
+    <script>
+        (function() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+            }
+        })();
+    </script>
+    <!-- Google Fonts: Editorial Serif and Clean Modern Sans-Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-page: #F8F5F0;            /* Warm luxury ivory canvas */
+            --bg-card: #FFFFFF;            /* Pure white card surface */
+            --olive-primary: #687547;      /* Sage / Olive accent */
+            --olive-dark: #4F5A31;         /* Deep olive */
+            --text-dark: #1E1E1E;          /* Rich charcoal */
+            --text-muted: #6B685F;         /* Sophisticated taupe */
+            --border-soft: #E2DDD3;        /* Soft dividers */
+            --transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Open Sans', sans-serif; 
+            font-size: 0.95rem; 
+            background-color: var(--bg-page); 
+            color: var(--text-dark); 
+            line-height: 1.6; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { 
+            font-family: 'Lora', serif; 
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-dark);
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Buttons --- */
+        .btn-primary { 
+            display: inline-block; 
+            padding: 15px 32px; 
+            background: var(--olive-primary); 
+            border: 1px solid var(--olive-primary); 
+            color: #FFFFFF; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            font-size: 0.82rem; 
+            font-weight: 600; 
+            text-align: center; 
+            width: 100%; 
+            border-radius: 30px;
+            box-shadow: 0 6px 18px rgba(104, 117, 71, 0.22);
+        }
+
+        .btn-primary:hover { 
+            background: var(--olive-dark); 
+            border-color: var(--olive-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(79, 90, 49, 0.32);
+        }
+        
+        /* --- Header Navigation (Identical to Home Page) --- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 7%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #FFFFFF;
+            border-bottom: 1px solid #DCD6CA;
+            box-shadow: 0 4px 24px rgba(30, 30, 30, 0.05);
+            transition: var(--transition);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .oryx-saturn-logo {
+            width: 48px;
+            height: 34px;
+            display: block;
+            color: #9E7D3B; /* Elegant golden bronze matching the designed logo */
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 2px 5px rgba(158, 125, 59, 0.18));
+            flex-shrink: 0;
+        }
+
+        .saturn-globe-base {
+            fill: #FAF8F5;
+        }
+
+        .logo-group:hover .oryx-saturn-logo {
+            transform: scale(1.10) rotate(-4deg);
+            color: #B88E3F;
+            filter: drop-shadow(0 4px 10px rgba(184, 142, 63, 0.35));
+        }
+
+        .logo-text {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 42px;
+        }
+
+        .nav-links a {
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: var(--text-dark);
+            position: relative;
+            padding-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--olive-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--olive-primary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Luxury Integrated Searchbar */
+        .nav-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            padding: 8px 18px;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            width: 230px;
+        }
+
+        .nav-search-bar:focus-within {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 16px rgba(104, 117, 71, 0.18);
+            width: 270px;
+        }
+
+        .search-bar-icon {
+            width: 17px;
+            height: 17px;
+            stroke: var(--text-muted);
+            stroke-width: 1.8;
+            fill: none;
+            flex-shrink: 0;
+            transition: stroke 0.3s ease;
+        }
+
+        .nav-search-bar:focus-within .search-bar-icon {
+            stroke: var(--olive-primary);
+        }
+
+        .search-bar-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            width: 100%;
+        }
+
+        .search-bar-input::placeholder {
+            color: #9C978D;
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .action-icon-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .action-icon-btn:hover {
+            color: var(--olive-primary);
+            transform: translateY(-1px);
+        }
+
+        .action-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.6;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            font-size: 0.68rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-count-badge.wishlist-badge {
+            background: #C0392B;
+        }
+
+        .badge-bounce {
+            transform: scale(1.4) !important;
+        }
+
+        /* ─── USER BADGE NEAR CART BADGE ─── */
+        .user-badge-dropdown-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px 6px 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            transition: all 0.3s ease;
+            user-select: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .user-badge-pill:hover,
+        .user-badge-dropdown-wrap.active .user-badge-pill {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.15);
+        }
+
+        .user-avatar-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-avatar-circle svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .user-name-text {
+            max-width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-chevron {
+            width: 12px;
+            height: 12px;
+            stroke: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .user-badge-dropdown-wrap.active .user-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 220px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+            animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .user-badge-dropdown-wrap.active .user-dropdown-menu {
+            display: flex;
+        }
+
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-user-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dropdown-user-title {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .dropdown-user-email {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dropdown-session-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--olive-primary);
+            margin-top: 6px;
+        }
+
+        .dropdown-session-tag::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-soft);
+            margin: 2px 0;
+        }
+
+        .dropdown-logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            background: none;
+            border: 1px solid transparent;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: #D32F2F;
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-logout-btn:hover {
+            background: #FFF5F5;
+            border-color: rgba(211, 47, 47, 0.2);
+        }
+
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(248, 245, 240, 0.98);
+                flex-direction: column;
+                align-items: center;
+                padding: 24px 0;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+                border-bottom: 1px solid var(--border-soft);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+        }
+
+        /* --- Real Luxury E-Commerce Product Page Styles --- */
+        .product-page-wrapper {
+            max-width: 1260px;
+            margin: 0 auto;
+            padding: 24px 4% 80px 4%;
+            box-sizing: border-box;
+        }
+
+        /* Top Breadcrumb & Status Bar */
+        .product-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0 20px 0;
+            border-bottom: 1px solid var(--border-soft);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .breadcrumb-trail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .breadcrumb-trail a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb-trail a:hover {
+            color: var(--olive-primary);
+        }
+
+        .bc-sep {
+            color: #C8C2B7;
+            font-size: 0.75rem;
+        }
+
+        .bc-current {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .product-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #FAF8F5;
+            border: 1px solid var(--border-soft);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .stock-pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #27AE60;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.2);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(39, 174, 96, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+        }
+
+        /* Hero 2-Column Layout */
+        .product-hero-layout {
+            display: grid;
+            grid-template-columns: 1.08fr 1fr;
+            gap: 56px;
+            align-items: start;
+            margin-bottom: 70px;
+        }
+
+        /* --- Left: Interactive Multi-Angle Gallery --- */
+        .gallery-card {
+            position: sticky;
+            top: 100px;
+        }
+
+        .gallery-main-stage {
+            position: relative;
+            background: #FAF8F5;
+            border: 1px solid var(--border-soft);
+            border-radius: 22px;
+            padding: 40px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 480px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            cursor: zoom-in;
+        }
+
+        .gallery-badge {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            background: rgba(248, 245, 240, 0.95);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            padding: 5px 12px;
+            font-size: 0.70rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--olive-primary);
+            backdrop-filter: blur(4px);
+            z-index: 2;
+        }
+
+        .gallery-main-img {
+            max-width: 85%;
+            max-height: 410px;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.12));
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+        }
+
+        .gallery-main-stage:hover .gallery-main-img {
+            transform: scale(1.14);
+        }
+
+        .gallery-zoom-hint {
+            position: absolute;
+            bottom: 14px;
+            font-size: 0.74rem;
+            color: #8C867B;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            pointer-events: none;
+        }
+
+        /* Gallery Thumbnails Strip */
+        .gallery-thumbs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .gallery-thumb-btn {
+            background: #FAF8F5;
+            border: 1.8px solid var(--border-soft);
+            border-radius: 14px;
+            padding: 8px;
+            cursor: pointer;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.22s ease;
+            position: relative;
+        }
+
+        .gallery-thumb-btn:hover {
+            border-color: var(--olive-primary);
+            transform: translateY(-2px);
+        }
+
+        .gallery-thumb-btn.active {
+            border-color: var(--olive-primary);
+            border-width: 2.2px;
+            background: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.25);
+        }
+
+        .gallery-thumb-btn img {
+            max-width: 82%;
+            max-height: 82%;
+            object-fit: contain;
+            transition: transform 0.2s;
+        }
+
+        .thumb-label {
+            position: absolute;
+            bottom: 4px;
+            font-size: 0.60rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        /* Short & Crisp Specifications Below Image */
+        .image-specs-box {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        .image-specs-title {
+            font-family: 'Lora', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1E1E1E;
+            margin: 0 0 12px 0;
+            letter-spacing: 0.3px;
+        }
+
+        .image-specs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px 12px;
+        }
+
+        .spec-pill {
+            display: flex;
+            flex-direction: column;
+            background: #FAF8F5;
+            padding: 9px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .spec-pill:hover {
+            border-color: rgba(104, 117, 71, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .spec-label {
+            font-size: 0.70rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--olive-primary);
+            margin-bottom: 3px;
+        }
+
+        .spec-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1E1E1E;
+            line-height: 1.25;
+        }
+
+        /* --- Right: Buy Box & Configuration --- */
+        .buy-box-card {
+            padding: 6px 0;
+        }
+
+        .brand-overline {
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            color: var(--olive-primary);
+            margin-bottom: 6px;
+        }
+
+        .product-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 6px;
+        }
+
+        .product-main-h1 {
+            font-family: 'Lora', serif;
+            font-size: clamp(2.3rem, 3.8vw, 3.1rem);
+            line-height: 1.1;
+            color: #1E1E1E;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Ratings in small square box next to title */
+        .rating-square-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            background: #FFFFFF;
+            border: 1.5px solid #687547;
+            border-radius: 8px;
+            padding: 5px 10px;
+            min-height: 34px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            vertical-align: middle;
+            cursor: default;
+        }
+
+        .rating-square-box .rating-star {
+            color: #E5A93C;
+            font-size: 0.95rem;
+            line-height: 1;
+        }
+
+        .rating-square-box .rating-val {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.90rem;
+            color: #1E1E1E;
+            letter-spacing: -0.01em;
+        }
+
+        .product-subheading {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            font-weight: 400;
+        }
+
+        /* Price & Installments */
+        .price-row-box {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            margin-bottom: 6px;
+        }
+
+        .price-big {
+            font-family: 'Lora', serif;
+            font-size: 2.5rem;
+            color: #1E1E1E;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .price-duties-badge {
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: #27AE60;
+            background: rgba(39, 174, 96, 0.1);
+            border: 1px solid rgba(39, 174, 96, 0.25);
+            padding: 3px 9px;
+            border-radius: 12px;
+        }
+
+        .product-narrative-summary {
+            font-size: 0.95rem;
+            color: #4A463F;
+            line-height: 1.75;
+            margin-bottom: 24px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        /* Option Selectors */
+        .config-selector-group {
+            margin-bottom: 20px;
+        }
+
+        .selector-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 9px;
+            color: var(--text-dark);
+        }
+
+        .selector-selected-val {
+            color: var(--olive-primary);
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .chips-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .config-chip-btn {
+            background: #FAF8F5;
+            border: 1.5px solid var(--border-soft);
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #3E3B35;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .config-chip-btn:hover {
+            border-color: var(--olive-primary);
+            color: var(--olive-primary);
+        }
+
+        .config-chip-btn.active {
+            border-color: var(--olive-primary);
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            border-width: 2px;
+        }
+
+        /* Buy & Actions Row */
+        .buy-actions-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 26px;
+            margin-bottom: 16px;
+        }
+
+        .buy-qty-stepper {
+            display: inline-flex;
+            align-items: center;
+            background: #FAF8F5;
+            border: 1.5px solid var(--border-soft);
+            border-radius: 14px;
+            padding: 4px 8px;
+            height: 52px;
+            box-sizing: border-box;
+            gap: 8px;
+        }
+
+        .buy-stepper-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #FFFFFF;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+        }
+
+        .buy-stepper-btn:hover {
+            background: var(--olive-primary);
+            color: #FFFFFF;
+        }
+
+        .buy-qty-number {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            min-width: 24px;
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .btn-acquire-primary {
+            flex-grow: 1;
+            height: 52px;
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.90rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 18px rgba(104, 117, 71, 0.3);
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .btn-acquire-primary:hover {
+            background: #556236;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(104, 117, 71, 0.4);
+        }
+
+        .btn-vault-toggle {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: #FAF8F5;
+            border: 1.5px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .btn-vault-toggle:hover {
+            border-color: #C0392B;
+            color: #C0392B;
+            transform: translateY(-2px);
+        }
+
+        .btn-vault-toggle.active {
+            background: rgba(192, 57, 43, 0.1);
+            border-color: #C0392B;
+            color: #C0392B;
+        }
+
+        .btn-vault-toggle.active svg {
+            fill: #C0392B;
+            stroke: #C0392B;
+        }
+
+        .btn-vault-toggle svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.8;
+            stroke: currentColor;
+            fill: none;
+            transition: transform 0.2s;
+        }
+
+        .btn-vault-toggle:hover svg {
+            transform: scale(1.15);
+        }
+
+        /* --- "You May Also Admire" Section --- */
+        .related-timepieces-section {
+            border-top: 1px solid var(--border-soft);
+            padding-top: 50px;
+        }
+
+        .related-section-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .related-section-header h2 {
+            font-family: 'Lora', serif;
+            font-size: 2.2rem;
+            color: #1E1E1E;
+            margin: 0 0 6px 0;
+        }
+
+        .related-section-header p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .related-card {
+            background: #FAF8F5;
+            border: 1px solid var(--border-soft);
+            border-radius: 18px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .related-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--olive-primary);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+        }
+
+        .related-img-wrap {
+            height: 170px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .related-img-wrap img {
+            max-height: 150px;
+            max-width: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+        }
+
+        .related-card:hover .related-img-wrap img {
+            transform: scale(1.08);
+        }
+
+        .related-title {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1E1E1E;
+            margin: 0 0 4px 0;
+        }
+
+        .related-price {
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--olive-primary);
+            margin: 0 0 12px 0;
+        }
+
+        .related-action-btn {
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--olive-primary);
+            border: 1px solid var(--olive-primary);
+            border-radius: 10px;
+            padding: 6px 14px;
+            transition: all 0.2s;
+        }
+
+        .related-card:hover .related-action-btn {
+            background: var(--olive-primary);
+            color: #FFFFFF;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .product-hero-layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .gallery-card {
+                position: relative;
+                top: 0;
+            }
+            .gallery-main-stage {
+                min-height: 420px;
+            }
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .gallery-main-stage {
+                min-height: 320px;
+                padding: 20px;
+            }
+            .buy-actions-wrapper {
+                flex-wrap: wrap;
+            }
+            .btn-acquire-primary {
+                width: 100%;
+                order: 1;
+            }
+            .buy-qty-stepper {
+                order: 2;
+            }
+            .btn-vault-toggle {
+                order: 3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo-group">
+            <svg class="oryx-saturn-logo" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ORYX Emblem">
+                <defs>
+                    <clipPath id="saturn-back-clip"><path d="M 0 0 L 100 0 L 100 35 L 0 35 Z"/></clipPath>
+                    <clipPath id="saturn-front-clip"><path d="M 0 35 L 100 35 L 100 70 L 0 70 Z"/></clipPath>
+                    <clipPath id="saturn-sphere-clip"><circle cx="50" cy="35" r="23"/></clipPath>
+                </defs>
+                <!-- Back Ring -->
+                <g clip-path="url(#saturn-back-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+                <!-- Central Planetary Sphere -->
+                <circle cx="50" cy="35" r="23" class="saturn-globe-base" stroke="currentColor" stroke-width="2.6"/>
+                <!-- Longitudinal Fluted Meridian Ribs -->
+                <g clip-path="url(#saturn-sphere-clip)">
+                    <line x1="50" y1="10" x2="50" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 57 18, 57 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 64 18, 64 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 71 20, 71 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 43 18, 43 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 36 18, 36 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 29 20, 29 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+                <!-- Front Ring -->
+                <g clip-path="url(#saturn-front-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+            </svg>
+            <a href="index.html" class="logo-text">ORYX</a>
+        </div>
+
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html" class="active">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <!-- Luxury Integrated Searchbar -->
+            <form class="nav-search-bar" action="collection.html" method="GET" role="search">
+                <svg class="search-bar-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="search" class="search-bar-input" placeholder="Search timepieces..." aria-label="Search timepieces">
+            </form>
+            
+            <!-- Wishlist -->
+            <a href="profile.html" class="action-icon-btn" title="Wishlist">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="cart-count-badge wishlist-badge" id="nav-wishlist-count">0</span>
+            </a>
+
+            <!-- Cart Bag with dynamic count -->
+            <a href="cart.html" class="action-icon-btn" title="Shopping Cart">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-count-badge" id="nav-cart-count">0</span>
+            </a>
+
+            <!-- User Badge near Cart Badge -->
+            <div class="user-badge-dropdown-wrap" id="user-badge-wrap">
+                <button type="button" class="user-badge-pill" id="user-badge-pill" aria-label="User Account">
+                    <span class="user-avatar-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span class="user-name-text" id="nav-user-name">Guest</span>
+                    <svg class="user-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="user-dropdown-menu" id="user-dropdown-menu">
+                    <div class="dropdown-user-header">
+                        <span class="dropdown-user-title" id="dropdown-user-name">Guest</span>
+                        <span class="dropdown-user-email" id="dropdown-user-email">guest@oryx.com</span>
+                        <span class="dropdown-session-tag">Temporary Active</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-logout-btn" id="logout-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="21" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Log Out</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer Hamburger Toggle -->
+            <button class="hamburger-btn" id="mobile-toggle" aria-label="Toggle navigation">
+                <svg width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="product-page-wrapper">
+        <div id="product-container">
+        </div>
+    </main>
+
+    <script>
+        // Exact local image array with rating, review and category data
+        const watches = [
+            { id: 1, name: "Oryx Apex", price: 1450, rating: 4.9, reviews: 128, gender: "men", desc: "Automatic movement, scratch-resistant sapphire crystal, Grade 5 titanium case.", image: "men1.jpg" },
+            { id: 2, name: "Starlight Chrono", price: 799, rating: 4.8, reviews: 94, gender: "women", desc: "Quartz precision chronometer with a midnight aventurine dial and diamond-cut indices.", image: "women1.webp" },
+            { id: 3, name: "Deep Sea Diver", price: 2499, rating: 4.9, reviews: 112, gender: "men", desc: "Professional diver water resistant to 300m with unidirectional ceramic bezel and luminescent hands.", image: "men2.webp" },
+            { id: 4, name: "Heritage Gold", price: 8990, rating: 5.0, reviews: 86, gender: "women", desc: "18k gold plated vintage aesthetic with exhibition caseback and hand-stitched leather.", image: "women2.webp" },
+            { id: 5, name: "Obsidian Skeleton", price: 28500, rating: 4.9, reviews: 67, gender: "men", desc: "Exposed automatic manufacture movement, architectural bridge skeletonization, DLC titanium case.", image: "men3.webp" },
+            { id: 6, name: "Celestial Moonphase", price: 14999, rating: 4.9, reviews: 143, gender: "unisex", desc: "Featuring a genuine meteorite dial and hand-painted aventurine glass moon disk reflecting true astronomical cycles.", image: "unisex1.jpg" },
+            { id: 7, name: "Velocity Racing", price: 1850, rating: 4.7, reviews: 52, gender: "men", desc: "Tachymeter bezel chronometer with high-contrast sub-dials and perforated vulcanized rubber strap.", image: "men4.webp" },
+            { id: 8, name: "Minimalist Rose", price: 699, rating: 4.8, reviews: 79, gender: "women", desc: "Ultra-thin 6.8mm profile, satin rose gold finish, minimalist indices and sunray champagne dial.", image: "women3.webp" },
+            { id: 9, name: "Aviation Pro", price: 3499, rating: 4.9, reviews: 63, gender: "men", desc: "Pilot's navigational timepiece with circular slide rule bezel, high-legibility numerals and dual-time GMT.", image: "men5.jpg" },
+            { id: 10, name: "Sapphire Tourbillon", price: 145000, rating: 5.0, reviews: 38, gender: "unisex", desc: "Hand-wound gravity-defying flying tourbillon in a monobloc synthetic sapphire crystal case, limited edition.", image: "unisex2.webp" },
+            { id: 11, name: "Aquamaster Chrono", price: 4250, rating: 4.9, reviews: 78, gender: "men", desc: "Marine-grade steel chronometer, 300m water resistance, ceramic bezel with ocean blue sunburst dial.", image: "men6.jpg" },
+            { id: 12, name: "Monaco Grand Prix", price: 1299, rating: 4.8, reviews: 62, gender: "men", desc: "Vintage motorsport chronograph, panda dual sub-dials, perforated calfskin racing strap.", image: "men7.jpg" },
+            { id: 13, name: "Royal Damascus Steel", price: 45000, rating: 5.0, reviews: 41, gender: "men", desc: "Pattern-welded forged Damascus steel case, hand-wound manufacture movement with exhibition back.", image: "men8.jpg" },
+            { id: 14, name: "Polaris Field GMT", price: 950, rating: 4.8, reviews: 95, gender: "men", desc: "Tactical dual-time GMT, high-contrast luminescent dial with reinforced canvas expedition strap.", image: "men9.webp" },
+            { id: 15, name: "Vanguard Carbon Phantom", price: 85000, rating: 4.9, reviews: 36, gender: "men", desc: "Monobloc forged carbon case, stealth matte black finish, shock-absorbent titanium internal cage.", image: "men10.jpg" },
+            { id: 16, name: "Serpentine Diamond", price: 3890, rating: 4.9, reviews: 104, gender: "women", desc: "Curved ergonomic silhouette, pavé diamond bezel with shimmering iridescent mother-of-pearl dial.", image: "women4.jpg" },
+            { id: 17, name: "Aurora Opaline", price: 850, rating: 4.8, reviews: 88, gender: "women", desc: "Shimmering opaline dial with delicate Milanese rose gold mesh bracelet and diamond hour markers.", image: "women5.webp" },
+            { id: 18, name: "Petite Vendôme", price: 1650, rating: 4.9, reviews: 57, gender: "women", desc: "Art Deco rectangular tank case, guilloché Roman dial, faceted sapphire cabochon crown.", image: "women6.webp" },
+            { id: 19, name: "Luna Royale", price: 5490, rating: 5.0, reviews: 72, gender: "women", desc: "Diamond-embellished bezel with day-and-night astronomical complication, satin champagne strap.", image: "women7.webp" },
+            { id: 20, name: "Blossom Skeleton", price: 19500, rating: 4.9, reviews: 49, gender: "women", desc: "Intricate floral openworked bridges, exhibition caseback with 24 synthetic pink ruby bearings.", image: "women8.webp" },
+            { id: 21, name: "Eclipse Perpetual", price: 215000, rating: 5.0, reviews: 29, gender: "unisex", desc: "Perpetual calendar complication, smoked sapphire dial with leap year and lunar cycle indicators.", image: "unisex3.jpg" },
+            { id: 22, name: "Chrono Titan Minimal", price: 2890, rating: 4.8, reviews: 84, gender: "unisex", desc: "Architectural Bauhaus unibody titanium casing with minimalist monochrome sub-dial aesthetics.", image: "unisex4.webp" },
+            { id: 23, name: "Solaris Worldtimer", price: 12500, rating: 4.9, reviews: 63, gender: "unisex", desc: "24-city rotating world-time bezel with engraved northern hemisphere relief map.", image: "unisex5.jpg" }
+        ];
+
+        function getCart() {
+            return JSON.parse(localStorage.getItem('chronous_cart')) || [];
+        }
+
+        function saveCart(newCart) { 
+            localStorage.setItem('chronous_cart', JSON.stringify(newCart)); 
+            syncCartCount();
+        }
+
+        function syncCartCount() {
+            const currentCart = getCart();
+            const badge = document.getElementById('nav-cart-count');
+            if (badge) {
+                const totalCount = currentCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                badge.innerText = totalCount;
+                badge.classList.add('badge-bounce');
+                setTimeout(() => badge.classList.remove('badge-bounce'), 300);
+            }
+        }
+
+        let buyQuantity = 1;
+
+        function updateBuyQuantity(delta) {
+            buyQuantity = Math.max(1, buyQuantity + delta);
+            const qtyDisplay = document.getElementById('buy-qty-val');
+            if (qtyDisplay) {
+                qtyDisplay.innerText = buyQuantity;
+            }
+        }
+
+        function addToCartWithQty(id) { 
+            const watch = watches.find(w => w.id === id); 
+            if (watch) { 
+                let currentCart = getCart();
+                const existing = currentCart.find(item => item.id === id);
+                if (existing) {
+                    existing.quantity = (existing.quantity || 1) + buyQuantity;
+                } else {
+                    currentCart.push({ ...watch, quantity: buyQuantity });
+                }
+                saveCart(currentCart); 
+                
+                const btn = document.getElementById('main-acquire-btn');
+                const badge = document.getElementById('nav-cart-count');
+                if (badge) {
+                    badge.classList.add('badge-bounce');
+                    setTimeout(() => badge.classList.remove('badge-bounce'), 400);
+                }
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = `✓ ${buyQuantity} Timepiece${buyQuantity > 1 ? 's' : ''} Added to Vault`;
+                    btn.style.background = "#556236";
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.style.background = "";
+                    }, 2000);
+                }
+            } 
+        }
+
+        // Vault / Wishlist Toggle
+        function toggleWishlistProduct(id) {
+            let wishlist = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+            const idx = wishlist.indexOf(id);
+            const btn = document.getElementById('btn-vault-heart');
+            if (idx > -1) {
+                wishlist.splice(idx, 1);
+                if (btn) btn.classList.remove('active');
+            } else {
+                wishlist.push(id);
+                if (btn) btn.classList.add('active');
+            }
+            localStorage.setItem('oryx_wishlist', JSON.stringify(wishlist));
+            syncWishlistCount();
+        }
+
+        function syncWishlistCount() {
+            const wishlist = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+            const badge = document.getElementById('nav-wishlist-count');
+            if (badge) {
+                badge.innerText = wishlist.length;
+            }
+        }
+
+        // Multi-Angle Gallery Switcher
+        function switchGalleryImage(src, btnElement) {
+            const mainImg = document.getElementById('main-gallery-view-img');
+            if (mainImg) {
+                mainImg.style.opacity = '0.2';
+                mainImg.style.transform = 'scale(0.96)';
+                setTimeout(() => {
+                    mainImg.src = src;
+                    mainImg.style.opacity = '1';
+                    mainImg.style.transform = 'scale(1)';
+                }, 140);
+            }
+            document.querySelectorAll('.gallery-thumb-btn').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) {
+                btnElement.classList.add('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            syncCartCount();
+            syncWishlistCount();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = parseInt(urlParams.get('id')) || 1;
+            
+            const container = document.getElementById('product-container');
+            const watch = watches.find(w => w.id === productId) || watches[0];
+
+            if (watch) {
+                let categoryLabel = "Men's Timepieces";
+                if(watch.gender === 'women') categoryLabel = "Women's Timepieces";
+                if(watch.gender === 'unisex') categoryLabel = "Unisex High Complications";
+
+                const ratingVal = watch.rating ? watch.rating.toFixed(1) : "4.9";
+                const reviewsCount = watch.reviews || 88;
+                const wishlist = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+                const isWishlisted = wishlist.includes(watch.id);
+
+                // Gallery showcase view
+                const galleryViews = [
+                    { src: watch.image, label: "Full Timepiece" }
+                ];
+
+                // Curated recommendations (excluding current watch)
+                const recommendations = watches.filter(w => w.id !== watch.id).slice(0, 3);
+
+                container.innerHTML = `
+                    <!-- Breadcrumbs & Status Bar -->
+                    <div class="product-top-bar">
+                        <div class="breadcrumb-trail">
+                            <a href="index.html">Home</a>
+                            <span class="bc-sep">/</span>
+                            <a href="collection.html">Collection</a>
+                            <span class="bc-sep">/</span>
+                            <a href="collection.html?gender=${watch.gender}">${categoryLabel}</a>
+                            <span class="bc-sep">/</span>
+                            <span class="bc-current">${watch.name}</span>
+                        </div>
+                        <div class="product-status-pill">
+                            <span class="stock-pulse-dot"></span>
+                            <span>In Stock</span>
+                        </div>
+                    </div>
+
+                    <!-- 2-Column Product Main Hero -->
+                    <div class="product-hero-layout">
+                        
+                        <!-- Left: Interactive Gallery -->
+                        <div class="gallery-card">
+                            <div class="gallery-main-stage" title="Hover to inspect fine mechanical details">
+                                <img id="main-gallery-view-img" src="${watch.image}" alt="${watch.name}" class="gallery-main-img">
+                                <div class="gallery-zoom-hint">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        <line x1="11" y1="8" x2="11" y2="14"></line>
+                                        <line x1="8" y1="11" x2="14" y2="11"></line>
+                                    </svg>
+                                    Hover image to magnify finishing
+                                </div>
+                            </div>
+
+                            <!-- Interactive Thumbnails -->
+                            <div class="gallery-thumbs-grid">
+                                ${galleryViews.map((view, idx) => `
+                                    <button class="gallery-thumb-btn ${idx === 0 ? 'active' : ''}" onclick="switchGalleryImage('${view.src}', this)" title="${view.label}">
+                                        <img src="${view.src}" alt="${view.label}">
+                                        <span class="thumb-label">${view.label}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Right: Buy Box & Configuration -->
+                        <div class="buy-box-card">
+                            <div class="brand-overline">ORYX HAUTE HORLOGERIE • GENEVA</div>
+                            <div class="product-title-row">
+                                <h1 class="product-main-h1">${watch.name}</h1>
+                                <div class="rating-square-box" title="Rated ${ratingVal} out of 5 stars">
+                                    <span class="rating-star">★</span>
+                                    <span class="rating-val">${ratingVal}</span>
+                                </div>
+                            </div>
+                            <div class="product-subheading">In-House Manufacture Automatic • ${categoryLabel}</div>
+
+                            <!-- Pricing -->
+                            <div class="price-row-box">
+                                <h2 class="price-big">₹${watch.price.toLocaleString("en-IN")}</h2>
+                            </div>
+
+                            <!-- Lead Narrative -->
+                            <p class="product-narrative-summary">
+                                ${watch.desc} Crafted in limited series at our Geneva manufacture, combining multi-axis hand-bevelled finishing with certified chronometric precision engineered for a lifetime of performance.
+                            </p>
+
+                            <!-- Buy Actions: Stepper + Add to Cart + Wishlist -->
+                            <div class="buy-actions-wrapper">
+                                <div class="buy-qty-stepper">
+                                    <button type="button" class="buy-stepper-btn" onclick="updateBuyQuantity(-1)" title="Decrease Quantity">−</button>
+                                    <span class="buy-qty-number" id="buy-qty-val">1</span>
+                                    <button type="button" class="buy-stepper-btn" onclick="updateBuyQuantity(1)" title="Increase Quantity">+</button>
+                                </div>
+
+                                <button type="button" class="btn-acquire-primary" id="main-acquire-btn" onclick="addToCartWithQty(${watch.id})">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                    </svg>
+                                    Acquire Timepiece
+                                </button>
+
+                                <button type="button" class="btn-vault-toggle ${isWishlisted ? 'active' : ''}" id="btn-vault-heart" onclick="toggleWishlistProduct(${watch.id})" title="${isWishlisted ? 'Saved in Vault' : 'Save to Vault'}" aria-label="Save to Vault">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Technical Specifications (Right Side, Exactly Below Acquire Timepiece) -->
+                            <div class="image-specs-box">
+                                <h3 class="image-specs-title">Technical Specifications</h3>
+                                <div class="image-specs-grid">
+                                    <div class="spec-pill">
+                                        <span class="spec-label">Movement</span>
+                                        <span class="spec-value">Automatic Cal. OX-${watch.id}0</span>
+                                    </div>
+                                    <div class="spec-pill">
+                                        <span class="spec-label">Case Size</span>
+                                        <span class="spec-value">41 mm × 11.8 mm</span>
+                                    </div>
+                                    <div class="spec-pill">
+                                        <span class="spec-label">Crystal</span>
+                                        <span class="spec-value">Anti-Reflective Sapphire</span>
+                                    </div>
+                                    <div class="spec-pill">
+                                        <span class="spec-label">Water Depth</span>
+                                        <span class="spec-value">${watch.id === 3 ? '300m / 30 ATM' : '100m / 10 ATM'}</span>
+                                    </div>
+                                    <div class="spec-pill">
+                                        <span class="spec-label">Power Reserve</span>
+                                        <span class="spec-value">68 Hours Continuous</span>
+                                    </div>
+                                    <div class="spec-pill">
+                                        <span class="spec-label">Material</span>
+                                        <span class="spec-value">${watch.id === 4 ? '18k Rose Gold Plated' : watch.id === 10 ? 'Synthetic Sapphire' : watch.id === 3 ? 'Ceramic & Steel' : 'Grade 5 Titanium'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- "You May Also Admire" Recommendations -->
+                    <div class="related-timepieces-section">
+                        <div class="related-section-header">
+                            <h2>You May Also Admire</h2>
+                            <p>Complementary mechanical creations from the Oryx Geneva Archive</p>
+                        </div>
+                        <div class="related-grid">
+                            ${recommendations.map(r => `
+                                <a href="product.html?id=${r.id}" class="related-card">
+                                    <div class="related-img-wrap">
+                                        <img src="${r.image}" alt="${r.name}">
+                                    </div>
+                                    <h4 class="related-title">${r.name}</h4>
+                                    <div class="related-price">₹${r.price.toLocaleString("en-IN")}</div>
+                                    <span class="related-action-btn">Explore Timepiece</span>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="error-message">
+                        <h2>Timepiece Not Found</h2>
+                        <p class="text-muted" style="margin-bottom: 30px;">The requested model is currently unavailable or has been archived.</p>
+                        <a href="collection.html" class="btn-primary" style="width: auto;">Return to Catalog</a>
+                    </div>
+                `;
+            }
+
+            // Mobile Menu Drawer Toggle
+            const toggle = document.getElementById('mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (toggle && navLinks) {
+                toggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+    
+
+        // Header Sync handled by top-level syncCartCount & syncWishlistCount
+
+        // --- User Badge Navigation & Auth Management ---
+        function initUserAuthNav() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+                return;
+            }
+
+            const userName = sessionStorage.getItem('oryx_user_name') || localStorage.getItem('oryx_user_name') || 'Guest';
+            const userEmail = sessionStorage.getItem('oryx_user_email') || localStorage.getItem('oryx_user_email') || 'guest@oryx.com';
+
+            const navNameEl = document.getElementById('nav-user-name');
+            const dropNameEl = document.getElementById('dropdown-user-name');
+            const dropEmailEl = document.getElementById('dropdown-user-email');
+            if (navNameEl) navNameEl.textContent = userName;
+            if (dropNameEl) dropNameEl.textContent = userName;
+            if (dropEmailEl) dropEmailEl.textContent = userEmail;
+
+            const wrap = document.getElementById('user-badge-wrap');
+            const btn = document.getElementById('user-badge-pill');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (btn && wrap) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    wrap.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!wrap.contains(e.target)) {
+                        wrap.classList.remove('active');
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.removeItem('oryx_logged_in');
+                    sessionStorage.removeItem('oryx_user_name');
+                    sessionStorage.removeItem('oryx_user_email');
+                    localStorage.removeItem('oryx_logged_in');
+                    localStorage.removeItem('oryx_user_name');
+                    localStorage.removeItem('oryx_user_email');
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserAuthNav();
+            syncCartCount();
+            syncWishlistCount();
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navMenu = document.querySelector('.nav-links');
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    
+</script>
+</body>
+</html>

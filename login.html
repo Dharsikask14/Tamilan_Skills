@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORYX | Sign In</title>
+    <!-- Google Fonts: Lora (Serif) & Open Sans (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-page: #F8F5F0;            /* Warm luxury ivory canvas */
+            --bg-card: #FFFFFF;            /* Pure white surface */
+            --olive-primary: #687547;      /* Sage / Olive accent */
+            --olive-dark: #4F5A31;         /* Deep olive */
+            --text-dark: #1E1E1E;          /* Rich charcoal */
+            --text-muted: #6B685F;         /* Soft taupe */
+            --border-soft: #E2DDD3;        /* Warm sand border */
+            --gold-accent: #C5A059;        /* Champagne gold */
+            --font-serif: 'Lora', Georgia, serif;
+            --font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            padding: 44px 38px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 16px 48px rgba(30, 30, 30, 0.05);
+            text-align: center;
+        }
+
+        /* ─── BRAND LOGO ─── */
+        .brand-header {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            text-decoration: none;
+        }
+
+        .oryx-saturn-logo {
+            width: 64px;
+            height: 45px;
+            display: block;
+            color: #9E7D3B;
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 3px 8px rgba(158, 125, 59, 0.22));
+            margin-bottom: 4px;
+        }
+
+        .saturn-globe-base {
+            fill: #FFFFFF;
+        }
+
+        .brand-header:hover .oryx-saturn-logo {
+            transform: scale(1.10) rotate(-4deg);
+            color: #B88E3F;
+            filter: drop-shadow(0 6px 14px rgba(184, 142, 63, 0.4));
+        }
+
+        .logo-text {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .login-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .login-subtitle {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        /* ─── FORM ─── */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: left;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrap svg.input-icon {
+            position: absolute;
+            left: 14px;
+            width: 18px;
+            height: 18px;
+            stroke: var(--text-muted);
+            fill: none;
+            stroke-width: 1.8;
+            pointer-events: none;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            background: #FAFAFA;
+            border: 1px solid var(--border-soft);
+            border-radius: 10px;
+            font-family: var(--font-sans);
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .input-field:focus {
+            background: #FFFFFF;
+            border-color: var(--olive-primary);
+            box-shadow: 0 0 0 3px rgba(104, 117, 71, 0.12);
+        }
+
+        .toggle-pwd {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .toggle-pwd:hover {
+            color: var(--olive-primary);
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn-submit {
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 20px;
+            font-family: var(--font-sans);
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.2);
+        }
+
+        .btn-submit:hover {
+            background: var(--olive-dark);
+            box-shadow: 0 6px 18px rgba(104, 117, 71, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 6px 0;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-soft);
+        }
+
+        .btn-guest {
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            color: var(--text-dark);
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-family: var(--font-sans);
+            font-size: 0.86rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-guest:hover {
+            border-color: var(--olive-primary);
+            color: var(--olive-primary);
+            background: #FDFBF7;
+        }
+
+        .login-footnote {
+            margin-top: 22px;
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .footnote-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--olive-primary);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 34px 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="login-card">
+        
+        <!-- Minimal Logo -->
+        <a href="index.html" class="brand-header">
+            <svg class="oryx-saturn-logo" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ORYX Emblem">
+                <defs>
+                    <clipPath id="saturn-back-clip"><path d="M 0 0 L 100 0 L 100 35 L 0 35 Z"/></clipPath>
+                    <clipPath id="saturn-front-clip"><path d="M 0 35 L 100 35 L 100 70 L 0 70 Z"/></clipPath>
+                    <clipPath id="saturn-sphere-clip"><circle cx="50" cy="35" r="23"/></clipPath>
+                </defs>
+                <!-- Back Ring -->
+                <g clip-path="url(#saturn-back-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+                <!-- Central Planetary Sphere -->
+                <circle cx="50" cy="35" r="23" class="saturn-globe-base" stroke="currentColor" stroke-width="2.6"/>
+                <!-- Longitudinal Fluted Meridian Ribs -->
+                <g clip-path="url(#saturn-sphere-clip)">
+                    <line x1="50" y1="10" x2="50" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 57 18, 57 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 64 18, 64 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 71 20, 71 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 43 18, 43 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 36 18, 36 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 29 20, 29 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+                <!-- Front Ring -->
+                <g clip-path="url(#saturn-front-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+            </svg>
+            <span class="logo-text">ORYX</span>
+        </a>
+
+        <h1 class="login-title">Sign In</h1>
+        <p class="login-subtitle">Access the private horological collection</p>
+
+        <!-- Minimal Form -->
+        <form class="login-form" id="login-form">
+            <div class="form-group">
+                <label class="form-label" for="user-input">Email or Username</label>
+                <div class="input-wrap">
+                    <svg class="input-icon" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <input type="text" id="user-input" class="input-field" placeholder="guest@oryx.com" value="guest@oryx.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password-input">Password</label>
+                <div class="input-wrap">
+                    <svg class="input-icon" viewBox="0 0 24 24">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <input type="password" id="password-input" class="input-field" placeholder="••••••••" value="oryx2024" required>
+                    <button type="button" class="toggle-pwd" id="toggle-pwd" aria-label="Toggle password visibility">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btn-submit">Sign In</button>
+
+            <div class="divider">or</div>
+
+            <button type="button" class="btn-guest" id="btn-guest">Continue as Guest</button>
+        </form>
+
+        <div class="login-footnote">
+            <span class="footnote-dot"></span>
+            <span>Temporary session &bull; No registration required</span>
+        </div>
+
+    </main>
+
+    <script>
+        (function() {
+            const form = document.getElementById('login-form');
+            const userInput = document.getElementById('user-input');
+            const pwdInput = document.getElementById('password-input');
+            const togglePwd = document.getElementById('toggle-pwd');
+            const guestBtn = document.getElementById('btn-guest');
+
+            // Password Toggle
+            togglePwd.addEventListener('click', () => {
+                const isPwd = pwdInput.type === 'password';
+                pwdInput.type = isPwd ? 'text' : 'password';
+                togglePwd.innerHTML = isPwd ? `
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                ` : `
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                `;
+            });
+
+            function doLogin(nameStr, emailStr) {
+                const cleanName = nameStr.trim();
+                const displayName = cleanName.includes('@') 
+                    ? cleanName.split('@')[0].charAt(0).toUpperCase() + cleanName.split('@')[0].slice(1)
+                    : cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+
+                sessionStorage.setItem('oryx_logged_in', 'true');
+                sessionStorage.setItem('oryx_user_name', displayName || 'Guest');
+                sessionStorage.setItem('oryx_user_email', emailStr || cleanName || 'guest@oryx.com');
+                localStorage.setItem('oryx_logged_in', 'true');
+                localStorage.setItem('oryx_user_name', displayName || 'Guest');
+                localStorage.setItem('oryx_user_email', emailStr || cleanName || 'guest@oryx.com');
+
+                window.location.href = 'index.html';
+            }
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const val = userInput.value.trim() || 'guest@oryx.com';
+                doLogin(val, val);
+            });
+
+            guestBtn.addEventListener('click', () => {
+                doLogin('Guest', 'guest@oryx.com');
+            });
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oryx | Shopping Cart</title>
+    <!-- Authentication Gate -->
+    <script>
+        (function() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+            }
+        })();
+    </script>
+    <!-- Google Fonts: Editorial Serif and Clean Modern Sans-Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-page: #F8F5F0;            /* Warm luxury ivory canvas */
+            --bg-card: #FFFFFF;            /* Pure white card surface */
+            --olive-primary: #687547;      /* Sage / Olive accent */
+            --olive-dark: #4F5A31;         /* Deep olive */
+            --text-dark: #1E1E1E;          /* Rich charcoal */
+            --text-muted: #6B685F;         /* Sophisticated taupe */
+            --border-soft: #E2DDD3;        /* Soft dividers */
+            --transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Open Sans', sans-serif; 
+            font-size: 0.95rem; 
+            background-color: var(--bg-page); 
+            color: var(--text-dark); 
+            line-height: 1.6; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { 
+            font-family: 'Lora', serif; 
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-dark);
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Header Navigation (Identical to Home Page) --- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 7%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #FFFFFF;
+            border-bottom: 1px solid #DCD6CA;
+            box-shadow: 0 4px 24px rgba(30, 30, 30, 0.05);
+            transition: var(--transition);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .oryx-saturn-logo {
+            width: 48px;
+            height: 34px;
+            display: block;
+            color: #9E7D3B; /* Elegant golden bronze matching the designed logo */
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 2px 5px rgba(158, 125, 59, 0.18));
+            flex-shrink: 0;
+        }
+
+        .saturn-globe-base {
+            fill: #FAF8F5;
+        }
+
+        .logo-group:hover .oryx-saturn-logo {
+            transform: scale(1.10) rotate(-4deg);
+            color: #B88E3F;
+            filter: drop-shadow(0 4px 10px rgba(184, 142, 63, 0.35));
+        }
+
+        .logo-text {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 42px;
+        }
+
+        .nav-links a {
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: var(--text-dark);
+            position: relative;
+            padding-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--olive-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--olive-primary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Luxury Integrated Searchbar */
+        .nav-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            padding: 8px 18px;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            width: 230px;
+        }
+
+        .nav-search-bar:focus-within {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 16px rgba(104, 117, 71, 0.18);
+            width: 270px;
+        }
+
+        .search-bar-icon {
+            width: 17px;
+            height: 17px;
+            stroke: var(--text-muted);
+            stroke-width: 1.8;
+            fill: none;
+            flex-shrink: 0;
+            transition: stroke 0.3s ease;
+        }
+
+        .nav-search-bar:focus-within .search-bar-icon {
+            stroke: var(--olive-primary);
+        }
+
+        .search-bar-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            width: 100%;
+        }
+
+        .search-bar-input::placeholder {
+            color: #9C978D;
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .action-icon-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .action-icon-btn:hover {
+            color: var(--olive-primary);
+            transform: translateY(-1px);
+        }
+
+        .action-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.6;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            font-size: 0.68rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-count-badge.wishlist-badge {
+            background: #C0392B;
+        }
+
+        .badge-bounce {
+            transform: scale(1.4) !important;
+        }
+
+        /* ─── USER BADGE NEAR CART BADGE ─── */
+        .user-badge-dropdown-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px 6px 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            transition: all 0.3s ease;
+            user-select: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .user-badge-pill:hover,
+        .user-badge-dropdown-wrap.active .user-badge-pill {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.15);
+        }
+
+        .user-avatar-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-avatar-circle svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .user-name-text {
+            max-width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-chevron {
+            width: 12px;
+            height: 12px;
+            stroke: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .user-badge-dropdown-wrap.active .user-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 220px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+            animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .user-badge-dropdown-wrap.active .user-dropdown-menu {
+            display: flex;
+        }
+
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-user-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dropdown-user-title {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .dropdown-user-email {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dropdown-session-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--olive-primary);
+            margin-top: 6px;
+        }
+
+        .dropdown-session-tag::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-soft);
+            margin: 2px 0;
+        }
+
+        .dropdown-logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            background: none;
+            border: 1px solid transparent;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: #D32F2F;
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-logout-btn:hover {
+            background: #FFF5F5;
+            border-color: rgba(211, 47, 47, 0.2);
+        }
+
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(248, 245, 240, 0.98);
+                flex-direction: column;
+                align-items: center;
+                padding: 24px 0;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+                border-bottom: 1px solid var(--border-soft);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+        }
+
+        /* --- Buttons --- */
+        .btn-primary { 
+            display: inline-block; 
+            width: 100%; 
+            padding: 14px 28px; 
+            background: var(--olive-primary); 
+            border: 1px solid var(--olive-primary); 
+            color: #FFFFFF; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            font-size: 0.82rem; 
+            font-weight: 600;
+            border-radius: 30px;
+            box-shadow: 0 6px 18px rgba(104, 117, 71, 0.22);
+            text-align: center;
+        }
+        
+        .btn-primary:hover { 
+            background: var(--olive-dark); 
+            border-color: var(--olive-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(79, 90, 49, 0.32);
+        }
+        
+        /* --- Cart Layout --- */
+        .container { 
+            padding: 50px 7% 80px 7%; 
+            max-width: 1300px; 
+            margin: 0 auto; 
+        }
+
+        .section-header-group {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-overline {
+            font-size: 0.76rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--olive-primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .page-title { 
+            font-size: clamp(2.4rem, 4.5vw, 3.4rem); 
+            letter-spacing: 2px;
+            color: var(--text-dark); 
+            line-height: 1.15;
+            text-transform: uppercase;
+        }
+        
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* --- Cart Items (Left Side) --- */
+        .cart-items-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+        }
+
+        .cart-item-card {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            background: var(--bg-card);
+            padding: 20px 24px;
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+            transition: var(--transition);
+        }
+
+        .cart-item-card:hover { 
+            border-color: var(--olive-primary); 
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(104, 117, 71, 0.1);
+        }
+        
+        .cart-item-img { 
+            width: 100px; 
+            height: 100px; 
+            object-fit: cover; 
+            border-radius: 12px; 
+            background: #FAF8F5;
+        }
+
+        .cart-item-details { flex-grow: 1; }
+        
+        .cart-item-title { 
+            font-family: 'Lora', serif; 
+            font-size: 1.45rem; 
+            margin-bottom: 4px; 
+            color: var(--text-dark); 
+        }
+
+        .cart-item-price { 
+            font-family: 'Lora', serif;
+            font-size: 1.3rem; 
+            font-weight: 700;
+            color: var(--olive-primary); 
+        }
+
+        .cart-item-actions-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 14px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .cart-qty-wrapper {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .qty-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .cart-qty-control {
+            display: inline-flex;
+            align-items: center;
+            background: #FAF8F5;
+            border: 1px solid var(--border-soft);
+            border-radius: 24px;
+            padding: 3px 6px;
+            gap: 8px;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: #FFFFFF;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+
+        .qty-btn:hover {
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            transform: scale(1.08);
+        }
+
+        .qty-val {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            min-width: 26px;
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .item-subtotal-price {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            margin-left: 6px;
+        }
+
+        .item-subtotal-price strong {
+            color: var(--olive-primary);
+        }
+        
+        .remove-btn {
+            background: transparent;
+            border: 1px solid rgba(192, 57, 43, 0.25);
+            color: #C0392B;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: 0;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-btn:hover { 
+            color: #FFFFFF; 
+            background: #C0392B;
+            border-color: #C0392B;
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(192, 57, 43, 0.25);
+        }
+
+        .bin-icon {
+            width: 17px;
+            height: 17px;
+            stroke: currentColor;
+            display: block;
+        }
+
+        .empty-cart-msg { 
+            text-align: center; 
+            font-size: 1.15rem; 
+            color: var(--text-muted); 
+            padding: 60px 30px; 
+            background: var(--bg-card); 
+            border-radius: 20px; 
+            border: 1px dashed var(--border-soft); 
+            line-height: 1.8;
+        }
+
+        .empty-cart-msg a {
+            color: var(--olive-primary);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        /* --- Checkout Summary (Right Side) --- */
+        .summary-card {
+            background: var(--bg-card);
+            padding: 36px;
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            position: sticky;
+            top: 100px;
+        }
+        
+        .summary-card h3 { 
+            font-size: 1.75rem; 
+            margin-bottom: 22px; 
+            border-bottom: 1px solid var(--border-soft); 
+            padding-bottom: 14px; 
+            color: var(--text-dark);
+        }
+        
+        .total-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            font-size: 1.15rem; 
+            font-weight: 500;
+        }
+
+        .total-price { 
+            font-family: 'Lora', serif;
+            font-size: 1.8rem; 
+            color: var(--olive-primary); 
+            font-weight: 700; 
+        }
+
+        /* Checkout Form */
+        .form-group { margin-bottom: 18px; }
+        
+        .form-group label { 
+            display: block; 
+            margin-bottom: 6px; 
+            color: var(--text-dark); 
+            font-size: 0.85rem; 
+            font-weight: 600;
+        }
+
+        .form-control { 
+            width: 100%; 
+            padding: 12px 16px; 
+            background: var(--bg-page); 
+            border: 1px solid var(--border-soft); 
+            color: var(--text-dark); 
+            border-radius: 12px; 
+            font-family: inherit; 
+            font-size: 0.92rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus { 
+            border-color: var(--olive-primary); 
+            background: #FFFFFF;
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(104, 117, 71, 0.12);
+        }
+
+        .form-row-compact {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-row-compact .form-group {
+            flex: 1;
+            margin-bottom: 18px;
+        }
+
+        .form-control:invalid:not(:placeholder-shown) {
+            border-color: #C0392B;
+        }
+
+        @media (max-width: 900px) {
+            .cart-layout { grid-template-columns: 1fr; }
+            .cart-item-card { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo-group">
+            <svg class="oryx-saturn-logo" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ORYX Emblem">
+                <defs>
+                    <clipPath id="saturn-back-clip"><path d="M 0 0 L 100 0 L 100 35 L 0 35 Z"/></clipPath>
+                    <clipPath id="saturn-front-clip"><path d="M 0 35 L 100 35 L 100 70 L 0 70 Z"/></clipPath>
+                    <clipPath id="saturn-sphere-clip"><circle cx="50" cy="35" r="23"/></clipPath>
+                </defs>
+                <!-- Back Ring -->
+                <g clip-path="url(#saturn-back-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+                <!-- Central Planetary Sphere -->
+                <circle cx="50" cy="35" r="23" class="saturn-globe-base" stroke="currentColor" stroke-width="2.6"/>
+                <!-- Longitudinal Fluted Meridian Ribs -->
+                <g clip-path="url(#saturn-sphere-clip)">
+                    <line x1="50" y1="10" x2="50" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 57 18, 57 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 64 18, 64 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 71 20, 71 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 43 18, 43 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 36 18, 36 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 29 20, 29 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+                <!-- Front Ring -->
+                <g clip-path="url(#saturn-front-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+            </svg>
+            <a href="index.html" class="logo-text">ORYX</a>
+        </div>
+
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <!-- Luxury Integrated Searchbar -->
+            <form class="nav-search-bar" action="collection.html" method="GET" role="search">
+                <svg class="search-bar-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="search" class="search-bar-input" placeholder="Search timepieces..." aria-label="Search timepieces">
+            </form>
+            
+            <!-- Wishlist -->
+            <a href="profile.html" class="action-icon-btn" title="Wishlist">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="cart-count-badge wishlist-badge" id="nav-wishlist-count">0</span>
+            </a>
+
+            <!-- Cart Bag with dynamic count -->
+            <a href="cart.html" class="action-icon-btn active" title="Shopping Cart">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-count-badge" id="nav-cart-count">0</span>
+            </a>
+
+            <!-- User Badge near Cart Badge -->
+            <div class="user-badge-dropdown-wrap" id="user-badge-wrap">
+                <button type="button" class="user-badge-pill" id="user-badge-pill" aria-label="User Account">
+                    <span class="user-avatar-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span class="user-name-text" id="nav-user-name">Guest</span>
+                    <svg class="user-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="user-dropdown-menu" id="user-dropdown-menu">
+                    <div class="dropdown-user-header">
+                        <span class="dropdown-user-title" id="dropdown-user-name">Guest</span>
+                        <span class="dropdown-user-email" id="dropdown-user-email">guest@oryx.com</span>
+                        <span class="dropdown-session-tag">Temporary Active</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-logout-btn" id="logout-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="21" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Log Out</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer Hamburger Toggle -->
+            <button class="hamburger-btn" id="mobile-toggle" aria-label="Toggle navigation">
+                <svg width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="section-header-group">
+            <span class="section-overline">Your Selection</span>
+            <h1 class="page-title">Your Private Vault</h1>
+        </div>
+        
+        <div class="cart-layout">
+            
+            <div class="cart-items-container" id="cart-items-container">
+            </div>
+
+            <div class="summary-card">
+                <h3>Order Summary</h3>
+                <div class="total-row">
+                    <span>Grand Total:</span>
+                    <span class="total-price">₹<span id="cart-total-price">0</span></span>
+                </div>
+
+                <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)">
+                    <div class="form-group">
+                        <label for="checkout-cardholder">Name on Card *</label>
+                        <input type="text" id="checkout-cardholder" class="form-control" placeholder="John Doe" pattern="^[a-zA-Z\s.]{3,40}$" minlength="3" maxlength="40" title="Please enter the full name as printed on your card (alphabets only)." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-address">Secure Shipping Address *</label>
+                        <input type="text" id="checkout-address" class="form-control" placeholder="123 Luxury Lane" minlength="10" maxlength="120" title="Please enter a complete delivery address (minimum 10 characters)." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-cardnumber">Card Number *</label>
+                        <input type="text" id="checkout-cardnumber" class="form-control" placeholder="4532 •••• •••• 8910" maxlength="19" autocomplete="cc-number" inputmode="numeric" oninput="formatCardNumber(this)" title="Please enter a valid 16-digit debit or credit card number." required>
+                    </div>
+                    <div class="form-row-compact">
+                        <div class="form-group">
+                            <label for="checkout-expiry">Expiry Date *</label>
+                            <input type="text" id="checkout-expiry" class="form-control" placeholder="MM/YY" maxlength="5" inputmode="numeric" oninput="formatExpiry(this)" title="Enter card expiry in MM/YY format." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="checkout-cvv">CVV / CVC *</label>
+                            <input type="password" id="checkout-cvv" class="form-control" placeholder="•••" maxlength="4" pattern="^[0-9]{3,4}$" inputmode="numeric" title="Enter 3 or 4-digit security code." required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary" style="margin-top: 10px;">Complete Acquisition</button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+        
+                // --- Card Input Formatters & Checkout Validation ---
+        function formatCardNumber(input) {
+            // Strip non-digits
+            let v = input.value.replace(/\D/g, '');
+            // Limit to 16 digits
+            v = v.substring(0, 16);
+            // Format into 4-digit chunks
+            const parts = [];
+            for (let i = 0; i < v.length; i += 4) {
+                parts.push(v.substring(i, i + 4));
+            }
+            input.value = parts.join(' ');
+        }
+
+        function formatExpiry(input) {
+            let v = input.value.replace(/\D/g, '');
+            v = v.substring(0, 4);
+            if (v.length >= 3) {
+                input.value = v.substring(0, 2) + '/' + v.substring(2, 4);
+            } else {
+                input.value = v;
+            }
+        }
+
+        // Luhn Algorithm Card Validator
+        function isValidCardLuhn(numStr) {
+            let sum = 0;
+            let shouldDouble = false;
+            for (let i = numStr.length - 1; i >= 0; i--) {
+                let digit = parseInt(numStr.charAt(i), 10);
+                if (shouldDouble) {
+                    digit *= 2;
+                    if (digit > 9) digit -= 9;
+                }
+                sum += digit;
+                shouldDouble = !shouldDouble;
+            }
+            return (sum % 10) === 0;
+        }
+
+        function handleCheckoutSubmit(e) {
+            e.preventDefault();
+            
+            if (cart.length === 0) {
+                alert('Your Vault Bag is empty. Please add a timepiece to proceed with acquisition.');
+                return;
+            }
+
+            const cardHolder = document.getElementById('checkout-cardholder').value.trim();
+            const address = document.getElementById('checkout-address').value.trim();
+            const rawCard = document.getElementById('checkout-cardnumber').value.replace(/\s/g, '');
+            const expiry = document.getElementById('checkout-expiry').value.trim();
+            const cvv = document.getElementById('checkout-cvv').value.trim();
+
+            // 1. Validate Card Number Length (15 or 16 digits)
+            if (!/^\d{15,16}$/.test(rawCard)) {
+                alert('Please enter a valid 16-digit card number.');
+                document.getElementById('checkout-cardnumber').focus();
+                return;
+            }
+
+            // 2. Validate Expiry Format (MM/YY) and not expired
+            const expiryMatch = expiry.match(/^(0[1-9]|1[0-2])\/([0-9]{2})$/);
+            if (!expiryMatch) {
+                alert('Please enter a valid card expiry date in MM/YY format (e.g. 08/28).');
+                document.getElementById('checkout-expiry').focus();
+                return;
+            }
+            const expMonth = parseInt(expiryMatch[1], 10);
+            const expYear = parseInt('20' + expiryMatch[2], 10);
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth() + 1;
+            if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+                alert('The card expiration date entered has already passed.');
+                document.getElementById('checkout-expiry').focus();
+                return;
+            }
+
+            // 3. Validate CVV (3 or 4 digits)
+            if (!/^[0-9]{3,4}$/.test(cvv)) {
+                alert('Please enter a valid 3 or 4-digit CVV / CVC code.');
+                document.getElementById('checkout-cvv').focus();
+                return;
+            }
+
+            // 4. Validate Address length
+            if (address.length < 10) {
+                alert('Please provide a complete shipping address (minimum 10 characters).');
+                document.getElementById('checkout-address').focus();
+                return;
+            }
+
+            // Transaction Approved
+            const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            const formattedTotal = `₹${total.toLocaleString('en-IN')}`;
+            
+            alert(`✓ Acquisition Approved!\n\nThank you, ${cardHolder}. Your order for ${formattedTotal} has been successfully authorized.\nDelivery scheduled to: ${address}.\n\nWelcome to the Oryx legacy.`);
+            
+            // Clear cart & sync
+            cart = [];
+            saveCart();
+            renderCart();
+            document.getElementById('checkout-form').reset();
+        }
+        // Consolidate any duplicate items into single items with summed quantity
+        function normalizeCart() {
+            const consolidated = [];
+            cart.forEach(item => {
+                const existing = consolidated.find(c => c.id === item.id);
+                if (existing) {
+                    existing.quantity = (existing.quantity || 1) + (item.quantity || 1);
+                } else {
+                    consolidated.push({ ...item, quantity: item.quantity || 1 });
+                }
+            });
+            cart = consolidated;
+            localStorage.setItem('chronous_cart', JSON.stringify(cart));
+        }
+
+        function saveCart() { 
+            localStorage.setItem('chronous_cart', JSON.stringify(cart)); 
+            syncCartCount(); 
+        }
+
+        function updateQuantity(index, delta) {
+            if (!cart[index]) return;
+            const currentQty = cart[index].quantity || 1;
+            const newQty = currentQty + delta;
+            if (newQty <= 0) {
+                removeFromCart(index);
+            } else {
+                cart[index].quantity = newQty;
+                saveCart();
+                renderCartPage();
+            }
+        }
+        
+        function removeFromCart(index) { 
+            cart.splice(index, 1); 
+            saveCart(); 
+            renderCartPage(); 
+        }
+        
+        function syncCartCount() { 
+            const countElement = document.getElementById('nav-cart-count'); 
+            if (countElement) {
+                const totalCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                countElement.innerText = totalCount;
+            }
+        }
+        
+        function renderCartPage() {
+            const container = document.getElementById('cart-items-container');
+            const totalEl = document.getElementById('cart-total-price');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart-msg">
+                        Your vault is currently empty.<br><br>
+                        <a href="collection.html">Discover Timepieces</a>
+                    </div>`;
+                totalEl.innerText = "0"; 
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map((item, index) => {
+                const qty = item.quantity || 1;
+                const subtotal = item.price * qty;
+                total += subtotal;
+                return `
+                    <div class="cart-item-card">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <h4 class="cart-item-title">${item.name}</h4>
+                            <p class="cart-item-price">₹${item.price.toLocaleString("en-IN")} <span style="font-size: 0.85rem; font-weight: 400; color: var(--text-muted); font-family: 'Open Sans', sans-serif;">each</span></p>
+                            
+                            <div class="cart-item-actions-row">
+                                <div class="cart-qty-wrapper">
+                                    <span class="qty-label">Quantity:</span>
+                                    <div class="cart-qty-control">
+                                        <button type="button" class="qty-btn" onclick="updateQuantity(${index}, -1)" title="Decrease quantity" aria-label="Decrease quantity">−</button>
+                                        <span class="qty-val">${qty}</span>
+                                        <button type="button" class="qty-btn" onclick="updateQuantity(${index}, 1)" title="Increase quantity" aria-label="Increase quantity">+</button>
+                                    </div>
+                                    <span class="item-subtotal-price">Subtotal: <strong>₹${subtotal.toLocaleString("en-IN")}</strong></span>
+                                </div>
+                                <button type="button" class="remove-btn" onclick="removeFromCart(${index})" title="Remove Item" aria-label="Remove Item">
+                                    <svg class="bin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            totalEl.innerText = total.toLocaleString();
+        }
+
+        function syncWishlistCount() {
+            const wishlist = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+            const badge = document.getElementById('nav-wishlist-count');
+            if (badge) {
+                badge.innerText = wishlist.length;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            normalizeCart();
+            syncCartCount(); 
+            syncWishlistCount();
+            renderCartPage();
+            
+            // Mobile Menu Drawer Toggle
+            const toggle = document.getElementById('mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (toggle && navLinks) {
+                toggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+    
+
+        // Header Sync handled by top-level syncCartCount & syncWishlistCount
+
+        // --- User Badge Navigation & Auth Management ---
+        function initUserAuthNav() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+                return;
+            }
+
+            const userName = sessionStorage.getItem('oryx_user_name') || localStorage.getItem('oryx_user_name') || 'Guest';
+            const userEmail = sessionStorage.getItem('oryx_user_email') || localStorage.getItem('oryx_user_email') || 'guest@oryx.com';
+
+            const navNameEl = document.getElementById('nav-user-name');
+            const dropNameEl = document.getElementById('dropdown-user-name');
+            const dropEmailEl = document.getElementById('dropdown-user-email');
+            if (navNameEl) navNameEl.textContent = userName;
+            if (dropNameEl) dropNameEl.textContent = userName;
+            if (dropEmailEl) dropEmailEl.textContent = userEmail;
+
+            const wrap = document.getElementById('user-badge-wrap');
+            const btn = document.getElementById('user-badge-pill');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (btn && wrap) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    wrap.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!wrap.contains(e.target)) {
+                        wrap.classList.remove('active');
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.removeItem('oryx_logged_in');
+                    sessionStorage.removeItem('oryx_user_name');
+                    sessionStorage.removeItem('oryx_user_email');
+                    localStorage.removeItem('oryx_logged_in');
+                    localStorage.removeItem('oryx_user_name');
+                    localStorage.removeItem('oryx_user_email');
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserAuthNav();
+            syncCartCount();
+            syncWishlistCount();
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navMenu = document.querySelector('.nav-links');
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    
+</script>
+</body>
+</html>

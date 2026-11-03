@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHRONOS — Luxury Timepieces</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dark: #8B6914;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #242424;
+    --white: #F5F0E8;
+    --white-dim: #C8BFA8;
+    --accent: #8B2E2E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+    opacity: 0.6;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.98), transparent);
+    transition: background 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.97);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--white); }
+
+  .nav-links {
+    display: flex; gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--white-dim);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--gold);
+    transform: scaleX(0); transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  .nav-icons {
+    display: flex; align-items: center; gap: 24px;
+  }
+  .nav-icon-btn {
+    background: none; border: none; color: var(--white-dim);
+    font-size: 18px; cursor: none;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-icon-btn:hover { color: var(--gold); }
+  .badge {
+    position: absolute; top: -8px; right: -8px;
+    background: var(--gold); color: var(--black);
+    font-size: 9px; font-weight: 600;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    height: 100vh;
+    position: relative;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 30% 60%, rgba(139,46,46,0.04) 0%, transparent 60%),
+      linear-gradient(135deg, #0A0A0A 0%, #111111 50%, #0D0D0D 100%);
+  }
+
+  /* Animated grain overlay */
+  .hero-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.3;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 80px;
+    max-width: 700px;
+    animation: fadeInUp 1.2s ease forwards;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -1px;
+    margin-bottom: 28px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-desc {
+    font-size: 13px;
+    letter-spacing: 1px;
+    line-height: 2;
+    color: var(--white-dim);
+    max-width: 460px;
+    margin-bottom: 48px;
+  }
+
+  .hero-actions {
+    display: flex; gap: 20px; align-items: center;
+  }
+
+  .btn-primary {
+    padding: 16px 40px;
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex; align-items: center; gap: 10px;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(201,168,76,0.3);
+  }
+
+  .btn-ghost {
+    padding: 16px 40px;
+    background: transparent;
+    color: var(--white-dim);
+    border: 1px solid rgba(201,168,76,0.3);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* Watch floating in hero */
+  .hero-watch {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 420px; height: 420px;
+    animation: floatWatch 6s ease-in-out infinite;
+  }
+
+  .watch-svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 30px 80px rgba(201,168,76,0.25));
+  }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--gold);
+    padding: 12px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-flex; gap: 0;
+    animation: ticker 25s linear infinite;
+  }
+  .ticker-item {
+    display: inline-flex; align-items: center; gap: 20px;
+    padding: 0 40px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--black);
+  }
+  .ticker-dot {
+    width: 4px; height: 4px;
+    background: var(--black);
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .section-eyebrow {
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+  }
+  .section-eyebrow::before, .section-eyebrow::after {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300;
+    letter-spacing: -0.5px;
+  }
+  .section-header h2 em { font-style: italic; color: var(--gold-light); }
+
+  /* ── COLLECTIONS ── */
+  .collections {
+    padding: 100px 60px;
+    background: var(--dark);
+  }
+
+  .collections-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+
+  .collection-card {
+    position: relative; overflow: hidden;
+    background: var(--dark2);
+    cursor: none;
+  }
+  .collection-card:first-child {
+    grid-row: span 2;
+    min-height: 600px;
+  }
+  .collection-card:not(:first-child) { min-height: 292px; }
+
+  .card-bg {
+    position: absolute; inset: 0;
+    background: var(--dark3);
+    transition: transform 0.6s ease;
+  }
+  .collection-card:hover .card-bg { transform: scale(1.05); }
+
+  .card-watch-icon {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.15;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .collection-card:hover .card-watch-icon {
+    opacity: 0.25;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .card-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 32px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+  }
+  .card-tag {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300;
+    margin-bottom: 8px;
+  }
+  .card-sub {
+    font-size: 11px; color: var(--white-dim);
+    letter-spacing: 1px;
+  }
+  .card-arrow {
+    position: absolute; top: 24px; right: 24px;
+    width: 40px; height: 40px;
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 14px;
+    transition: all 0.3s ease;
+    transform: rotate(0deg);
+  }
+  .collection-card:hover .card-arrow {
+    background: var(--gold); color: var(--black);
+    transform: rotate(45deg);
+  }
+
+  /* ── FEATURED WATCHES ── */
+  .featured {
+    padding: 100px 60px;
+    background: var(--black);
+  }
+
+  .watches-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .watch-card {
+    background: var(--dark);
+    padding: 40px 32px;
+    position: relative;
+    cursor: none;
+    transition: background 0.3s ease;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .watch-card:hover { background: var(--dark2); }
+  .watch-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--gold);
+    transition: width 0.4s ease;
+  }
+  .watch-card:hover::before { width: 100%; }
+
+  .watch-brand {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+  }
+
+  .watch-img-area {
+    width: 100%; aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .watch-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .watch-ref {
+    font-size: 10px; color: var(--white-dim);
+    letter-spacing: 2px; margin-bottom: 20px;
+  }
+  .watch-price {
+    font-size: 15px; font-weight: 500;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .watch-actions {
+    display: flex; gap: 10px;
+  }
+  .btn-add {
+    flex: 1; padding: 12px;
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--white-dim);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    cursor: none;
+    transition: all 0.3s ease;
+  }
+  .btn-add:hover {
+    background: var(--gold); color: var(--black);
+    border-color: var(--gold);
+  }
+  .btn-wish {
+    width: 42px;
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--white-dim);
+    font-size: 14px; cursor: none;
+    transition: all 0.3s ease;
+  }
+  .btn-wish:hover { color: var(--accent); border-color: var(--accent); }
+
+  .watch-badge {
+    position: absolute; top: 20px; right: 20px;
+    padding: 4px 10px;
+    font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+    font-weight: 600;
+  }
+  .badge-new { background: var(--gold); color: var(--black); }
+  .badge-hot { background: var(--accent); color: var(--white); }
+
+  /* ── COMPARE ── */
+  .compare {
+    padding: 100px 60px;
+    background: var(--dark);
+  }
+  .compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .compare-table th {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 300;
+    padding: 20px 32px;
+    text-align: left;
+    background: var(--dark2);
+    border-bottom: 2px solid var(--gold);
+  }
+  .compare-table th:first-child {
+    color: var(--white-dim); font-family: 'Montserrat', sans-serif;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .compare-table td {
+    padding: 18px 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13px; color: var(--white-dim);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child {
+    font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 500;
+  }
+  .compare-table td:not(:first-child) { color: var(--white); }
+  .compare-table tr:hover td { background: rgba(201,168,76,0.03); }
+
+  /* ── OFFERS BANNER ── */
+  .offers-banner {
+    padding: 80px 60px;
+    background: var(--gold);
+    position: relative; overflow: hidden;
+  }
+  .offers-banner::before {
+    content: 'OFFER';
+    position: absolute; right: -60px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 200px; font-weight: 300;
+    color: rgba(0,0,0,0.07);
+    letter-spacing: -10px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .offers-content {
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; z-index: 1;
+  }
+  .offers-text h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 300;
+    color: var(--black); line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .offers-text p {
+    font-size: 13px; color: rgba(0,0,0,0.6);
+    letter-spacing: 1px;
+  }
+  .btn-dark {
+    padding: 18px 48px;
+    background: var(--black);
+    color: var(--gold);
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 3px; text-transform: uppercase;
+    cursor: none; text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  .btn-dark:hover { background: var(--dark2); transform: translateY(-2px); }
+
+  /* ── BLOG ── */
+  .blog {
+    padding: 100px 60px;
+    background: var(--black);
+  }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .blog-card {
+    background: var(--dark);
+    cursor: none;
+    transition: background 0.3s;
+  }
+  .blog-card:hover { background: var(--dark2); }
+  .blog-img {
+    width: 100%; height: 220px;
+    background: var(--dark3);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .blog-img-inner {
+    transition: transform 0.5s ease;
+  }
+  .blog-card:hover .blog-img-inner { transform: scale(1.08); }
+  .blog-body { padding: 32px; }
+  .blog-cat {
+    font-size: 9px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .blog-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300;
+    line-height: 1.3; margin-bottom: 14px;
+  }
+  .blog-excerpt {
+    font-size: 12px; color: var(--white-dim);
+    line-height: 1.8; margin-bottom: 20px;
+  }
+  .blog-meta {
+    font-size: 10px; color: rgba(200,191,168,0.5);
+    letter-spacing: 1px;
+  }
+
+  /* ── BRANDS ── */
+  .brands {
+    padding: 80px 60px;
+    background: var(--dark);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .brands-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
+  }
+  .brand-item {
+    padding: 40px 32px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--dark2);
+    cursor: none;
+    transition: background 0.3s;
+  }
+  .brand-item:hover { background: var(--dark3); }
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 300;
+    letter-spacing: 3px;
+    color: rgba(200,191,168,0.4);
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .brand-item:hover .brand-name { color: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    padding: 80px 60px 40px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand .nav-logo {
+    display: block; margin-bottom: 20px;
+    font-size: 24px;
+  }
+  .footer-desc {
+    font-size: 12px; line-height: 2;
+    color: rgba(200,191,168,0.5);
+    margin-bottom: 28px;
+    max-width: 280px;
+  }
+  .social-links { display: flex; gap: 12px; }
+  .social-btn {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white-dim); font-size: 12px;
+    cursor: none; text-decoration: none;
+    transition: all 0.3s;
+  }
+  .social-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+  .footer-col h4 {
+    font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 24px; font-weight: 500;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 12px; }
+  .footer-links a {
+    font-size: 12px; color: rgba(200,191,168,0.5);
+    text-decoration: none; letter-spacing: 0.5px;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 30px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy {
+    font-size: 11px; color: rgba(200,191,168,0.3);
+    letter-spacing: 1px;
+  }
+
+  /* ── MOBILE MENU ── */
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 6px;
+    background: none; border: none;
+    cursor: none;
+    z-index: 1001;
+  }
+  .hamburger span {
+    display: block; width: 28px; height: 1px;
+    background: var(--white); transition: all 0.3s;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes floatWatch {
+    0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+    50%       { transform: translateY(calc(-50% - 20px)) rotate(5deg); }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1200px) {
+    .watches-grid { grid-template-columns: repeat(2, 1fr); }
+    .collections-grid { grid-template-columns: 1fr 1fr; }
+    .collection-card:first-child { grid-row: span 1; min-height: 280px; }
+    .brands-grid { grid-template-columns: repeat(3, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-content { padding: 0 32px; }
+    .hero-watch { display: none; }
+    .collections, .featured, .compare, .blog, .brands, footer { padding: 60px 24px; }
+    .offers-banner { padding: 60px 24px; }
+    .offers-content { flex-direction: column; gap: 28px; }
+    .watches-grid { grid-template-columns: 1fr; gap: 2px; }
+    .blog-grid { grid-template-columns: 1fr; }
+    .brands-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr; }
+    .collections-grid { grid-template-columns: 1fr; }
+    .compare-table { display: block; overflow-x: auto; }
+  }
+
+  /* Glow effect on scroll */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* New Arrivals tag */
+  .new-ribbon {
+    position: absolute; top: 0; left: 0;
+    background: var(--gold);
+    color: var(--black);
+    font-size: 8px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 14px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── NAVBAR ── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">CHRON<span>OS</span></a>
+
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#brands">Brands</a></li>
+    <li><a href="#compare">Compare</a></li>
+    <li><a href="#new">New Arrivals</a></li>
+    <li><a href="#offers">Offers</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-icons">
+    <button class="nav-icon-btn" title="Search">⌕</button>
+    <button class="nav-icon-btn" title="Wishlist" style="position:relative;">
+      ♡ <span class="badge">3</span>
+    </button>
+    <button class="nav-icon-btn" title="Cart" style="position:relative;">
+      ⊡ <span class="badge">2</span>
+    </button>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">2025 Luxury Collection</p>
+    <h1>Time is<br><em>the rarest</em><br>luxury.</h1>
+    <p class="hero-desc">
+      Curated masterpieces from the world's most prestigious maisons. 
+      Each piece a testament to centuries of horological mastery.
+    </p>
+    <div class="hero-actions">
+      <a href="#collections" class="btn-primary">Explore Collection →</a>
+      <a href="#new" class="btn-ghost">New Arrivals</a>
+    </div>
+  </div>
+
+  <!-- SVG Watch Illustration -->
+  <div class="hero-watch">
+    <svg class="watch-svg" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+      <!-- Watch strap top -->
+      <rect x="110" y="20" width="80" height="80" rx="12" fill="#1A1A1A" stroke="#C9A84C" stroke-width="1"/>
+      <line x1="120" y1="35" x2="120" y2="85" stroke="#333" stroke-width="1"/>
+      <line x1="135" y1="35" x2="135" y2="85" stroke="#333" stroke-width="1"/>
+      <line x1="165" y1="35" x2="165" y2="85" stroke="#333" stroke-width="1"/>
+      <line x1="180" y1="35" x2="180" y2="85" stroke="#333" stroke-width="1"/>
+      <!-- Watch case -->
+      <circle cx="150" cy="200" r="115" fill="#141414" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="150" cy="200" r="108" fill="#0D0D0D" stroke="#333" stroke-width="0.5"/>
+      <!-- Bezel markings -->
+      <g stroke="#C9A84C" stroke-width="1.5" opacity="0.8">
+        <line x1="150" y1="97" x2="150" y2="107"/>
+        <line x1="203" y1="111" x2="197" y2="119"/>
+        <line x1="243" y1="150" x2="235" y2="152"/>
+        <line x1="253" y1="200" x2="243" y2="200"/>
+        <line x1="243" y1="250" x2="235" y2="248"/>
+        <line x1="203" y1="289" x2="197" y2="281"/>
+        <line x1="150" y1="303" x2="150" y2="293"/>
+        <line x1="97" y1="289" x2="103" y2="281"/>
+        <line x1="57" y1="250" x2="65" y2="248"/>
+        <line x1="47" y1="200" x2="57" y2="200"/>
+        <line x1="57" y1="150" x2="65" y2="152"/>
+        <line x1="97" y1="111" x2="103" y2="119"/>
+      </g>
+      <!-- Minor ticks -->
+      <g stroke="#555" stroke-width="0.5" opacity="0.6">
+        <line x1="168" y1="98" x2="167" y2="104"/>
+        <line x1="186" y1="103" x2="184" y2="108"/>
+        <line x1="132" y1="98" x2="133" y2="104"/>
+        <line x1="114" y1="103" x2="116" y2="108"/>
+      </g>
+      <!-- Dial -->
+      <circle cx="150" cy="200" r="90" fill="#0A0A0A"/>
+      <!-- Hour numerals -->
+      <text x="150" y="128" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#C9A84C" font-weight="300">XII</text>
+      <text x="222" y="207" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#888" font-weight="300">III</text>
+      <text x="150" y="282" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#888" font-weight="300">VI</text>
+      <text x="78" y="207" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#888" font-weight="300">IX</text>
+      <!-- Date window -->
+      <rect x="187" y="190" width="22" height="18" rx="2" fill="#111" stroke="#C9A84C" stroke-width="0.5"/>
+      <text x="198" y="203" text-anchor="middle" font-family="Montserrat" font-size="9" fill="#C9A84C" font-weight="400">14</text>
+      <!-- Brand text -->
+      <text x="150" y="168" text-anchor="middle" font-family="Cormorant Garamond" font-size="11" fill="#C9A84C" letter-spacing="3">CHRONOS</text>
+      <text x="150" y="182" text-anchor="middle" font-family="Montserrat" font-size="7" fill="#555" letter-spacing="2">GENÈVE</text>
+      <!-- Sub-dial -->
+      <circle cx="150" cy="228" r="18" fill="none" stroke="#222" stroke-width="0.5"/>
+      <circle cx="150" cy="228" r="2" fill="#555"/>
+      <!-- Hour hand -->
+      <line x1="150" y1="200" x2="150" y2="155" stroke="#F5F0E8" stroke-width="3" stroke-linecap="round"/>
+      <!-- Minute hand -->
+      <line x1="150" y1="200" x2="195" y2="175" stroke="#F5F0E8" stroke-width="2" stroke-linecap="round"/>
+      <!-- Second hand -->
+      <line x1="150" y1="200" x2="130" y2="145" stroke="#C9A84C" stroke-width="1" stroke-linecap="round"/>
+      <line x1="150" y1="200" x2="158" y2="220" stroke="#C9A84C" stroke-width="1" stroke-linecap="round"/>
+      <!-- Center jewel -->
+      <circle cx="150" cy="200" r="4" fill="#C9A84C"/>
+      <circle cx="150" cy="200" r="2" fill="#0A0A0A"/>
+      <!-- Crown -->
+      <rect x="263" y="194" width="18" height="12" rx="6" fill="#1A1A1A" stroke="#C9A84C" stroke-width="0.5"/>
+      <!-- Strap bottom -->
+      <rect x="110" y="300" width="80" height="80" rx="12" fill="#1A1A1A" stroke="#C9A84C" stroke-width="1"/>
+      <line x1="120" y1="315" x2="120" y2="365" stroke="#333" stroke-width="1"/>
+      <line x1="135" y1="315" x2="135" y2="365" stroke="#333" stroke-width="1"/>
+      <line x1="165" y1="315" x2="165" y2="365" stroke="#333" stroke-width="1"/>
+      <line x1="180" y1="315" x2="180" y2="365" stroke="#333" stroke-width="1"/>
+      <!-- Buckle -->
+      <rect x="125" y="355" width="50" height="12" rx="4" fill="#222" stroke="#555" stroke-width="0.5"/>
+      <circle cx="150" cy="361" r="3" fill="none" stroke="#888" stroke-width="0.8"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ── TICKER ── -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Free Shipping on Orders Above ₹50,000 <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Certified Authentic Timepieces <span class="ticker-dot"></span></span>
+    <span class="ticker-item">5-Year International Warranty <span class="ticker-dot"></span></span>
+    <span class="ticker-item">EMI Options Available <span class="ticker-dot"></span></span>
+    <span class="ticker-item">New Arrivals Every Friday <span class="ticker-dot"></span></span>
+    <!-- Duplicate for infinite loop -->
+    <span class="ticker-item">Free Shipping on Orders Above ₹50,000 <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Certified Authentic Timepieces <span class="ticker-dot"></span></span>
+    <span class="ticker-item">5-Year International Warranty <span class="ticker-dot"></span></span>
+    <span class="ticker-item">EMI Options Available <span class="ticker-dot"></span></span>
+    <span class="ticker-item">New Arrivals Every Friday <span class="ticker-dot"></span></span>
+  </div>
+</div>
+
+<!-- ── COLLECTIONS ── -->
+<section class="collections reveal" id="collections">
+  <div class="section-header">
+    <p class="section-eyebrow">Curated Selection</p>
+    <h2>Our <em>Collections</em></h2>
+  </div>
+  <div class="collections-grid">
+    <div class="collection-card">
+      <div class="card-bg" style="background: linear-gradient(135deg, #1a1a0d 0%, #2a2010 100%);"></div>
+      <div class="card-watch-icon">
+        <svg width="260" height="260" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.3"/>
+          <circle cx="100" cy="100" r="70" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.2"/>
+          <circle cx="100" cy="100" r="50" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.15"/>
+        </svg>
+      </div>
+      <div class="card-arrow">→</div>
+      <div class="card-content">
+        <p class="card-tag">Flagship</p>
+        <h3 class="card-title">Heritage Royale</h3>
+        <p class="card-sub">14 Exclusive Timepieces · From ₹4,20,000</p>
+      </div>
+    </div>
+    <div class="collection-card">
+      <div class="card-bg" style="background: linear-gradient(135deg, #0d1a1a 0%, #102020 100%);"></div>
+      <div class="card-arrow">→</div>
+      <div class="card-content">
+        <p class="card-tag">Sport</p>
+        <h3 class="card-title">Aqua Master</h3>
+        <p class="card-sub">8 Pieces · From ₹1,85,000</p>
+      </div>
+    </div>
+    <div class="collection-card">
+      <div class="card-bg" style="background: linear-gradient(135deg, #1a0d0d 0%, #200d0d 100%);"></div>
+      <div class="card-arrow">→</div>
+      <div class="card-content">
+        <p class="card-tag">Limited</p>
+        <h3 class="card-title">Noir Edition</h3>
+        <p class="card-sub">5 Pieces Only · From ₹7,50,000</p>
+      </div>
+    </div>
+    <div class="collection-card">
+      <div class="card-bg" style="background: linear-gradient(135deg, #120d1a 0%, #180d20 100%);"></div>
+      <div class="card-arrow">→</div>
+      <div class="card-content">
+        <p class="card-tag">Dress</p>
+        <h3 class="card-title">Soirée Grande</h3>
+        <p class="card-sub">11 Pieces · From ₹2,90,000</p>
+      </div>
+    </div>
+    <div class="collection-card">
+      <div class="card-bg" style="background: linear-gradient(135deg, #0d1a12 0%, #0d2018 100%);"></div>
+      <div class="card-arrow">→</div>
+      <div class="card-content">
+        <p class="card-tag">Ladies</p>
+        <h3 class="card-title">Lumière Rose</h3>
+        <p class="card-sub">9 Pieces · From ₹3,40,000</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURED WATCHES ── -->
+<section class="featured reveal" id="new">
+  <div class="section-header">
+    <p class="section-eyebrow">Just Arrived</p>
+    <h2>New <em>Arrivals</em></h2>
+  </div>
+  <div class="watches-grid">
+
+    <!-- Watch 1 -->
+    <div class="watch-card">
+      <span class="watch-badge badge-new">New</span>
+      <p class="watch-brand">Chronos Heritage</p>
+      <div class="watch-img-area">
+        <svg width="140" height="180" viewBox="0 0 140 200">
+          <rect x="50" y="5" width="40" height="35" rx="6" fill="#1a1a1a" stroke="#C9A84C" stroke-width="0.5"/>
+          <circle cx="70" cy="105" r="58" fill="#111" stroke="#C9A84C" stroke-width="1.5"/>
+          <circle cx="70" cy="105" r="51" fill="#0a0a0a"/>
+          <text x="70" y="82" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#C9A84C">XII</text>
+          <text x="70" y="137" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#666">VI</text>
+          <text x="38" y="110" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#666">IX</text>
+          <text x="102" y="110" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#666">III</text>
+          <line x1="70" y1="105" x2="70" y2="72" stroke="#F5F0E8" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="70" y1="105" x2="96" y2="92" stroke="#F5F0E8" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="70" y1="105" x2="55" y2="72" stroke="#C9A84C" stroke-width="1"/>
+          <circle cx="70" cy="105" r="3" fill="#C9A84C"/>
+          <rect x="50" y="160" width="40" height="35" rx="6" fill="#1a1a1a" stroke="#C9A84C" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <h3 class="watch-name">Royale Perpetual</h3>
+      <p class="watch-ref">CHR-2025-RP · Rose Gold</p>
+      <p class="watch-price">₹ 5,40,000</p>
+      <div class="watch-actions">
+        <button class="btn-add">Add to Cart</button>
+        <button class="btn-wish">♡</button>
+      </div>
+    </div>
+
+    <!-- Watch 2 -->
+    <div class="watch-card">
+      <span class="watch-badge badge-hot">Hot</span>
+      <p class="watch-brand">Aqua Master</p>
+      <div class="watch-img-area">
+        <svg width="140" height="180" viewBox="0 0 140 200">
+          <rect x="50" y="5" width="40" height="35" rx="6" fill="#0d1a1a" stroke="#4CAAAA" stroke-width="0.5"/>
+          <circle cx="70" cy="105" r="58" fill="#0d1a1a" stroke="#4CAAAA" stroke-width="1.5"/>
+          <circle cx="70" cy="105" r="51" fill="#0a1414"/>
+          <text x="70" y="82" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#4CAAAA">XII</text>
+          <text x="70" y="137" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#336666">VI</text>
+          <line x1="70" y1="105" x2="70" y2="72" stroke="#F5F0E8" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="70" y1="105" x2="90" y2="84" stroke="#F5F0E8" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="70" y1="105" x2="60" y2="75" stroke="#4CAAAA" stroke-width="1"/>
+          <circle cx="70" cy="105" r="3" fill="#4CAAAA"/>
+          <rect x="50" y="160" width="40" height="35" rx="6" fill="#0d1a1a" stroke="#4CAAAA" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <h3 class="watch-name">Submariner X</h3>
+      <p class="watch-ref">AQM-2025-SX · Steel Blue</p>
+      <p class="watch-price">₹ 2,15,000</p>
+      <div class="watch-actions">
+        <button class="btn-add">Add to Cart</button>
+        <button class="btn-wish">♡</button>
+      </div>
+    </div>
+
+    <!-- Watch 3 -->
+    <div class="watch-card">
+      <span class="watch-badge badge-new">New</span>
+      <p class="watch-brand">Noir Limited</p>
+      <div class="watch-img-area">
+        <svg width="140" height="180" viewBox="0 0 140 200">
+          <rect x="50" y="5" width="40" height="35" rx="4" fill="#111" stroke="#C9A84C" stroke-width="0.5"/>
+          <circle cx="70" cy="105" r="58" fill="#080808" stroke="#C9A84C" stroke-width="2"/>
+          <circle cx="70" cy="105" r="51" fill="#050505"/>
+          <circle cx="70" cy="105" r="44" fill="none" stroke="#1a1a1a" stroke-width="0.5"/>
+          <text x="70" y="82" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#C9A84C">XII</text>
+          <line x1="70" y1="105" x2="70" y2="70" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="70" y1="105" x2="100" y2="90" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="70" y1="105" x2="52" y2="68" stroke="#8B6914" stroke-width="1"/>
+          <circle cx="70" cy="105" r="4" fill="#C9A84C"/>
+          <rect x="50" y="160" width="40" height="35" rx="4" fill="#111" stroke="#C9A84C" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <h3 class="watch-name">Noir Absolut</h3>
+      <p class="watch-ref">NR-2025-NA · PVD Black</p>
+      <p class="watch-price">₹ 8,80,000</p>
+      <div class="watch-actions">
+        <button class="btn-add">Add to Cart</button>
+        <button class="btn-wish">♡</button>
+      </div>
+    </div>
+
+    <!-- Watch 4 -->
+    <div class="watch-card">
+      <p class="watch-brand">Soirée Grande</p>
+      <div class="watch-img-area">
+        <svg width="140" height="180" viewBox="0 0 140 200">
+          <rect x="52" y="5" width="36" height="32" rx="10" fill="#1a1210" stroke="#C9A84C" stroke-width="0.5"/>
+          <ellipse cx="70" cy="105" rx="56" ry="60" fill="#120f0a" stroke="#C9A84C" stroke-width="1.5"/>
+          <ellipse cx="70" cy="105" rx="49" ry="53" fill="#0a0806"/>
+          <text x="70" y="80" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#C9A84C">XII</text>
+          <text x="70" y="140" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#666">VI</text>
+          <text x="36" y="110" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#666">IX</text>
+          <text x="104" y="110" text-anchor="middle" font-family="Cormorant Garamond" font-size="9" fill="#666">III</text>
+          <text x="70" y="95" text-anchor="middle" font-family="Cormorant Garamond" font-size="7" fill="#8B6914" letter-spacing="2">SOIRÉE</text>
+          <line x1="70" y1="105" x2="70" y2="73" stroke="#F5F0E8" stroke-width="2" stroke-linecap="round"/>
+          <line x1="70" y1="105" x2="94" y2="90" stroke="#F5F0E8" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="70" y1="105" x2="57" y2="72" stroke="#C9A84C" stroke-width="0.8"/>
+          <circle cx="70" cy="105" r="3" fill="#C9A84C"/>
+          <rect x="52" y="163" width="36" height="32" rx="10" fill="#1a1210" stroke="#C9A84C" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <h3 class="watch-name">Grande Tourbillon</h3>
+      <p class="watch-ref">SGD-2025-GT · Yellow Gold</p>
+      <p class="watch-price">₹ 12,50,000</p>
+      <div class="watch-actions">
+        <button class="btn-add">Add to Cart</button>
+        <button class="btn-wish">♡</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── COMPARE ── -->
+<section class="compare reveal" id="compare">
+  <div class="section-header">
+    <p class="section-eyebrow">Side by Side</p>
+    <h2>Compare <em>Watches</em></h2>
+  </div>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Specification</th>
+        <th>Royale Perpetual</th>
+        <th>Submariner X</th>
+        <th>Noir Absolut</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Movement</td><td>Cal. CH-3235 Auto</td><td>Cal. AQ-2140 Auto</td><td>Cal. NR-8810 Auto</td></tr>
+      <tr><td>Power Reserve</td><td>70 Hours</td><td>60 Hours</td><td>72 Hours</td></tr>
+      <tr><td>Case Diameter</td><td>41 mm</td><td>42 mm</td><td>40 mm</td></tr>
+      <tr><td>Water Resistance</td><td>50 m</td><td>300 m</td><td>100 m</td></tr>
+      <tr><td>Case Material</td><td>18k Rose Gold</td><td>904L Steel</td><td>PVD Titanium</td></tr>
+      <tr><td>Crystal</td><td>Sapphire AR</td><td>Sapphire AR</td><td>Sapphire AR</td></tr>
+      <tr><td>Warranty</td><td>5 Years</td><td>5 Years</td><td>5 Years</td></tr>
+      <tr><td>Price</td><td>₹ 5,40,000</td><td>₹ 2,15,000</td><td>₹ 8,80,000</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ── OFFERS ── -->
+<section class="offers-banner reveal" id="offers">
+  <div class="offers-content">
+    <div class="offers-text">
+      <h3>Exclusive<br>Members Offer</h3>
+      <p>Up to 15% off on select Heritage timepieces · Valid through March 2025</p>
+    </div>
+    <a href="#" class="btn-dark">Claim Offer →</a>
+  </div>
+</section>
+
+<!-- ── BRANDS ── -->
+<section class="brands reveal" id="brands">
+  <div class="section-header">
+    <p class="section-eyebrow">Premium Partners</p>
+    <h2>Trusted <em>Brands</em></h2>
+  </div>
+  <div class="brands-grid">
+    <div class="brand-item"><span class="brand-name">Rolex</span></div>
+    <div class="brand-item"><span class="brand-name">Patek</span></div>
+    <div class="brand-item"><span class="brand-name">Audemars</span></div>
+    <div class="brand-item"><span class="brand-name">Vacheron</span></div>
+    <div class="brand-item"><span class="brand-name">IWC</span></div>
+    <div class="brand-item"><span class="brand-name">Jaeger</span></div>
+    <div class="brand-item"><span class="brand-name">Omega</span></div>
+    <div class="brand-item"><span class="brand-name">Breitling</span></div>
+    <div class="brand-item"><span class="brand-name">Cartier</span></div>
+    <div class="brand-item"><span class="brand-name">Panerai</span></div>
+    <div class="brand-item"><span class="brand-name">Longines</span></div>
+    <div class="brand-item"><span class="brand-name">Tissot</span></div>
+  </div>
+</section>
+
+<!-- ── BLOG ── -->
+<section class="blog reveal" id="blog">
+  <div class="section-header">
+    <p class="section-eyebrow">Horology News</p>
+    <h2>From Our <em>Journal</em></h2>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card">
+      <div class="blog-img">
+        <div class="blog-img-inner">
+          <svg width="200" height="140" viewBox="0 0 200 140">
+            <rect width="200" height="140" fill="#1a1a0d"/>
+            <circle cx="100" cy="70" r="50" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.3"/>
+            <circle cx="100" cy="70" r="35" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.2"/>
+            <line x1="100" y1="70" x2="100" y2="38" stroke="#C9A84C" stroke-width="1.5"/>
+            <line x1="100" y1="70" x2="120" y2="58" stroke="#888" stroke-width="1"/>
+            <circle cx="100" cy="70" r="3" fill="#C9A84C"/>
+            <text x="100" y="20" text-anchor="middle" font-family="Cormorant Garamond" font-size="10" fill="#C9A84C" opacity="0.6">THE ART OF TIME</text>
+          </svg>
+        </div>
+      </div>
+      <div class="blog-body">
+        <p class="blog-cat">History</p>
+        <h3 class="blog-title">The Evolution of Swiss Watchmaking Through the Centuries</h3>
+        <p class="blog-excerpt">From the earliest pocket watches of the 16th century to today's ultra-precise movements, discover how Swiss horology shaped the world.</p>
+        <p class="blog-meta">March 10, 2025 · 8 min read</p>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img">
+        <div class="blog-img-inner">
+          <svg width="200" height="140" viewBox="0 0 200 140">
+            <rect width="200" height="140" fill="#0d1a1a"/>
+            <circle cx="100" cy="70" r="50" fill="none" stroke="#4CAAAA" stroke-width="1" opacity="0.3"/>
+            <rect x="70" y="40" width="60" height="60" rx="4" fill="none" stroke="#4CAAAA" stroke-width="0.5" opacity="0.4"/>
+            <text x="100" y="75" text-anchor="middle" font-family="Cormorant Garamond" font-size="22" fill="#4CAAAA" opacity="0.4">G</text>
+          </svg>
+        </div>
+      </div>
+      <div class="blog-body">
+        <p class="blog-cat">Guide</p>
+        <h3 class="blog-title">How to Read a Watch Movement: A Beginner's Guide</h3>
+        <p class="blog-excerpt">Understanding the mechanics inside your timepiece is the first step to truly appreciating fine watchmaking.</p>
+        <p class="blog-meta">March 5, 2025 · 5 min read</p>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-img">
+        <div class="blog-img-inner">
+          <svg width="200" height="140" viewBox="0 0 200 140">
+            <rect width="200" height="140" fill="#1a0d0d"/>
+            <polygon points="100,20 120,60 160,65 130,92 138,130 100,110 62,130 70,92 40,65 80,60" fill="none" stroke="#8B2E2E" stroke-width="1" opacity="0.4"/>
+            <text x="100" y="78" text-anchor="middle" font-family="Cormorant Garamond" font-size="24" fill="#8B2E2E" opacity="0.5">★</text>
+          </svg>
+        </div>
+      </div>
+      <div class="blog-body">
+        <p class="blog-cat">Investment</p>
+        <h3 class="blog-title">Top 5 Watches That Have Appreciated in Value Over the Decade</h3>
+        <p class="blog-excerpt">Certain timepieces have proven to be extraordinary investments. We examine which references are worth watching closely.</p>
+        <p class="blog-meta">Feb 28, 2025 · 10 min read</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer id="contact">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">CHRON<span>OS</span></a>
+      <p class="footer-desc">
+        Your premier destination for authentic luxury timepieces. 
+        Curated from the world's finest manufacturers with uncompromising standards.
+      </p>
+      <div class="social-links">
+        <a href="#" class="social-btn">𝕏</a>
+        <a href="#" class="social-btn">f</a>
+        <a href="#" class="social-btn">in</a>
+        <a href="#" class="social-btn">◎</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul class="footer-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Collections</a></li>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Offers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">About Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Customer Care</h4>
+      <ul class="footer-links">
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Return Policy</a></li>
+        <li><a href="#">Warranty Service</a></li>
+        <li><a href="#">Authentication</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul class="footer-links">
+        <li><a href="#">Coimbatore, Tamil Nadu</a></li>
+        <li><a href="#">+91 98765 43210</a></li>
+        <li><a href="#">hello@chronos.in</a></li>
+        <li><a href="#" style="margin-top:16px; display:block;">Mon–Sat 10am–8pm</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 CHRONOS Luxury Timepieces. All rights reserved.</p>
+    <p class="footer-copy">Privacy Policy · Terms of Service</p>
+  </div>
+</footer>
+
+<script>
+  // ── Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  });
+  let rx = 0, ry = 0;
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Cursor expand on hover
+  document.querySelectorAll('a, button, .collection-card, .watch-card, .blog-card, .brand-item').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '18px'; cursor.style.height = '18px';
+      ring.style.width = '56px'; ring.style.height = '56px';
+      ring.style.opacity = '0.3';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px'; cursor.style.height = '10px';
+      ring.style.width = '36px'; ring.style.height = '36px';
+      ring.style.opacity = '0.6';
+    });
+  });
+
+  // ── Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // ── Cart & wishlist buttons
+  document.querySelectorAll('.btn-add').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const orig = this.textContent;
+      this.textContent = '✓ Added';
+      this.style.background = 'var(--gold)';
+      this.style.color = 'var(--black)';
+      this.style.borderColor = 'var(--gold)';
+      setTimeout(() => {
+        this.textContent = orig;
+        this.style.background = '';
+        this.style.color = '';
+        this.style.borderColor = '';
+      }, 1800);
+    });
+  });
+
+  document.querySelectorAll('.btn-wish').forEach(btn => {
+    btn.addEventListener('click', function() {
+      if (this.textContent === '♡') {
+        this.textContent = '♥';
+        this.style.color = '#8B2E2E';
+        this.style.borderColor = '#8B2E2E';
+        this.style.background = 'rgba(139,46,46,0.1)';
+      } else {
+        this.textContent = '♡';
+        this.style.color = '';
+        this.style.borderColor = '';
+        this.style.background = '';
+      }
+    });
+  });
+
+  // ── Smooth nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>

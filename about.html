@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oryx | Our Heritage</title>
+    <!-- Authentication Gate -->
+    <script>
+        (function() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+            }
+        })();
+    </script>
+    <!-- Google Fonts: Editorial Serif and Clean Modern Sans-Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-page: #F8F5F0;            /* Warm luxury ivory canvas */
+            --bg-card: #FFFFFF;            /* Pure white card surface */
+            --olive-primary: #687547;      /* Sage / Olive accent */
+            --olive-dark: #4F5A31;         /* Deep olive */
+            --text-dark: #1E1E1E;          /* Rich charcoal */
+            --text-muted: #6B685F;         /* Sophisticated taupe */
+            --border-soft: #E2DDD3;        /* Soft dividers */
+            --transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Open Sans', sans-serif; 
+            font-size: 0.95rem;
+            background-color: var(--bg-page); 
+            color: var(--text-dark); 
+            line-height: 1.7; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { 
+            font-family: 'Lora', serif; 
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Header Navigation (Identical to Home Page) --- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 7%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #FFFFFF;
+            border-bottom: 1px solid #DCD6CA;
+            box-shadow: 0 4px 24px rgba(30, 30, 30, 0.05);
+            transition: var(--transition);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .oryx-saturn-logo {
+            width: 48px;
+            height: 34px;
+            display: block;
+            color: #9E7D3B; /* Elegant golden bronze matching the designed logo */
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 2px 5px rgba(158, 125, 59, 0.18));
+            flex-shrink: 0;
+        }
+
+        .saturn-globe-base {
+            fill: #FAF8F5;
+        }
+
+        .logo-group:hover .oryx-saturn-logo {
+            transform: scale(1.10) rotate(-4deg);
+            color: #B88E3F;
+            filter: drop-shadow(0 4px 10px rgba(184, 142, 63, 0.35));
+        }
+
+        .logo-text {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 42px;
+        }
+
+        .nav-links a {
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: var(--text-dark);
+            position: relative;
+            padding-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--olive-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--olive-primary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Luxury Integrated Searchbar */
+        .nav-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            padding: 8px 18px;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            width: 230px;
+        }
+
+        .nav-search-bar:focus-within {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 16px rgba(104, 117, 71, 0.18);
+            width: 270px;
+        }
+
+        .search-bar-icon {
+            width: 17px;
+            height: 17px;
+            stroke: var(--text-muted);
+            stroke-width: 1.8;
+            fill: none;
+            flex-shrink: 0;
+            transition: stroke 0.3s ease;
+        }
+
+        .nav-search-bar:focus-within .search-bar-icon {
+            stroke: var(--olive-primary);
+        }
+
+        .search-bar-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            width: 100%;
+        }
+
+        .search-bar-input::placeholder {
+            color: #9C978D;
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .action-icon-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .action-icon-btn:hover {
+            color: var(--olive-primary);
+            transform: translateY(-1px);
+        }
+
+        .action-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.6;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            font-size: 0.68rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-count-badge.wishlist-badge {
+            background: #C0392B;
+        }
+
+        .badge-bounce {
+            transform: scale(1.4) !important;
+        }
+
+        /* ─── USER BADGE NEAR CART BADGE ─── */
+        .user-badge-dropdown-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px 6px 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            transition: all 0.3s ease;
+            user-select: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .user-badge-pill:hover,
+        .user-badge-dropdown-wrap.active .user-badge-pill {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.15);
+        }
+
+        .user-avatar-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-avatar-circle svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .user-name-text {
+            max-width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-chevron {
+            width: 12px;
+            height: 12px;
+            stroke: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .user-badge-dropdown-wrap.active .user-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 220px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+            animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .user-badge-dropdown-wrap.active .user-dropdown-menu {
+            display: flex;
+        }
+
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-user-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dropdown-user-title {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .dropdown-user-email {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dropdown-session-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--olive-primary);
+            margin-top: 6px;
+        }
+
+        .dropdown-session-tag::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-soft);
+            margin: 2px 0;
+        }
+
+        .dropdown-logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            background: none;
+            border: 1px solid transparent;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: #D32F2F;
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-logout-btn:hover {
+            background: #FFF5F5;
+            border-color: rgba(211, 47, 47, 0.2);
+        }
+
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(248, 245, 240, 0.98);
+                flex-direction: column;
+                align-items: center;
+                padding: 24px 0;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+                border-bottom: 1px solid var(--border-soft);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+        }
+
+        /* --- About Page Layout & Typography --- */
+        .about-page-container { 
+            padding: 50px 7% 90px 7%; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        .section-header-center {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+        }
+
+        .section-overline {
+            font-size: 0.74rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--olive-primary);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .section-title { 
+            font-size: clamp(2.2rem, 3.8vw, 3.2rem); 
+            letter-spacing: 2px;
+            color: var(--text-dark);
+            line-height: 1.18;
+            text-transform: uppercase;
+        }
+
+        /* --- 1. Balanced Atelier Hero (50/50 Split) --- */
+        .about-hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            align-items: center;
+            gap: 56px;
+        }
+
+        .hero-tagline-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .hero-tagline-text {
+            font-size: 0.76rem;
+            font-weight: 600;
+            letter-spacing: 2.8px;
+            text-transform: uppercase;
+            color: var(--olive-primary);
+        }
+
+        .hero-tagline-line {
+            width: 48px;
+            height: 1px;
+            background: var(--border-soft);
+        }
+
+        .about-headline {
+            font-size: clamp(2.4rem, 4.2vw, 3.6rem);
+            letter-spacing: 2px;
+            line-height: 1.14;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .about-lead {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .about-hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .meta-label {
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .meta-val {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            letter-spacing: 0.5px;
+        }
+
+        .meta-divider {
+            width: 1px;
+            height: 34px;
+            background: var(--border-soft);
+        }
+
+        .about-hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-frame-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+        }
+
+        .hero-frame-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .hero-frame-container:hover .hero-frame-img {
+            transform: scale(1.03);
+        }
+
+        .frame-floating-seal {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 14px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .seal-icon-box {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .seal-icon-box svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            fill: none;
+        }
+
+        .seal-text-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .seal-badge-num {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: 0.5px;
+        }
+
+        .seal-badge-label {
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* --- 2. Prestige Metrics Strip (Balanced 4-Card Ribbon) --- */
+        .metrics-strip {
+            background: var(--bg-card);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            padding: 36px 42px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+
+        .metric-card {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .metric-card:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -16px;
+            top: 15%;
+            height: 70%;
+            width: 1px;
+            background: var(--border-soft);
+        }
+
+        .metric-number {
+            font-family: 'Lora', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--olive-primary);
+            line-height: 1;
+            letter-spacing: 1px;
+        }
+
+        .metric-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .metric-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* --- 3. Equal Two-Column Editorial Feature Rows --- */
+        .split-feature-section {
+            width: 100%;
+        }
+
+        .split-feature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 56px;
+        }
+
+        .split-feature-row.reverse-row {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .split-content-col {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .section-badge {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--olive-primary);
+            background: rgba(104, 117, 71, 0.09);
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        .split-title {
+            font-size: clamp(2rem, 3.4vw, 2.8rem);
+            line-height: 1.2;
+            color: var(--text-dark);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .split-para {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        .feature-bullets {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            color: var(--text-muted);
+        }
+
+        .bullet-item strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .bullet-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.14);
+            color: var(--olive-primary);
+            padding: 3px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            fill: none;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .split-visual-col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Equal-Height Proportional Image Container */
+        .equal-img-container {
+            width: 100%;
+            height: 380px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.06);
+            background: #FAF8F5;
+        }
+
+        .equal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .equal-img-container:hover .equal-img {
+            transform: scale(1.03);
+        }
+
+        /* --- 4. Interactive Chrono-Timeline & Archival Showcase --- */
+        .milestones-section {
+            width: 100%;
+        }
+
+        /* Horizontal Chronometer Track */
+        .chrono-track-wrapper {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto 40px auto;
+            padding: 10px 0;
+        }
+
+        .chrono-track-line {
+            position: absolute;
+            top: 24px;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: var(--border-soft);
+            z-index: 1;
+        }
+
+        .chrono-track-progress {
+            position: absolute;
+            top: 24px;
+            left: 5%;
+            width: 0%;
+            height: 2px;
+            background: var(--olive-primary);
+            transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 2;
+        }
+
+        .chrono-nodes-group {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 3;
+        }
+
+        .chrono-node-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px;
+            transition: var(--transition);
+        }
+
+        .chrono-node-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 2px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .chrono-node-circle::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-soft);
+            transition: var(--transition);
+        }
+
+        .chrono-node-btn:hover .chrono-node-circle {
+            border-color: var(--olive-primary);
+            transform: scale(1.15);
+        }
+
+        .chrono-node-btn.active .chrono-node-circle {
+            border-color: var(--olive-primary);
+            background: var(--olive-primary);
+            transform: scale(1.2);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.35);
+        }
+
+        .chrono-node-btn.active .chrono-node-circle::after {
+            background: #FFFFFF;
+        }
+
+        .chrono-node-year {
+            font-family: 'Lora', serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .chrono-node-btn.active .chrono-node-year {
+            color: var(--olive-primary);
+            font-size: 1.45rem;
+        }
+
+        .chrono-node-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .chrono-node-btn.active .chrono-node-label {
+            color: var(--text-dark);
+        }
+
+        /* Showcase Card (Editorial Dual Pane) */
+        .chapter-showcase-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-soft);
+            border-radius: 24px;
+            padding: 44px 48px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 48px;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 440px;
+        }
+
+        .chapter-watermark-year {
+            position: absolute;
+            right: 48%;
+            top: -20px;
+            font-family: 'Lora', serif;
+            font-size: 9.5rem;
+            font-weight: 700;
+            color: rgba(104, 117, 71, 0.05);
+            line-height: 1;
+            user-select: none;
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .chapter-content-side {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .chapter-badge {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--olive-primary);
+            background: rgba(104, 117, 71, 0.09);
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+
+        .chapter-title {
+            font-family: 'Lora', serif;
+            font-size: clamp(2rem, 3.2vw, 2.7rem);
+            color: var(--text-dark);
+            letter-spacing: 1.5px;
+            line-height: 1.18;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .chapter-desc {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .chapter-tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .chapter-tag {
+            font-size: 0.76rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            background: #FAF8F5;
+            border: 1px solid var(--border-soft);
+            padding: 6px 14px;
+            border-radius: 16px;
+            letter-spacing: 0.4px;
+        }
+
+        .chapter-nav-btns {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .chapter-nav-btn {
+            background: transparent;
+            border: 1px solid var(--border-soft);
+            color: var(--text-dark);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chapter-nav-btn:hover {
+            border-color: var(--olive-primary);
+            color: var(--olive-primary);
+            background: rgba(104, 117, 71, 0.06);
+        }
+
+        .chapter-visual-side {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 330px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+            background: #FAF8F5;
+        }
+
+        .chapter-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .chapter-visual-side:hover .chapter-img {
+            transform: scale(1.04);
+        }
+
+        .chapter-img-caption {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: var(--text-dark);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Fade transitions for chapter switching */
+        .chapter-fade {
+            transition: opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .chapter-fade.fading-out {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        /* --- 5. Bespoke Concierge Banner --- */
+        .concierge-cta-section {
+            width: 100%;
+        }
+
+        .concierge-card {
+            background: linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%);
+            border: 1px solid var(--border-soft);
+            border-radius: 24px;
+            padding: 48px 50px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concierge-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(104, 117, 71, 0.14) 0%, rgba(248, 245, 240, 0) 70%);
+            pointer-events: none;
+        }
+
+        .concierge-content {
+            max-width: 660px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .concierge-overline {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 2.8px;
+            text-transform: uppercase;
+            color: var(--olive-primary);
+        }
+
+        .concierge-title {
+            font-size: clamp(1.8rem, 2.8vw, 2.3rem);
+            color: var(--text-dark);
+            letter-spacing: 1.5px;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        .concierge-desc {
+            font-size: 0.94rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        .concierge-action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+
+        .btn-concierge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            padding: 13px 28px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 20px rgba(104, 117, 71, 0.22);
+            transition: var(--transition);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .btn-concierge:hover {
+            background: var(--olive-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(79, 90, 49, 0.3);
+        }
+
+        .btn-concierge-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--text-dark);
+            border: 1px solid var(--border-soft);
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            transition: var(--transition);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .btn-concierge-secondary:hover {
+            border-color: var(--olive-primary);
+            color: var(--olive-primary);
+            background: #FFFFFF;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .about-hero-grid,
+            .split-feature-row,
+            .split-feature-row.reverse-row {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .split-feature-row.reverse-row .split-visual-col {
+                order: 2;
+            }
+            .split-feature-row.reverse-row .split-content-col {
+                order: 1;
+            }
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 28px;
+            }
+            .metric-card:not(:last-child)::after {
+                display: none;
+            }
+            .chapter-showcase-card {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                padding: 32px 24px;
+            }
+            .chapter-watermark-year {
+                right: 20px;
+                top: 0;
+                font-size: 6rem;
+            }
+            .chapter-visual-side {
+                height: 250px;
+            }
+            .concierge-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 36px 30px;
+            }
+            .concierge-action-group {
+                width: 100%;
+                flex-direction: row;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-page-container {
+                padding: 36px 6% 60px 6%;
+                gap: 50px;
+            }
+            .hero-frame-container,
+            .equal-img-container {
+                height: 280px;
+            }
+            .metrics-strip {
+                padding: 24px;
+            }
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            .chrono-track-wrapper {
+                overflow-x: auto;
+                padding-bottom: 14px;
+            }
+            .chrono-nodes-group {
+                min-width: 460px;
+            }
+            .chrono-track-line,
+            .chrono-track-progress {
+                min-width: 420px;
+            }
+            .concierge-action-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo-group">
+            <svg class="oryx-saturn-logo" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ORYX Emblem">
+                <defs>
+                    <clipPath id="saturn-back-clip"><path d="M 0 0 L 100 0 L 100 35 L 0 35 Z"/></clipPath>
+                    <clipPath id="saturn-front-clip"><path d="M 0 35 L 100 35 L 100 70 L 0 70 Z"/></clipPath>
+                    <clipPath id="saturn-sphere-clip"><circle cx="50" cy="35" r="23"/></clipPath>
+                </defs>
+                <!-- Back Ring -->
+                <g clip-path="url(#saturn-back-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+                <!-- Central Planetary Sphere -->
+                <circle cx="50" cy="35" r="23" class="saturn-globe-base" stroke="currentColor" stroke-width="2.6"/>
+                <!-- Longitudinal Fluted Meridian Ribs -->
+                <g clip-path="url(#saturn-sphere-clip)">
+                    <line x1="50" y1="10" x2="50" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 57 18, 57 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 64 18, 64 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 71 20, 71 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 43 18, 43 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 36 18, 36 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 29 20, 29 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+                <!-- Front Ring -->
+                <g clip-path="url(#saturn-front-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+            </svg>
+            <a href="index.html" class="logo-text">ORYX</a>
+        </div>
+
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="collection.html">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <!-- Luxury Integrated Searchbar -->
+            <form class="nav-search-bar" action="collection.html" method="GET" role="search">
+                <svg class="search-bar-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="search" class="search-bar-input" placeholder="Search timepieces..." aria-label="Search timepieces">
+            </form>
+            
+            <!-- Wishlist -->
+            <a href="profile.html" class="action-icon-btn" title="Wishlist">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="cart-count-badge wishlist-badge" id="nav-wishlist-count">0</span>
+            </a>
+
+            <!-- Cart Bag with dynamic count -->
+            <a href="cart.html" class="action-icon-btn" title="Shopping Cart">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-count-badge" id="nav-cart-count">0</span>
+            </a>
+
+            <!-- User Badge near Cart Badge -->
+            <div class="user-badge-dropdown-wrap" id="user-badge-wrap">
+                <button type="button" class="user-badge-pill" id="user-badge-pill" aria-label="User Account">
+                    <span class="user-avatar-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span class="user-name-text" id="nav-user-name">Guest</span>
+                    <svg class="user-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="user-dropdown-menu" id="user-dropdown-menu">
+                    <div class="dropdown-user-header">
+                        <span class="dropdown-user-title" id="dropdown-user-name">Guest</span>
+                        <span class="dropdown-user-email" id="dropdown-user-email">guest@oryx.com</span>
+                        <span class="dropdown-session-tag">Temporary Active</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-logout-btn" id="logout-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="21" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Log Out</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer Hamburger Toggle -->
+            <button class="hamburger-btn" id="mobile-toggle" aria-label="Toggle navigation">
+                <svg width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="about-page-container">
+        
+        <!-- 1. Balanced Atelier Hero (50/50 Split) -->
+        <section class="about-hero-section">
+            <div class="about-hero-grid">
+                <div class="about-hero-text">
+                    <div class="hero-tagline-wrap">
+                        <span class="hero-tagline-text">THE ATELIER MANIFESTO</span>
+                        <span class="hero-tagline-line"></span>
+                    </div>
+                    <h1 class="about-headline">Curating Time in Its Purest Form</h1>
+                    <p class="about-lead">
+                        Founded on the bedrock of independent horology and uncompromising artisanal integrity, Oryx bridges the golden age of Swiss chronometry with contemporary mechanical mastery. We partner with master watchmakers whose hands breathe life into micro-mechanical wonders.
+                    </p>
+                    <div class="about-hero-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">ATELIER VAULT</span>
+                            <span class="meta-val">Geneva &bull; Est. 2015</span>
+                        </div>
+                        <div class="meta-divider"></div>
+                        <div class="meta-item">
+                            <span class="meta-label">SPECIALIZATION</span>
+                            <span class="meta-val">Haute Horlogerie & Complications</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-hero-visual">
+                    <div class="hero-frame-container">
+                        <img src="watch12.jpg" alt="Watch mechanism micro-artistry" class="hero-frame-img">
+                        <div class="frame-floating-seal">
+                            <div class="seal-icon-box">
+                                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <div class="seal-text-group">
+                                <span class="seal-badge-num">100% Certified</span>
+                                <span class="seal-badge-label">Verified Provenance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Prestige Metrics Strip (Balanced 4-Card Ribbon) -->
+        <section class="metrics-strip">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-number">12+</span>
+                    <span class="metric-title">Years of Heritage</span>
+                    <p class="metric-desc">Unbroken dedication to peerless mechanical craftsmanship.</p>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">32</span>
+                    <span class="metric-title">Master Maisons</span>
+                    <p class="metric-desc">Direct allocations from elite independent watchmakers.</p>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">48-Pt</span>
+                    <span class="metric-title">Precision Audit</span>
+                    <p class="metric-desc">Every movement tested to stringent internal tolerances.</p>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">15K+</span>
+                    <span class="metric-title">Global Collectors</span>
+                    <p class="metric-desc">Connoisseurs across 45 countries trusting our vault.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Equal Two-Column Editorial Feature 1: Curation (Text Left, Image Right) -->
+        <section class="split-feature-section">
+            <div class="split-feature-row">
+                <div class="split-content-col">
+                    <span class="section-badge">PILLAR I &bull; CURATION</span>
+                    <h2 class="split-title">The Art of Discerning Selection</h2>
+                    <p class="split-para">
+                        In an era dominated by mass industrialization, Oryx champions the rare, the intricate, and the soulful. We do not merely stock timepieces; we curate legacies. Each mechanical creation admitted into our vault represents hundreds of hours of manual finishing—from Geneva striping and mirror anglage to hand-blued screws.
+                    </p>
+                    <div class="feature-bullets">
+                        <div class="bullet-item">
+                            <svg class="bullet-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <div>
+                                <strong>Single-Source Provenance:</strong> Direct allocations from master artisans and verified Swiss manufactures with intact documentation.
+                            </div>
+                        </div>
+                        <div class="bullet-item">
+                            <svg class="bullet-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <div>
+                                <strong>Complication Specialists:</strong> Focused on tourbillons, perpetual calendars, minute repeaters, and astronomical displays.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="split-visual-col">
+                    <div class="equal-img-container">
+                        <img src="watch13.jpg" alt="Atelier watchmaking craftsmanship" class="equal-img">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Equal Two-Column Editorial Feature 2: Metrology (Image Left, Text Right) -->
+        <section class="split-feature-section">
+            <div class="split-feature-row reverse-row">
+                <div class="split-visual-col">
+                    <div class="equal-img-container">
+                        <img src="watch14.jpg" alt="Precision micro-mechanical adjustment" class="equal-img">
+                    </div>
+                </div>
+
+                <div class="split-content-col">
+                    <span class="section-badge">PILLAR II &bull; RIGOR</span>
+                    <h2 class="split-title">48-Point Chronometric Inspection</h2>
+                    <p class="split-para">
+                        Before a timepiece is released to a collector, it undergoes an exhaustive evaluation by our certified master watchmakers. We inspect escapement lubrication, measure amplitude across six isobaric positions, and verify water resistance under simulated hyperbaric pressure.
+                    </p>
+                    <div class="feature-bullets">
+                        <div class="bullet-item">
+                            <svg class="bullet-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <div>
+                                <strong>Isochronism Verification:</strong> Multi-position rate consistency measured continuously over 120 hours.
+                            </div>
+                        </div>
+                        <div class="bullet-item">
+                            <svg class="bullet-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <div>
+                                <strong>Laser Micro-Casing Analysis:</strong> Flawless crystal and bezel surface integrity inspection under 40x magnification.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Defining Milestones: Interactive Chronometer Timeline & Archival Showcase -->
+        <section class="milestones-section">
+            <div class="section-header-center">
+                <span class="section-overline">JOURNEY THROUGH TIME</span>
+                <h2 class="section-title">Defining Chapters</h2>
+                <p class="about-lead" style="margin-bottom: 0;">Explore the four defining eras of the Oryx horological legacy.</p>
+            </div>
+
+            <!-- Horizontal Chronometer Timeline Track -->
+            <div class="chrono-track-wrapper">
+                <div class="chrono-track-line"></div>
+                <div class="chrono-track-progress" id="chrono-progress"></div>
+                <div class="chrono-nodes-group">
+                    <button class="chrono-node-btn active" onclick="setChapter(0)" aria-label="Chapter 2015 Genesis">
+                        <div class="chrono-node-circle"></div>
+                        <span class="chrono-node-year">2015</span>
+                        <span class="chrono-node-label">Genesis</span>
+                    </button>
+                    <button class="chrono-node-btn" onclick="setChapter(1)" aria-label="Chapter 2018 Private Vault">
+                        <div class="chrono-node-circle"></div>
+                        <span class="chrono-node-year">2018</span>
+                        <span class="chrono-node-label">The Vault</span>
+                    </button>
+                    <button class="chrono-node-btn" onclick="setChapter(2)" aria-label="Chapter 2022 Global Expansion">
+                        <div class="chrono-node-circle"></div>
+                        <span class="chrono-node-year">2022</span>
+                        <span class="chrono-node-label">Global Era</span>
+                    </button>
+                    <button class="chrono-node-btn" onclick="setChapter(3)" aria-label="Chapter 2026 Digital Atelier">
+                        <div class="chrono-node-circle"></div>
+                        <span class="chrono-node-year">2026</span>
+                        <span class="chrono-node-label">Digital Atelier</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Archival Showcase Card (Dual Pane Editorial Showcase) -->
+            <div class="chapter-showcase-card">
+                <div class="chapter-watermark-year chapter-fade" id="chapter-watermark">2015</div>
+
+                <!-- Content Column -->
+                <div class="chapter-content-side chapter-fade">
+                    <span class="chapter-badge" id="chapter-badge">CHAPTER 01 OF 04 &bull; GENEVA</span>
+                    <h3 class="chapter-title" id="chapter-title">The Geneva Genesis</h3>
+                    <p class="chapter-desc" id="chapter-desc">
+                        Oryx was founded in Geneva with a singular purpose: establishing a transparent, peerless bridge between master independent watchmakers and discerning collectors. Operating initially as a private salon on Rue du Rhône, we set new benchmarks for guaranteed origin and mechanical provenance.
+                    </p>
+
+                    <div class="chapter-tags-row" id="chapter-tags">
+                        <span class="chapter-tag">📍 Geneva Atelier</span>
+                        <span class="chapter-tag">🤝 8 Master Independents</span>
+                        <span class="chapter-tag">📜 Single-Origin Treaty</span>
+                    </div>
+
+                    <div class="chapter-nav-btns">
+                        <button class="chapter-nav-btn" onclick="prevChapter()">← Previous Chapter</button>
+                        <button class="chapter-nav-btn" onclick="nextChapter()">Next Chapter →</button>
+                    </div>
+                </div>
+
+                <!-- Archival Visual Column -->
+                <div class="chapter-visual-side chapter-fade">
+                    <img src="watch15.jpg" alt="Archival Atelier benchwork" class="chapter-img" id="chapter-img">
+                    <div class="chapter-img-caption" id="chapter-caption">Archival Atelier Workshop &bull; Geneva 2015</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Private Concierge & VIP Acquisition Invitation -->
+        <section class="concierge-cta-section">
+            <div class="concierge-card">
+                <div class="concierge-content">
+                    <span class="concierge-overline">BESPOKE HOROLOGICAL CONCIERGE</span>
+                    <h2 class="concierge-title">Seeking a Rare Reference or Commission?</h2>
+                    <p class="concierge-desc">
+                        Our private client advisors maintain direct links with independent ateliers and premier collector vaults to source bespoke, limited-run, and allocated complications.
+                    </p>
+                </div>
+                <div class="concierge-action-group">
+                    <a href="contact.html" class="btn-concierge">Request Private Consultation</a>
+                    <a href="collection.html" class="btn-concierge-secondary">Explore Vault Collection</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Defining Chapters Dataset ---
+        const chaptersData = [
+            {
+                year: "2015",
+                badge: "CHAPTER 01 OF 04 &bull; GENEVA",
+                title: "The Geneva Genesis",
+                desc: "Oryx was founded in Geneva with a singular purpose: establishing a transparent, peerless bridge between master independent watchmakers and discerning collectors. Operating initially as a private salon on Rue du Rhône, we set new benchmarks for guaranteed origin and mechanical provenance.",
+                tags: ["📍 Geneva Atelier", "🤝 8 Master Independents", "📜 Single-Origin Treaty"],
+                img: "watch15.jpg",
+                caption: "Archival Atelier Workshop &bull; Geneva 2015"
+            },
+            {
+                year: "2018",
+                badge: "CHAPTER 02 OF 04 &bull; ALLIANCES",
+                title: "The Private Vault",
+                desc: "Inaugurating our private collector salon and securing exclusive direct allocation treaties with premier Swiss complications manufactures. Every acquisition was paired with our signature 48-point horological audit, establishing our reputation among international connoisseurs.",
+                tags: ["🏛️ Private Vault Salon", "⏱️ 48-Pt Chronometer Audit", "💎 Complication Allocations"],
+                img: "watch16.webp",
+                caption: "Vault Complication Curation &bull; Zurich 2018"
+            },
+            {
+                year: "2022",
+                badge: "CHAPTER 03 OF 04 &bull; EXPANSION",
+                title: "Global Curated Vault",
+                desc: "Expanding our collector footprint across Europe, Asia, and North America. We established climate-controlled physical inspection repositories in three metropolitan hubs, ensuring zero-latency international dispatch with full custodial insurance.",
+                tags: ["🌐 3 Metropolitan Hubs", "🛡️ Armored Custodial Logistics", "🌍 45 Collector Nations"],
+                img: "watch17.webp",
+                caption: "International Salon Network &bull; 2022"
+            },
+            {
+                year: "2026",
+                badge: "CHAPTER 04 OF 04 &bull; HORIZON",
+                title: "The Digital Atelier",
+                desc: "Launching our unified interactive digital platform, providing discerning collectors worldwide with instant access to rare references, real-time vault reserves, and bespoke white-glove advisory from Geneva's most accomplished horologists.",
+                tags: ["💻 Real-Time Vault Curation", "👑 Bespoke Client Concierge", "✨ Next-Gen Horology"],
+                img: "watch12.jpg",
+                caption: "Interactive Digital Vault Launch &bull; 2026"
+            }
+        ];
+
+        let activeChapterIdx = 0;
+
+        function setChapter(idx) {
+            activeChapterIdx = (idx + chaptersData.length) % chaptersData.length;
+            const data = chaptersData[activeChapterIdx];
+
+            // Update Progress Bar
+            const progress = (activeChapterIdx / (chaptersData.length - 1)) * 90;
+            const progressEl = document.getElementById('chrono-progress');
+            if (progressEl) progressEl.style.width = `${progress}%`;
+
+            // Update Active Node Button
+            document.querySelectorAll('.chrono-node-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === activeChapterIdx);
+            });
+
+            // Smooth cross-fade transition
+            const fadeEls = document.querySelectorAll('.chapter-fade');
+            fadeEls.forEach(el => el.classList.add('fading-out'));
+
+            setTimeout(() => {
+                const watermarkEl = document.getElementById('chapter-watermark');
+                const badgeEl = document.getElementById('chapter-badge');
+                const titleEl = document.getElementById('chapter-title');
+                const descEl = document.getElementById('chapter-desc');
+                const tagsEl = document.getElementById('chapter-tags');
+                const imgEl = document.getElementById('chapter-img');
+                const captionEl = document.getElementById('chapter-caption');
+
+                if (watermarkEl) watermarkEl.innerText = data.year;
+                if (badgeEl) badgeEl.innerHTML = data.badge;
+                if (titleEl) titleEl.innerText = data.title;
+                if (descEl) descEl.innerText = data.desc;
+                if (tagsEl) {
+                    tagsEl.innerHTML = data.tags.map(tag => `<span class="chapter-tag">${tag}</span>`).join('');
+                }
+                if (imgEl) imgEl.src = data.img;
+                if (captionEl) captionEl.innerHTML = data.caption;
+
+                fadeEls.forEach(el => el.classList.remove('fading-out'));
+            }, 180);
+        }
+
+        function nextChapter() {
+            setChapter(activeChapterIdx + 1);
+        }
+
+        function prevChapter() {
+            setChapter(activeChapterIdx - 1);
+        }
+
+        // Synchronize Shopping Cart Badge from LocalStorage
+        function syncCartCount() {
+            const cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+            const badge = document.getElementById('nav-cart-count');
+            if (badge) {
+                const totalCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                badge.innerText = totalCount;
+            }
+        }
+
+        function syncWishlistCount() {
+            const wishlist = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+            const badge = document.getElementById('nav-wishlist-count');
+            if (badge) {
+                badge.innerText = wishlist.length;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            syncCartCount();
+            syncWishlistCount();
+            setChapter(0);
+
+            // Mobile Menu Drawer Toggle
+            const toggle = document.getElementById('mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (toggle && navLinks) {
+                toggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+    
+
+        // Header Sync handled by top-level syncCartCount & syncWishlistCount
+
+        // --- User Badge Navigation & Auth Management ---
+        function initUserAuthNav() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+                return;
+            }
+
+            const userName = sessionStorage.getItem('oryx_user_name') || localStorage.getItem('oryx_user_name') || 'Guest';
+            const userEmail = sessionStorage.getItem('oryx_user_email') || localStorage.getItem('oryx_user_email') || 'guest@oryx.com';
+
+            const navNameEl = document.getElementById('nav-user-name');
+            const dropNameEl = document.getElementById('dropdown-user-name');
+            const dropEmailEl = document.getElementById('dropdown-user-email');
+            if (navNameEl) navNameEl.textContent = userName;
+            if (dropNameEl) dropNameEl.textContent = userName;
+            if (dropEmailEl) dropEmailEl.textContent = userEmail;
+
+            const wrap = document.getElementById('user-badge-wrap');
+            const btn = document.getElementById('user-badge-pill');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (btn && wrap) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    wrap.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!wrap.contains(e.target)) {
+                        wrap.classList.remove('active');
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.removeItem('oryx_logged_in');
+                    sessionStorage.removeItem('oryx_user_name');
+                    sessionStorage.removeItem('oryx_user_email');
+                    localStorage.removeItem('oryx_logged_in');
+                    localStorage.removeItem('oryx_user_name');
+                    localStorage.removeItem('oryx_user_email');
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserAuthNav();
+            syncCartCount();
+            syncWishlistCount();
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navMenu = document.querySelector('.nav-links');
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    
+</script>
+</body>
+</html>

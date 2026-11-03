@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oryx | Partnered Maisons</title>
+    <!-- Authentication Gate -->
+    <script>
+        (function() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+            }
+        })();
+    </script>
+    <!-- Google Fonts: Lora (Editorial Luxury Serif) & Open Sans (Modern Clean Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-page: #F8F5F0;            /* Warm luxury ivory canvas */
+            --bg-card: #FFFFFF;            /* Pure white surface */
+            --olive-primary: #687547;      /* Sage / Olive accent */
+            --olive-dark: #4F5A31;         /* Deep olive */
+            --text-dark: #1E1E1E;          /* Rich charcoal */
+            --text-muted: #6B685F;         /* Soft taupe */
+            --border-soft: #E2DDD3;        /* Warm sand border */
+            --gold-accent: #C5A059;        /* Champagne gold */
+            --gold-light: #F3E5AB;
+            --gold-dark: #8C6D2D;
+            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            --font-serif: 'Lora', Georgia, serif;
+            --font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+        /* ─── CANONICAL LUXURY NAVBAR (COMMON FOR ALL PAGES) ─── */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 7%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #FFFFFF;
+            border-bottom: 1px solid #DCD6CA;
+            box-shadow: 0 4px 24px rgba(30, 30, 30, 0.05);
+            transition: var(--transition-smooth);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .oryx-saturn-logo {
+            width: 48px;
+            height: 34px;
+            display: block;
+            color: #9E7D3B; /* Elegant golden bronze matching the designed logo */
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 2px 5px rgba(158, 125, 59, 0.18));
+            flex-shrink: 0;
+        }
+
+        .saturn-globe-base {
+            fill: #FAF8F5;
+        }
+
+        .logo-group:hover .oryx-saturn-logo {
+            transform: scale(1.10) rotate(-4deg);
+            color: #B88E3F;
+            filter: drop-shadow(0 4px 10px rgba(184, 142, 63, 0.35));
+        }
+
+        .logo-text {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dark, #1E1E1E);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 42px;
+        }
+
+        .nav-links a {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: var(--text-dark, #1E1E1E);
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--olive-primary, #687547);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--olive-primary, #687547);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Luxury Integrated Searchbar */
+        .nav-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft, #E2DDD3);
+            border-radius: 30px;
+            padding: 8px 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            width: 230px;
+        }
+
+        .nav-search-bar:focus-within {
+            border-color: var(--olive-primary, #687547);
+            box-shadow: 0 4px 16px rgba(104, 117, 71, 0.18);
+            width: 270px;
+        }
+
+        .search-bar-icon {
+            width: 17px;
+            height: 17px;
+            stroke: var(--text-muted, #6B685F);
+            stroke-width: 1.8;
+            fill: none;
+            flex-shrink: 0;
+            transition: stroke 0.3s ease;
+        }
+
+        .nav-search-bar:focus-within .search-bar-icon {
+            stroke: var(--olive-primary, #687547);
+        }
+
+        .search-bar-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dark, #1E1E1E);
+            width: 100%;
+        }
+
+        .search-bar-input::placeholder {
+            color: #9C978D;
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .action-icon-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark, #1E1E1E);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 4px;
+        }
+
+        .action-icon-btn:hover,
+        .action-icon-btn.active {
+            color: var(--olive-primary, #687547);
+            transform: translateY(-1px);
+        }
+
+        .action-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.6;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--olive-primary, #687547);
+            color: #FFFFFF;
+            font-size: 0.68rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-count-badge.wishlist-badge {
+            background: #C0392B;
+        }
+
+        /* ─── USER BADGE NEAR CART BADGE ─── */
+        .user-badge-dropdown-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px 6px 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            transition: all 0.3s ease;
+            user-select: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .user-badge-pill:hover,
+        .user-badge-dropdown-wrap.active .user-badge-pill {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.15);
+        }
+
+        .user-avatar-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-avatar-circle svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .user-name-text {
+            max-width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-chevron {
+            width: 12px;
+            height: 12px;
+            stroke: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .user-badge-dropdown-wrap.active .user-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 220px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+            animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .user-badge-dropdown-wrap.active .user-dropdown-menu {
+            display: flex;
+        }
+
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-user-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dropdown-user-title {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .dropdown-user-email {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dropdown-session-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--olive-primary);
+            margin-top: 6px;
+        }
+
+        .dropdown-session-tag::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-soft);
+            margin: 2px 0;
+        }
+
+        .dropdown-logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            background: none;
+            border: 1px solid transparent;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: #D32F2F;
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-logout-btn:hover {
+            background: #FFF5F5;
+            border-color: rgba(211, 47, 47, 0.2);
+        }
+
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark, #1E1E1E);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 18px 5%;
+            }
+            .nav-search-bar {
+                display: none;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(248, 245, 240, 0.98);
+                backdrop-filter: blur(12px);
+                flex-direction: column;
+                align-items: center;
+                padding: 24px 0;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+                border-bottom: 1px solid var(--border-soft, #E2DDD3);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+        }
+
+
+        /* ─── MINIMALIST EDITORIAL HEADER ─── */
+        .page-header {
+            text-align: center;
+            padding: 44px 7% 20px;
+        }
+
+        .page-subheading {
+            font-family: var(--font-sans);
+            font-size: 0.72rem;
+            letter-spacing: 3.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--olive-primary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .page-heading {
+            font-family: var(--font-serif);
+            font-size: 2.4rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+        }
+
+        /* Quick live search */
+        .search-pill-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .search-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 40px;
+            padding: 10px 22px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+            width: 320px;
+            transition: var(--transition-smooth);
+        }
+
+        .search-pill:focus-within {
+            border-color: var(--olive-primary);
+            box-shadow: 0 6px 22px rgba(104, 117, 71, 0.15);
+            width: 360px;
+        }
+
+        .search-pill input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: var(--font-sans);
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            width: 100%;
+        }
+
+        /* ─── BRAND GRID ─── */
+        .brands-container {
+            flex: 1;
+            padding: 30px 7% 60px;
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 28px;
+            perspective: 1200px;
+        }
+
+        /* ─── 3D COIN CARD ─── */
+        .brand-coin-card {
+            background: #FFFFFF;
+            border-radius: 18px;
+            border: 1px solid var(--border-soft);
+            padding: 34px 20px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), 
+                        box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1), 
+                        border-color 0.4s ease;
+            user-select: none;
+            perspective: 1000px;
+        }
+
+        .brand-coin-card:hover {
+            border-color: var(--olive-primary);
+            box-shadow: 
+                0 20px 42px rgba(104, 117, 71, 0.16),
+                0 6px 16px rgba(0, 0, 0, 0.04);
+            transform: translateY(-6px);
+        }
+
+        /* ─── 3D COIN & GOLDEN ORBIT STAGE ─── */
+        .brand-circle-stage {
+            width: 104px;
+            height: 104px;
+            position: relative;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 3D Flipping Coin */
+        .brand-coin {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .brand-coin-card:hover .brand-coin {
+            transform: rotateY(180deg);
+        }
+
+        /* Front & Back Faces (Both have exact same authentic brand logo) */
+        .coin-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .coin-face img {
+            width: 62%;
+            height: 62%;
+            object-fit: contain;
+            filter: contrast(1.02);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .coin-face-front {
+            transform: rotateY(0deg);
+        }
+
+        .coin-face-back {
+            transform: rotateY(180deg);
+        }
+
+        .brand-coin-card:hover .coin-face {
+            border-color: rgba(197, 160, 89, 0.55);
+            box-shadow: 
+                0 0 16px rgba(197, 160, 89, 0.28),
+                0 6px 20px rgba(104, 117, 71, 0.12);
+        }
+
+        .brand-coin-card:hover .coin-face img {
+            transform: scale(1.06);
+        }
+
+        /* Soft Luminous Highlight Aura behind circle (appears with gentle glow after flip) */
+        .luminous-circle-highlight {
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                rgba(197, 160, 89, 0.42) 0%,
+                rgba(212, 175, 55, 0.24) 45%,
+                rgba(104, 117, 71, 0.10) 65%,
+                transparent 78%
+            );
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.3s ease 0s, transform 0.3s ease 0s;
+            pointer-events: none;
+            filter: blur(8px);
+            z-index: 1;
+        }
+
+        .brand-coin-card:hover .luminous-circle-highlight {
+            opacity: 1;
+            transform: scale(1.18);
+            transition: opacity 0.4s ease 0.5s, transform 0.4s ease 0.5s;
+        }
+
+        /* ─── MOVING GOLDEN LINE AROUND THE CIRCLE ─── */
+        .golden-orbit-ring {
+            position: absolute;
+            inset: -7px;
+            width: calc(100% + 14px);
+            height: calc(100% + 14px);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.25s ease 0s;
+        }
+
+        /* Highlights with moving golden line AFTER flipping */
+        .brand-coin-card:hover .golden-orbit-ring {
+            opacity: 1;
+            transition: opacity 0.35s ease 0.55s;
+        }
+
+        .golden-orbit-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: visible;
+            transform-origin: 50% 50%;
+        }
+
+        .brand-coin-card:hover .golden-orbit-svg {
+            animation: goldenOrbitSpin 1.8s linear infinite;
+            animation-delay: 0.55s;
+        }
+
+        @keyframes goldenOrbitSpin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .golden-orbit-track {
+            fill: none;
+            stroke: rgba(197, 160, 89, 0.24);
+            stroke-width: 1.2;
+            stroke-dasharray: 3 3;
+        }
+
+        .golden-orbit-arc {
+            fill: none;
+            stroke-width: 2.8;
+            stroke-linecap: round;
+            stroke-dasharray: 92 247;
+            filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.95)) drop-shadow(0 0 8px rgba(197, 160, 89, 0.5));
+        }
+
+        /* ─── EDITORIAL BRAND TYPOGRAPHY ─── */
+        .card-brand-title {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .brand-coin-card:hover .card-brand-title {
+            letter-spacing: 3.5px;
+            color: var(--olive-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Micro Horological Accent (Diamond & Subtle Line) */
+        .title-accent-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .accent-line {
+            width: 14px;
+            height: 1px;
+            background: var(--olive-primary);
+        }
+
+        .accent-diamond {
+            font-size: 7px;
+            color: var(--olive-primary);
+            line-height: 1;
+        }
+
+        .brand-coin-card:hover .title-accent-wrap {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Empty search state */
+        .no-results-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-muted);
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        /* ─── FOOTER (MINIMALIST HAUTE HORLOGERIE) ─── */
+        .site-footer {
+            margin-top: auto;
+            border-top: 1px solid rgba(226, 221, 211, 0.7);
+            background: #FFFFFF;
+            padding: 24px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-pulse-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--olive-primary);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .footer-right a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-right a:hover {
+            color: var(--olive-primary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 18px 5%;
+            }
+            .nav-links, .nav-search-bar {
+                display: none;
+            }
+            .page-heading {
+                font-size: 1.9rem;
+            }
+            .brands-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 18px;
+            }
+            .brand-coin-card {
+                padding: 26px 14px 20px;
+            }
+            .brand-circle-stage {
+                width: 86px;
+                height: 86px;
+                margin-bottom: 16px;
+            }
+            .card-brand-title {
+                font-size: 0.9rem;
+            }
+            .site-footer {
+                padding: 18px 5%;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── AUTHENTIC NAVBAR ─── -->
+    <header class="navbar">
+        <div class="logo-group">
+            <svg class="oryx-saturn-logo" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ORYX Emblem">
+                <defs>
+                    <clipPath id="saturn-back-clip"><path d="M 0 0 L 100 0 L 100 35 L 0 35 Z"/></clipPath>
+                    <clipPath id="saturn-front-clip"><path d="M 0 35 L 100 35 L 100 70 L 0 70 Z"/></clipPath>
+                    <clipPath id="saturn-sphere-clip"><circle cx="50" cy="35" r="23"/></clipPath>
+                </defs>
+                <!-- Back Ring -->
+                <g clip-path="url(#saturn-back-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+                <!-- Central Planetary Sphere -->
+                <circle cx="50" cy="35" r="23" class="saturn-globe-base" stroke="currentColor" stroke-width="2.6"/>
+                <!-- Longitudinal Fluted Meridian Ribs -->
+                <g clip-path="url(#saturn-sphere-clip)">
+                    <line x1="50" y1="10" x2="50" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 57 18, 57 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 64 18, 64 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 71 20, 71 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 43 18, 43 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 36 18, 36 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 29 20, 29 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+                <!-- Front Ring -->
+                <g clip-path="url(#saturn-front-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+            </svg>
+            <a href="index.html" class="logo-text">ORYX</a>
+        </div>
+
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html">Collection</a></li>
+                <li><a href="brands.html" class="active">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <!-- Luxury Integrated Searchbar -->
+            <form class="nav-search-bar" action="collection.html" method="GET" role="search">
+                <svg class="search-bar-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="search" class="search-bar-input" placeholder="Search timepieces..." aria-label="Search timepieces">
+            </form>
+            
+            <!-- Wishlist -->
+            <a href="profile.html" class="action-icon-btn" title="Wishlist">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="cart-count-badge wishlist-badge" id="nav-wishlist-count">0</span>
+            </a>
+
+            <!-- Cart Bag with dynamic count -->
+            <a href="cart.html" class="action-icon-btn" title="Shopping Cart">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-count-badge" id="nav-cart-count">0</span>
+            </a>
+
+            <!-- User Badge near Cart Badge -->
+            <div class="user-badge-dropdown-wrap" id="user-badge-wrap">
+                <button type="button" class="user-badge-pill" id="user-badge-pill" aria-label="User Account">
+                    <span class="user-avatar-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span class="user-name-text" id="nav-user-name">Guest</span>
+                    <svg class="user-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="user-dropdown-menu" id="user-dropdown-menu">
+                    <div class="dropdown-user-header">
+                        <span class="dropdown-user-title" id="dropdown-user-name">Guest</span>
+                        <span class="dropdown-user-email" id="dropdown-user-email">guest@oryx.com</span>
+                        <span class="dropdown-session-tag">Temporary Active</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-logout-btn" id="logout-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="21" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Log Out</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer Hamburger Toggle -->
+            <button class="hamburger-btn" id="mobile-toggle" aria-label="Toggle navigation">
+                <svg width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ─── MINIMALIST EDITORIAL HEADER ─── -->
+    <section class="page-header">
+        <span class="page-subheading">Maisons & Manufactures</span>
+        <h1 class="page-heading">Partnered Brands</h1>
+
+        <div class="search-pill-container">
+            <div class="search-pill">
+                <svg class="search-bar-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="brand-filter-input" placeholder="Filter maisons..." aria-label="Filter maisons">
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── 3D COIN FLIP BRAND GRID ─── -->
+    <main class="brands-container">
+        <div class="brands-grid" id="brands-grid">
+            <!-- 35 Brand 3D Medallion Cards -->
+            <div class="no-results-msg" id="no-results">
+                No matching maison found.
+            </div>
+        </div>
+    </main>
+
+    <!-- ─── MINIMAL FOOTER ─── -->
+    <footer class="site-footer">
+        <div class="footer-left">
+            <span class="footer-pulse-dot"></span>
+            <span>35 Certified Horological Partners</span>
+        </div>
+        <div class="footer-right">
+            <a href="collection.html">View Complete Timepiece Registry &rarr;</a>
+        </div>
+    </footer>
+
+    <!-- ─── 3D MEDALLION ENGINE SCRIPT ─── -->
+    <script>
+        const BRANDS = [
+            { name: "Rolex", file: "rolex.jpg" },
+            { name: "Omega", file: "omega.png" },
+            { name: "Breitling", file: "breitling.png" },
+            { name: "Hublot", file: "hublot.png" },
+            { name: "Tag Heuer", file: "tagheuer.png" },
+            { name: "Longines", file: "longines.jpg" },
+            { name: "Tissot", file: "tissot.jpg" },
+            { name: "Rado", file: "rado.jpg" },
+            { name: "Panerai", file: "panerai.png" },
+            { name: "Frederique Constant", file: "frederique_constant.png" },
+            { name: "Alpina", file: "alpina.png" },
+            { name: "Citizen", file: "citizen.png" },
+            { name: "Seiko", file: "seiko.png" },
+            { name: "Casio", file: "casio.jpg" },
+            { name: "Movado", file: "movado.jpg" },
+            { name: "Victorinox", file: "victorinox.png" },
+            { name: "Skagen", file: "skagen.png" },
+            { name: "Titan", file: "titan.jpg" },
+            { name: "Edge", file: "edge.png" },
+            { name: "Nebula", file: "nebula.jpg" },
+            { name: "Fastrack", file: "fasttrack.png" },
+            { name: "Sonata", file: "sonata.jpg" },
+            { name: "Xylys", file: "xylys.png" },
+            { name: "Fossil", file: "fossil.png" },
+            { name: "Guess", file: "guess.jpg" },
+            { name: "Tommy Hilfiger", file: "tommyhilfiger.jpg" },
+            { name: "Michael Kors", file: "mk.png" },
+            { name: "Daniel Wellington", file: "daniel_wellington.png" },
+            { name: "Police", file: "police.png" },
+            { name: "Apple", file: "apple.png" },
+            { name: "Garmin", file: "garmin.png" },
+            { name: "Samsung", file: "samsung.png" },
+            { name: "boAt", file: "boat.png" },
+            { name: "Fire-Boltt", file: "fire_boltt.png" },
+            { name: "Noise", file: "noise.png" }
+        ];
+
+        const grid = document.getElementById('brands-grid');
+        const filterInput = document.getElementById('brand-filter-input');
+        const noResults = document.getElementById('no-results');
+
+        // Render 3D Medallion Flip Cards
+        function renderCards(brandList) {
+            grid.querySelectorAll('.brand-coin-card').forEach(c => c.remove());
+
+            if (brandList.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+            noResults.style.display = 'none';
+
+            brandList.forEach(brand => {
+                const card = document.createElement('a');
+                card.className = 'brand-coin-card';
+                card.href = `collection.html?search=${encodeURIComponent(brand.name)}`;
+                card.setAttribute('data-name', brand.name.toLowerCase());
+
+                // 3D Coin & Golden Orbit Stage
+                const stage = document.createElement('div');
+                stage.className = 'brand-circle-stage';
+
+                // Luminous Circle Highlight Aura (golden-sage glow after flip)
+                const highlight = document.createElement('div');
+                highlight.className = 'luminous-circle-highlight';
+
+                // 3D Flipping Coin Body
+                const coin = document.createElement('div');
+                coin.className = 'brand-coin';
+
+                // Front Face: Exact Authentic Brand Logo
+                const front = document.createElement('div');
+                front.className = 'coin-face coin-face-front';
+                const frontImg = document.createElement('img');
+                frontImg.src = brand.file;
+                frontImg.alt = brand.name;
+                frontImg.loading = 'lazy';
+                front.appendChild(frontImg);
+
+                // Back Face: Exact Same Authentic Brand Logo
+                const back = document.createElement('div');
+                back.className = 'coin-face coin-face-back';
+                const backImg = document.createElement('img');
+                backImg.src = brand.file;
+                backImg.alt = brand.name;
+                backImg.loading = 'lazy';
+                back.appendChild(backImg);
+
+                coin.appendChild(front);
+                coin.appendChild(back);
+
+                // Moving Golden Line around the Circle (highlights after flip)
+                const orbitRing = document.createElement('div');
+                orbitRing.className = 'golden-orbit-ring';
+
+                const gradId = `goldBeam-${brand.name.replace(/[^a-zA-Z0-9]/g, '')}`;
+                orbitRing.innerHTML = `
+                    <svg class="golden-orbit-svg" viewBox="0 0 116 116" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#C5A059" stop-opacity="0.05" />
+                                <stop offset="35%" stop-color="#C5A059" stop-opacity="0.65" />
+                                <stop offset="75%" stop-color="#F2D08A" stop-opacity="0.95" />
+                                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="golden-orbit-track" cx="58" cy="58" r="54" />
+                        <circle class="golden-orbit-arc" cx="58" cy="58" r="54" stroke="url(#${gradId})" />
+                    </svg>
+                `;
+
+                stage.appendChild(highlight);
+                stage.appendChild(coin);
+                stage.appendChild(orbitRing);
+
+                // Interactive gentle mouse physics over the circle
+                card.addEventListener('mousemove', (e) => {
+                    const rect = stage.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const cx = rect.width / 2;
+                    const cy = rect.height / 2;
+                    const dx = ((x - cx) / cx) * 6;
+                    const dy = ((y - cy) / cy) * 6;
+                    stage.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    stage.style.transform = '';
+                });
+
+                // Editorial Brand Title
+                const title = document.createElement('h3');
+                title.className = 'card-brand-title';
+                title.innerText = brand.name;
+
+                // Micro Horological Accent Wrap (Lines + Diamond)
+                const accentWrap = document.createElement('div');
+                accentWrap.className = 'title-accent-wrap';
+                accentWrap.innerHTML = `
+                    <span class="accent-line"></span>
+                    <span class="accent-diamond">◆</span>
+                    <span class="accent-line"></span>
+                `;
+
+                card.appendChild(stage);
+                card.appendChild(title);
+                card.appendChild(accentWrap);
+
+                grid.insertBefore(card, noResults);
+            });
+        }
+
+        renderCards(BRANDS);
+
+        // Live Filter
+        filterInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const filtered = BRANDS.filter(b => b.name.toLowerCase().includes(query));
+            renderCards(filtered);
+        });
+
+        /* ─── SYNC CART & WISHLIST COUNTS ─── */
+        function syncCounts() {
+            const cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+            const count = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+            const cartBadge = document.getElementById('nav-cart-count');
+            if (cartBadge) cartBadge.innerText = count;
+
+            const wishlist = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+            const wishBadge = document.getElementById('nav-wishlist-count');
+            if (wishBadge) wishBadge.innerText = wishlist.length;
+        }
+
+        document.addEventListener('DOMContentLoaded', syncCounts);
+    
+
+        // --- Common Header Sync (Cart, Wishlist, Mobile Drawer) ---
+        function syncCartCount() {
+            const cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+            const count = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+            const badge = document.getElementById('nav-cart-count');
+            if (badge) badge.innerText = count;
+        }
+
+        function syncWishlistCount() {
+            const wishlist = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+            const badge = document.getElementById('nav-wishlist-count');
+            if (badge) badge.innerText = wishlist.length;
+        }
+
+        // --- User Badge Navigation & Auth Management ---
+        function initUserAuthNav() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+                return;
+            }
+
+            const userName = sessionStorage.getItem('oryx_user_name') || localStorage.getItem('oryx_user_name') || 'Guest';
+            const userEmail = sessionStorage.getItem('oryx_user_email') || localStorage.getItem('oryx_user_email') || 'guest@oryx.com';
+
+            const navNameEl = document.getElementById('nav-user-name');
+            const dropNameEl = document.getElementById('dropdown-user-name');
+            const dropEmailEl = document.getElementById('dropdown-user-email');
+            if (navNameEl) navNameEl.textContent = userName;
+            if (dropNameEl) dropNameEl.textContent = userName;
+            if (dropEmailEl) dropEmailEl.textContent = userEmail;
+
+            const wrap = document.getElementById('user-badge-wrap');
+            const btn = document.getElementById('user-badge-pill');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (btn && wrap) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    wrap.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!wrap.contains(e.target)) {
+                        wrap.classList.remove('active');
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.removeItem('oryx_logged_in');
+                    sessionStorage.removeItem('oryx_user_name');
+                    sessionStorage.removeItem('oryx_user_email');
+                    localStorage.removeItem('oryx_logged_in');
+                    localStorage.removeItem('oryx_user_name');
+                    localStorage.removeItem('oryx_user_email');
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserAuthNav();
+            syncCartCount();
+            syncWishlistCount();
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navMenu = document.querySelector('.nav-links');
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    
+</script>
+</body>
+</html>

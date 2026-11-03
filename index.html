@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oryx | Luxury Timepieces</title>
+    <!-- Authentication Gate: Redirects unauthenticated users to welcome page -->
+    <script>
+        (function() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('welcome.html');
+            }
+        })();
+    </script>
+    <!-- Google Fonts: Editorial Serif and Clean Modern Sans-Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-page: #F8F5F0;            /* Warm luxury ivory canvas */
+            --bg-card: #FFFFFF;
+            --olive-primary: #687547;      /* Sage / Olive accent */
+            --olive-dark: #4F5A31;         /* Deep olive */
+            --text-dark: #1E1E1E;          /* Rich charcoal */
+            --text-muted: #6B685F;         /* Sophisticated taupe */
+            --border-soft: #E2DDD3;        /* Soft dividers */
+            --transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- Header Navigation --- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 7%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #FFFFFF;
+            border-bottom: 1px solid #DCD6CA;
+            box-shadow: 0 4px 24px rgba(30, 30, 30, 0.05);
+            transition: var(--transition);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .oryx-saturn-logo {
+            width: 48px;
+            height: 34px;
+            display: block;
+            color: #9E7D3B; /* Elegant golden bronze matching the designed logo */
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 2px 5px rgba(158, 125, 59, 0.18));
+            flex-shrink: 0;
+        }
+
+        .saturn-globe-base {
+            fill: #FAF8F5;
+        }
+
+        .logo-group:hover .oryx-saturn-logo {
+            transform: scale(1.10) rotate(-4deg);
+            color: #B88E3F;
+            filter: drop-shadow(0 4px 10px rgba(184, 142, 63, 0.35));
+        }
+
+        .logo-text {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 42px;
+        }
+
+        .nav-links a {
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: var(--text-dark);
+            position: relative;
+            padding-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--olive-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--olive-primary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Luxury Integrated Searchbar */
+        .nav-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            padding: 8px 18px;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            width: 230px;
+        }
+
+        .nav-search-bar:focus-within {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 16px rgba(104, 117, 71, 0.18);
+            width: 270px;
+        }
+
+        .search-bar-icon {
+            width: 17px;
+            height: 17px;
+            stroke: var(--text-muted);
+            stroke-width: 1.8;
+            fill: none;
+            flex-shrink: 0;
+            transition: stroke 0.3s ease;
+        }
+
+        .nav-search-bar:focus-within .search-bar-icon {
+            stroke: var(--olive-primary);
+        }
+
+        .search-bar-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            width: 100%;
+        }
+
+        .search-bar-input::placeholder {
+            color: #9C978D;
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .action-icon-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .action-icon-btn:hover {
+            color: var(--olive-primary);
+            transform: translateY(-1px);
+        }
+
+        .action-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.6;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            font-size: 0.68rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-count-badge.wishlist-badge {
+            background: #C0392B;
+        }
+
+        .badge-bounce {
+            transform: scale(1.4) !important;
+        }
+
+        /* ─── USER BADGE NEAR CART BADGE ─── */
+        .user-badge-dropdown-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px 6px 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            transition: all 0.3s ease;
+            user-select: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .user-badge-pill:hover,
+        .user-badge-dropdown-wrap.active .user-badge-pill {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.15);
+        }
+
+        .user-avatar-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-avatar-circle svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .user-name-text {
+            max-width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-chevron {
+            width: 12px;
+            height: 12px;
+            stroke: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .user-badge-dropdown-wrap.active .user-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 220px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+            animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .user-badge-dropdown-wrap.active .user-dropdown-menu {
+            display: flex;
+        }
+
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-user-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dropdown-user-title {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .dropdown-user-email {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dropdown-session-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--olive-primary);
+            margin-top: 6px;
+        }
+
+        .dropdown-session-tag::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-soft);
+            margin: 2px 0;
+        }
+
+        .dropdown-logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            background: none;
+            border: 1px solid transparent;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: #D32F2F;
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-logout-btn:hover {
+            background: #FFF5F5;
+            border-color: rgba(211, 47, 47, 0.2);
+        }
+
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        /* --- Main Hero Layout: Two-Column Flex Container --- */
+        .hero-section {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1540px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 40px 6% 60px 6%;
+            gap: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ─── DISTINCT CONCENTRIC HOROLOGICAL RINGS (BACKGROUND) ─── */
+        .hero-concentric-rings-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            max-width: 90vw;
+            max-height: 90vh;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .concentric-rings-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: visible;
+        }
+
+        /* Whisper-slow celestial rotation (1 full turn every 240 seconds - almost imperceptible) */
+        .rotating-rings-group {
+            transform-origin: 500px 500px;
+            animation: celestialSlowTurn 240s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes celestialSlowTurn {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- Left Side: Content Column expanded --- */
+        .hero-content-minimal {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            z-index: 10;
+            max-width: 760px;
+            flex: 1 1 700px;
+        }
+
+        /* Ambient Dynamic Background Glow matching each watch */
+        .hero-ambient-glow {
+            position: absolute;
+            top: 45%;
+            left: 20%;
+            transform: translate(-50%, -50%);
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(185, 130, 85, 0.20) 0%, rgba(248, 245, 240, 0) 70%);
+            filter: blur(75px);
+            pointer-events: none;
+            z-index: -1;
+            transition: background 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s ease;
+            opacity: 0.85;
+        }
+
+        /* Dynamic Text Cross-Fade Transitions */
+        .dynamic-text-fade {
+            transition: opacity 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: opacity, transform;
+        }
+
+        .dynamic-text-fade.fade-out {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        /* Overline Tagline & Horizontal Line */
+        .hero-tagline-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .hero-tagline-text {
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 3.2px;
+            text-transform: uppercase;
+            color: #7D7971;
+        }
+
+        .hero-tagline-line {
+            width: 68px;
+            height: 1px;
+            background: #C5BFB5;
+        }
+
+        /* Brand ORYX */
+        .hero-brand {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 6px;
+            line-height: 1.2;
+            text-transform: uppercase;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+        }
+
+        /* Model Headline */
+        .hero-model-title {
+            font-family: 'Lora', serif;
+            font-size: clamp(2.8rem, 4.6vw, 4.2rem);
+            font-weight: 700;
+            letter-spacing: 3px;
+            line-height: 1.15;
+            text-transform: uppercase;
+            color: #161616;
+            margin-bottom: 24px;
+        }
+
+        /* Description */
+        .hero-description {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.08rem;
+            line-height: 1.75;
+            color: #6E685E;
+            font-weight: 400;
+            max-width: 660px;
+            margin-bottom: 38px;
+        }
+
+        /* Specifications Bar: CASE SIZE | POWER RESERVE | WATER RESISTANCE */
+        .hero-specs-bar {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 38px;
+            padding-top: 6px;
+        }
+
+        .hero-spec-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .hero-spec-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #98938A;
+        }
+
+        .hero-spec-value {
+            font-size: 1.02rem;
+            font-weight: 500;
+            color: #1A1A1A;
+            letter-spacing: 0.3px;
+        }
+
+        .hero-spec-divider {
+            width: 1px;
+            height: 42px;
+            background: #D8D2C7;
+        }
+
+        /* Sleek Minimal CTA Button */
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            padding: 13px 30px;
+            border-radius: 30px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 22px rgba(104, 117, 71, 0.22);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .hero-cta:hover {
+            background: var(--olive-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(79, 90, 49, 0.3);
+        }
+
+        .hero-cta svg {
+            width: 15px;
+            height: 15px;
+            stroke-width: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-cta:hover svg {
+            transform: translateX(5px);
+        }
+
+        /* --- Right Side: Static Stack Parallax Cards (Arrow Buttons Removed) --- */
+        .hero-slider-stage {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 540px;
+            perspective: 1200px;
+        }
+
+        /* 3D Stack Container (Static & Clean) */
+        .parallax-deck {
+            position: relative;
+            z-index: 10;
+            width: 340px;
+            height: 520px;
+            transform-style: preserve-3d;
+        }
+
+        /* Tall, Slender Slide Card */
+        .stack-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 340px;
+            height: 520px;
+            border-radius: 26px;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease, box-shadow 0.6s ease;
+            transform-origin: center bottom;
+            user-select: none;
+            background: #15181C;
+            padding: 0;
+        }
+
+        /* Full Card Image — NO empty spaces above or below */
+        .card-image-box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .card-full-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .stack-card.pos-0:hover .card-full-img {
+            transform: scale(1.04);
+        }
+
+        /* 3D Stack Layering */
+        .stack-card.pos-0 {
+            transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+            opacity: 1;
+            z-index: 10;
+            pointer-events: auto;
+            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.20);
+        }
+
+        .stack-card.pos-1 {
+            transform: translate3d(28px, -12px, -50px) scale(0.93) rotate(2.5deg);
+            opacity: 0.96;
+            filter: brightness(0.94);
+            z-index: 8;
+            pointer-events: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.16);
+        }
+
+        .stack-card.pos-2 {
+            transform: translate3d(54px, -24px, -100px) scale(0.86) rotate(5deg);
+            opacity: 0.92;
+            filter: brightness(0.88);
+            z-index: 6;
+            pointer-events: auto;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.14);
+        }
+
+        .stack-card.pos-3 {
+            transform: translate3d(78px, -36px, -150px) scale(0.80) rotate(7.5deg);
+            opacity: 0.88;
+            filter: brightness(0.82);
+            z-index: 4;
+            pointer-events: auto;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Content Fitted INSIDE the Bottom of Slide Card */
+        .card-dock-content {
+            position: absolute;
+            bottom: 16px;
+            left: 14px;
+            right: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            z-index: 5;
+        }
+
+        .card-dock-title { 
+            font-family: 'Lora', serif;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .card-rounds-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .dock-round-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #E2DDD3;
+            background: #FFFFFF;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            padding: 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .dock-round-btn:hover {
+            transform: scale(1.12);
+            border-color: var(--olive-primary);
+        }
+
+        .dock-round-btn.active {
+            border-color: var(--olive-primary);
+            border-width: 2.4px;
+            transform: scale(1.18);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.4);
+        }
+
+        .dock-round-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        /* --- Responsive Styles --- */
+        @media (max-width: 1024px) {
+            .hero-section {
+                flex-direction: column-reverse;
+                gap: 50px;
+                padding-top: 20px;
+                justify-content: center;
+            }
+            .hero-content-minimal {
+                order: 2;
+                align-items: center;
+                text-align: center;
+                max-width: 100%;
+            }
+            .hero-tagline-wrap {
+                justify-content: center;
+            }
+            .hero-specs-bar {
+                justify-content: center;
+            }
+            .hero-slider-stage {
+                order: 1;
+            }
+            .hero-concentric-rings-bg {
+                width: 440px;
+                height: 440px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-concentric-rings-bg {
+                width: 330px;
+                height: 330px;
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(248, 245, 240, 0.98);
+                flex-direction: column;
+                align-items: center;
+                padding: 24px 0;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+                border-bottom: 1px solid var(--border-soft);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+            .hero-brand {
+                font-size: 1.5rem;
+                letter-spacing: 6px;
+            }
+            .hero-model-title {
+                font-size: 1.9rem;
+                letter-spacing: 4px;
+            }
+            .hero-specs-bar {
+                gap: 16px;
+            }
+            .hero-spec-divider {
+                height: 30px;
+            }
+            .hero-spec-val {
+                font-size: 0.85rem;
+            }
+            .parallax-deck {
+                width: 300px;
+                height: 480px;
+            }
+            .stack-card {
+                width: 300px;
+                height: 480px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo-group">
+            <svg class="oryx-saturn-logo" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ORYX Emblem">
+                <defs>
+                    <clipPath id="saturn-back-clip"><path d="M 0 0 L 100 0 L 100 35 L 0 35 Z"/></clipPath>
+                    <clipPath id="saturn-front-clip"><path d="M 0 35 L 100 35 L 100 70 L 0 70 Z"/></clipPath>
+                    <clipPath id="saturn-sphere-clip"><circle cx="50" cy="35" r="23"/></clipPath>
+                </defs>
+                <!-- Back Ring -->
+                <g clip-path="url(#saturn-back-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+                <!-- Central Planetary Sphere -->
+                <circle cx="50" cy="35" r="23" class="saturn-globe-base" stroke="currentColor" stroke-width="2.6"/>
+                <!-- Longitudinal Fluted Meridian Ribs -->
+                <g clip-path="url(#saturn-sphere-clip)">
+                    <line x1="50" y1="10" x2="50" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 57 18, 57 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 64 18, 64 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 71 20, 71 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 43 18, 43 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 36 18, 36 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 29 20, 29 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+                <!-- Front Ring -->
+                <g clip-path="url(#saturn-front-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+            </svg>
+            <a href="index.html" class="logo-text">ORYX</a>
+        </div>
+
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <!-- Luxury Integrated Searchbar -->
+            <form class="nav-search-bar" action="collection.html" method="GET" role="search">
+                <svg class="search-bar-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="search" class="search-bar-input" placeholder="Search timepieces..." aria-label="Search timepieces">
+            </form>
+            
+            <!-- Wishlist -->
+            <a href="profile.html" class="action-icon-btn" title="Wishlist">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="cart-count-badge wishlist-badge" id="nav-wishlist-count">0</span>
+            </a>
+
+            <!-- Cart Bag with dynamic count -->
+            <a href="cart.html" class="action-icon-btn" title="Shopping Cart">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-count-badge" id="nav-cart-count">0</span>
+            </a>
+
+            <!-- User Badge near Cart Badge -->
+            <div class="user-badge-dropdown-wrap" id="user-badge-wrap">
+                <button type="button" class="user-badge-pill" id="user-badge-pill" aria-label="User Account">
+                    <span class="user-avatar-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span class="user-name-text" id="nav-user-name">Guest</span>
+                    <svg class="user-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="user-dropdown-menu" id="user-dropdown-menu">
+                    <div class="dropdown-user-header">
+                        <span class="dropdown-user-title" id="dropdown-user-name">Guest</span>
+                        <span class="dropdown-user-email" id="dropdown-user-email">guest@oryx.com</span>
+                        <span class="dropdown-session-tag">Temporary Active</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-logout-btn" id="logout-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="21" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Log Out</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer Hamburger Toggle -->
+            <button class="hamburger-btn" id="mobile-toggle" aria-label="Toggle navigation">
+                <svg width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Hero Section (Side-by-Side Flex Container) -->
+    <main class="hero-section">
+        
+        <!-- Left Column: Content Presentation as represented in the image -->
+        <div class="hero-content-minimal">
+            <!-- Dynamic ambient background glow -->
+            <div class="hero-ambient-glow" id="hero-ambient-glow"></div>
+            
+            <!-- Overline Tagline with fine horizontal rule -->
+            <div class="hero-tagline-wrap">
+                <span class="hero-tagline-text dynamic-text-fade" id="slide-tagline">TIME ENGRAVED IN STARS</span>
+                <span class="hero-tagline-line"></span>
+            </div>
+
+            <!-- Brand Name -->
+            <div class="hero-brand">ORYX</div>
+
+            <!-- Model Headline -->
+            <h1 class="hero-model-title dynamic-text-fade" id="slide-title">CELESTIAL MOONPHASE</h1>
+
+            <!-- Description -->
+            <p class="hero-description dynamic-text-fade" id="slide-description">
+                Featuring a genuine meteorite dial and hand-painted aventurine glass moon disk reflecting true astronomical cycles.
+            </p>
+
+            <!-- Specifications Bar: CASE SIZE | POWER RESERVE | WATER RESISTANCE -->
+            <div class="hero-specs-bar">
+                <div class="hero-spec-item">
+                    <span class="hero-spec-label">CASE SIZE</span>
+                    <span class="hero-spec-value dynamic-text-fade" id="slide-case">40mm Rose Gold</span>
+                </div>
+                <div class="hero-spec-divider"></div>
+                <div class="hero-spec-item">
+                    <span class="hero-spec-label">POWER RESERVE</span>
+                    <span class="hero-spec-value dynamic-text-fade" id="slide-power">68 Hours</span>
+                </div>
+                <div class="hero-spec-divider"></div>
+                <div class="hero-spec-item">
+                    <span class="hero-spec-label">WATER RESISTANCE</span>
+                    <span class="hero-spec-value dynamic-text-fade" id="slide-water">50 Meters</span>
+                </div>
+            </div>
+
+            <a href="product.html?id=6" class="hero-cta" id="slide-cta-link">
+                <span>Explore Timepiece</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+        </div>
+
+        <!-- Right Column: Interactive Sliding Card Stack Deck -->
+        <div class="hero-slider-stage">
+            
+            <!-- Distinct Horological Concentric Rings (Atmospheric Background, Centered & Small to Fit Screen) -->
+            <div class="hero-concentric-rings-bg" aria-hidden="true">
+                <svg class="concentric-rings-svg" viewBox="0 0 1000 1000" fill="none">
+                    <defs>
+                        <radialGradient id="ringWarmGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#C5A059" stop-opacity="0.10" />
+                            <stop offset="45%" stop-color="#687547" stop-opacity="0.04" />
+                            <stop offset="85%" stop-color="#C5A059" stop-opacity="0.01" />
+                            <stop offset="100%" stop-color="#F8F5F0" stop-opacity="0" />
+                        </radialGradient>
+                    </defs>
+                    <!-- Central Warm Ambient Depth -->
+                    <circle cx="500" cy="500" r="480" fill="url(#ringWarmGlow)" />
+                    
+                    <!-- Rotating Celestial & Horological Concentric Rings (Subtle, Clean & Minimal) -->
+                    <g class="rotating-rings-group">
+                        <!-- Outermost Dash Ring -->
+                        <circle cx="500" cy="500" r="470" stroke="rgba(197, 160, 89, 0.22)" stroke-width="1" stroke-dasharray="3 7" />
+                        <!-- Outer Meridian Ring -->
+                        <circle cx="500" cy="500" r="420" stroke="rgba(104, 117, 71, 0.16)" stroke-width="1" />
+                        <!-- Dash-Interval Astrolabe Track -->
+                        <circle cx="500" cy="500" r="360" stroke="rgba(197, 160, 89, 0.22)" stroke-width="1" stroke-dasharray="12 8" />
+                        <!-- Mid Compass Ring -->
+                        <circle cx="500" cy="500" r="300" stroke="rgba(104, 117, 71, 0.15)" stroke-width="1" />
+                        <!-- Inner Golden Bezel Ring -->
+                        <circle cx="500" cy="500" r="230" stroke="rgba(197, 160, 89, 0.22)" stroke-width="1" />
+                        <!-- Core Escapement Orbit -->
+                        <circle cx="500" cy="500" r="150" stroke="rgba(104, 117, 71, 0.14)" stroke-width="1" stroke-dasharray="4 6" />
+                        <!-- Center Ring -->
+                        <circle cx="500" cy="500" r="80" stroke="rgba(197, 160, 89, 0.18)" stroke-width="1" />
+                        
+                        <!-- Faint Precision Crosshair Axes -->
+                        <line x1="60" y1="500" x2="940" y2="500" stroke="rgba(197, 160, 89, 0.14)" stroke-width="1" stroke-dasharray="6 12" />
+                        <line x1="500" y1="60" x2="500" y2="940" stroke="rgba(197, 160, 89, 0.14)" stroke-width="1" stroke-dasharray="6 12" />
+                    </g>
+                </svg>
+            </div>
+            
+            <!-- 3D Stack Deck -->
+            <div class="parallax-deck" id="parallaxDeck">
+                
+                <!-- Card 0: Celestial Moonphase -->
+                <div class="stack-card pos-0" data-card-idx="0">
+                    <div class="card-image-box">
+                        <img src="watchh1.jpg" alt="Celestial Moonphase" class="card-full-img">
+                    </div>
+                    <!-- Docked inside the card -->
+                    <div class="card-dock-content">
+                        <div class="card-dock-title">Celestial Moonphase</div>
+                        <div class="card-rounds-group">
+                            <button class="dock-round-btn active" data-target="0" title="Celestial Moonphase">
+                                <img src="watchh1.jpg" alt="Celestial Moonphase">
+                            </button>
+                            <button class="dock-round-btn" data-target="1" title="Sapphire Tourbillon">
+                                <img src="watchh2.jpg" alt="Tourbillon">
+                            </button>
+                            <button class="dock-round-btn" data-target="2" title="Starlight Chrono">
+                                <img src="watchh3.jpg" alt="Starlight">
+                            </button>
+                            <button class="dock-round-btn" data-target="3" title="Deep Sea Diver">
+                                <img src="watchh4.jpg" alt="Diver">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 1: Sapphire Tourbillon -->
+                <div class="stack-card pos-1" data-card-idx="1">
+                    <div class="card-image-box">
+                        <img src="watchh2.jpg" alt="Sapphire Tourbillon" class="card-full-img">
+                    </div>
+                    <!-- Docked inside the card -->
+                    <div class="card-dock-content">
+                        <div class="card-dock-title">Sapphire Tourbillon</div>
+                        <div class="card-rounds-group">
+                            <button class="dock-round-btn" data-target="0" title="Celestial Moonphase">
+                                <img src="watchh1.jpg" alt="Celestial Moonphase">
+                            </button>
+                            <button class="dock-round-btn active" data-target="1" title="Sapphire Tourbillon">
+                                <img src="watchh2.jpg" alt="Tourbillon">
+                            </button>
+                            <button class="dock-round-btn" data-target="2" title="Starlight Chrono">
+                                <img src="watchh3.jpg" alt="Starlight">
+                            </button>
+                            <button class="dock-round-btn" data-target="3" title="Deep Sea Diver">
+                                <img src="watchh4.jpg" alt="Diver">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Starlight Chrono -->
+                <div class="stack-card pos-2" data-card-idx="2">
+                    <div class="card-image-box">
+                        <img src="watchh3.jpg" alt="Starlight Chrono" class="card-full-img">
+                    </div>
+                    <!-- Docked inside the card -->
+                    <div class="card-dock-content">
+                        <div class="card-dock-title">Starlight Chrono</div>
+                        <div class="card-rounds-group">
+                            <button class="dock-round-btn" data-target="0" title="Celestial Moonphase">
+                                <img src="watchh1.jpg" alt="Celestial Moonphase">
+                            </button>
+                            <button class="dock-round-btn" data-target="1" title="Sapphire Tourbillon">
+                                <img src="watchh2.jpg" alt="Tourbillon">
+                            </button>
+                            <button class="dock-round-btn active" data-target="2" title="Starlight Chrono">
+                                <img src="watchh3.jpg" alt="Starlight">
+                            </button>
+                            <button class="dock-round-btn" data-target="3" title="Deep Sea Diver">
+                                <img src="watchh4.jpg" alt="Diver">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Deep Sea Diver -->
+                <div class="stack-card pos-3" data-card-idx="3">
+                    <div class="card-image-box">
+                        <img src="watchh4.jpg" alt="Deep Sea Diver" class="card-full-img">
+                    </div>
+                    <!-- Docked inside the card -->
+                    <div class="card-dock-content">
+                        <div class="card-dock-title">Deep Sea Diver</div>
+                        <div class="card-rounds-group">
+                            <button class="dock-round-btn" data-target="0" title="Celestial Moonphase">
+                                <img src="watchh1.jpg" alt="Celestial Moonphase">
+                            </button>
+                            <button class="dock-round-btn" data-target="1" title="Sapphire Tourbillon">
+                                <img src="watchh2.jpg" alt="Tourbillon">
+                            </button>
+                            <button class="dock-round-btn" data-target="2" title="Starlight Chrono">
+                                <img src="watchh3.jpg" alt="Starlight">
+                            </button>
+                            <button class="dock-round-btn active" data-target="3" title="Deep Sea Diver">
+                                <img src="watchh4.jpg" alt="Diver">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // --- 1. Distinct Clean Watch Form Slides ---
+        const watchSlides = [
+            {
+                id: 6,
+                tagline: "TIME ENGRAVED IN STARS",
+                name: "Celestial Moonphase",
+                desc: "Featuring a genuine meteorite dial and hand-painted aventurine glass moon disk reflecting true astronomical cycles.",
+                caseSize: "40mm Rose Gold",
+                powerReserve: "68 Hours",
+                waterResist: "50 Meters",
+                link: "product.html?id=6",
+                glow: "radial-gradient(circle, rgba(185, 130, 85, 0.22) 0%, rgba(248, 245, 240, 0) 70%)"
+            },
+            {
+                id: 10,
+                tagline: "PRECISION MEETS TRANSPARENCY",
+                name: "Sapphire Tourbillon",
+                desc: "Hand-wound exposed tourbillon encased in pure sapphire crystal, representing the ultimate expression of horological art.",
+                caseSize: "42mm Sapphire",
+                powerReserve: "72 Hours",
+                waterResist: "30 Meters",
+                link: "product.html?id=10",
+                glow: "radial-gradient(circle, rgba(104, 117, 71, 0.22) 0%, rgba(248, 245, 240, 0) 70%)"
+            },
+            {
+                id: 2,
+                tagline: "ECLIPSE OF TIME",
+                name: "Starlight Chrono",
+                desc: "An immaculate midnight dial with precision subdials, balancing sporty dynamics with pure luxury aesthetics.",
+                caseSize: "41mm Midnight Steel",
+                powerReserve: "60 Hours",
+                waterResist: "100 Meters",
+                link: "product.html?id=2",
+                glow: "radial-gradient(circle, rgba(60, 85, 120, 0.22) 0%, rgba(248, 245, 240, 0) 70%)"
+            },
+            {
+                id: 3,
+                tagline: "BEYOND THE DEPTHS",
+                name: "Deep Sea Diver",
+                desc: "Engineered for 300m ocean exploration with high-luminosity hands, unidirectional ceramic bezel, and marine-grade steel.",
+                caseSize: "43mm Titanium",
+                powerReserve: "80 Hours",
+                waterResist: "300 Meters",
+                link: "product.html?id=3",
+                glow: "radial-gradient(circle, rgba(20, 70, 140, 0.22) 0%, rgba(248, 245, 240, 0) 70%)"
+            }
+        ];
+
+        let currentActiveIdx = 0;
+        const totalCards = watchSlides.length;
+        const cards = document.querySelectorAll('.stack-card');
+        const taglineEl = document.getElementById('slide-tagline');
+        const titleEl = document.getElementById('slide-title');
+        const descEl = document.getElementById('slide-description');
+        const caseEl = document.getElementById('slide-case');
+        const powerEl = document.getElementById('slide-power');
+        const waterEl = document.getElementById('slide-water');
+        const ctaLink = document.getElementById('slide-cta-link');
+        const ambientGlow = document.getElementById('hero-ambient-glow');
+
+        // Update the 3D Stack Parallax Arrangement with Cross-Fade & Glow
+        function setStackActive(activeIndex) {
+            currentActiveIdx = (activeIndex + totalCards) % totalCards;
+            const item = watchSlides[currentActiveIdx];
+
+            // 1. Cross-fade left textual content & update ambient glow
+            const fadeElements = [taglineEl, titleEl, descEl, caseEl, powerEl, waterEl];
+            fadeElements.forEach(el => {
+                if (el) el.classList.add('fade-out');
+            });
+            
+            if (ambientGlow) {
+                ambientGlow.style.background = item.glow;
+            }
+
+            setTimeout(() => {
+                if (taglineEl) taglineEl.innerText = item.tagline;
+                if (titleEl) titleEl.innerText = item.name.toUpperCase();
+                if (descEl) descEl.innerText = item.desc;
+                if (caseEl) caseEl.innerText = item.caseSize;
+                if (powerEl) powerEl.innerText = item.powerReserve;
+                if (waterEl) waterEl.innerText = item.waterResist;
+                if (ctaLink) ctaLink.href = item.link;
+
+                fadeElements.forEach(el => {
+                    if (el) el.classList.remove('fade-out');
+                });
+            }, 180);
+
+            // 2. Re-calculate 3D parallax stack transforms and classes
+            cards.forEach(card => {
+                const cardIdx = parseInt(card.getAttribute('data-card-idx'));
+                const relPos = (cardIdx - currentActiveIdx + totalCards) % totalCards;
+                
+                card.classList.remove('pos-0', 'pos-1', 'pos-2', 'pos-3');
+                card.classList.add(`pos-${relPos}`);
+            });
+
+            // 3. Synchronize thumbnail swatches inside all cards
+            document.querySelectorAll('.dock-round-btn').forEach(btn => {
+                const target = parseInt(btn.getAttribute('data-target'));
+                btn.classList.toggle('active', target === currentActiveIdx);
+            });
+        }
+
+        function nextSlide() {
+            setStackActive(currentActiveIdx + 1);
+        }
+
+        function prevSlide() {
+            setStackActive(currentActiveIdx - 1);
+        }
+
+        // --- Automatic Slideshow Logic ---
+        let autoplayTimer = null;
+        const AUTOPLAY_INTERVAL = 4000; // 4 seconds per slide
+
+        function startAutoplay() {
+            if (autoplayTimer) {
+                clearInterval(autoplayTimer);
+            }
+            autoplayTimer = setInterval(() => {
+                nextSlide();
+            }, AUTOPLAY_INTERVAL);
+        }
+
+        function resetAutoplay() {
+            startAutoplay();
+        }
+
+        // Clicking a stacked card brings it forward and resets the auto-slide timer
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.dock-round-btn')) return;
+                
+                const cardIdx = parseInt(card.getAttribute('data-card-idx'));
+                if (cardIdx !== currentActiveIdx) {
+                    setStackActive(cardIdx);
+                    resetAutoplay();
+                } else {
+                    window.location.href = watchSlides[currentActiveIdx].link;
+                }
+            });
+        });
+
+        // Clicking any round swatch inside any card jumps directly to that card and continues auto-sliding
+        document.querySelectorAll('.dock-round-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const targetIdx = parseInt(btn.getAttribute('data-target'));
+                setStackActive(targetIdx);
+                resetAutoplay();
+            });
+        });
+
+        // Keyboard Arrow Navigation changes slide and continues auto-sliding
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+                resetAutoplay();
+            }
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+                resetAutoplay();
+            }
+        });
+
+        // Synchronize Shopping Cart Badge from LocalStorage
+        function syncCartCount() {
+            const cart = JSON.parse(localStorage.getItem('chronous_cart')) || [];
+            const badge = document.getElementById('nav-cart-count');
+            if (badge) {
+                const totalCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                badge.innerText = totalCount;
+            }
+        }
+
+        function syncWishlistCount() {
+            const wishlist = JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+            const badge = document.getElementById('nav-wishlist-count');
+            if (badge) {
+                badge.innerText = wishlist.length;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            syncCartCount();
+            syncWishlistCount();
+            setStackActive(0);
+            startAutoplay();
+
+            // Mobile Menu Drawer Toggle
+            const toggle = document.getElementById('mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (toggle && navLinks) {
+                toggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+    
+
+        // Header Sync handled by top-level syncCartCount & syncWishlistCount
+
+        // --- User Badge Navigation & Auth Management ---
+        function initUserAuthNav() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+                return;
+            }
+
+            const userName = sessionStorage.getItem('oryx_user_name') || localStorage.getItem('oryx_user_name') || 'Guest';
+            const userEmail = sessionStorage.getItem('oryx_user_email') || localStorage.getItem('oryx_user_email') || 'guest@oryx.com';
+
+            const navNameEl = document.getElementById('nav-user-name');
+            const dropNameEl = document.getElementById('dropdown-user-name');
+            const dropEmailEl = document.getElementById('dropdown-user-email');
+            if (navNameEl) navNameEl.textContent = userName;
+            if (dropNameEl) dropNameEl.textContent = userName;
+            if (dropEmailEl) dropEmailEl.textContent = userEmail;
+
+            const wrap = document.getElementById('user-badge-wrap');
+            const btn = document.getElementById('user-badge-pill');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (btn && wrap) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    wrap.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!wrap.contains(e.target)) {
+                        wrap.classList.remove('active');
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.removeItem('oryx_logged_in');
+                    sessionStorage.removeItem('oryx_user_name');
+                    sessionStorage.removeItem('oryx_user_email');
+                    localStorage.removeItem('oryx_logged_in');
+                    localStorage.removeItem('oryx_user_name');
+                    localStorage.removeItem('oryx_user_email');
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserAuthNav();
+            syncCartCount();
+            syncWishlistCount();
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navMenu = document.querySelector('.nav-links');
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    
+</script>
+</body>
+</html>

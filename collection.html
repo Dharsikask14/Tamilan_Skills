@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oryx | Collection</title>
+    <!-- Authentication Gate -->
+    <script>
+        (function() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+            }
+        })();
+    </script>
+    <!-- Google Fonts: Editorial Serif and Clean Modern Sans-Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-page: #F8F5F0;            /* Warm luxury ivory canvas */
+            --bg-card: #FFFFFF;            /* Pure white card surface */
+            --olive-primary: #687547;      /* Sage / Olive accent */
+            --olive-dark: #4F5A31;         /* Deep olive */
+            --text-dark: #1E1E1E;          /* Rich charcoal */
+            --text-muted: #6B685F;         /* Sophisticated taupe */
+            --border-soft: #E2DDD3;        /* Soft dividers */
+            --transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Open Sans', sans-serif; 
+            font-size: 0.95rem; 
+            background-color: var(--bg-page); 
+            color: var(--text-dark); 
+            line-height: 1.6; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { 
+            font-family: 'Lora', serif; 
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-dark);
+        }
+
+        a { text-decoration: none; color: inherit; }
+        
+        /* --- Buttons --- */
+        .btn-primary { 
+            display: inline-block; 
+            padding: 12px 24px; 
+            background: var(--olive-primary); 
+            border: 1px solid var(--olive-primary); 
+            color: #FFFFFF; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            font-size: 0.78rem; 
+            font-weight: 600;
+            border-radius: 30px;
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.2);
+        }
+        
+        .btn-primary:hover { 
+            background: var(--olive-dark); 
+            border-color: var(--olive-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 90, 49, 0.3);
+        }
+        
+        /* --- Header Navigation (Identical to Home Page) --- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 7%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #FFFFFF;
+            border-bottom: 1px solid #DCD6CA;
+            box-shadow: 0 4px 24px rgba(30, 30, 30, 0.05);
+            transition: var(--transition);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .oryx-saturn-logo {
+            width: 48px;
+            height: 34px;
+            display: block;
+            color: #9E7D3B; /* Elegant golden bronze matching the designed logo */
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 2px 5px rgba(158, 125, 59, 0.18));
+            flex-shrink: 0;
+        }
+
+        .saturn-globe-base {
+            fill: #FAF8F5;
+        }
+
+        .logo-group:hover .oryx-saturn-logo {
+            transform: scale(1.10) rotate(-4deg);
+            color: #B88E3F;
+            filter: drop-shadow(0 4px 10px rgba(184, 142, 63, 0.35));
+        }
+
+        .logo-text {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 42px;
+        }
+
+        .nav-links a {
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: var(--text-dark);
+            position: relative;
+            padding-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--olive-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--olive-primary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Luxury Integrated Searchbar */
+        .nav-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            padding: 8px 18px;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            width: 230px;
+        }
+
+        .nav-search-bar:focus-within {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 16px rgba(104, 117, 71, 0.18);
+            width: 270px;
+        }
+
+        .search-bar-icon {
+            width: 17px;
+            height: 17px;
+            stroke: var(--text-muted);
+            stroke-width: 1.8;
+            fill: none;
+            flex-shrink: 0;
+            transition: stroke 0.3s ease;
+        }
+
+        .nav-search-bar:focus-within .search-bar-icon {
+            stroke: var(--olive-primary);
+        }
+
+        .search-bar-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            width: 100%;
+        }
+
+        .search-bar-input::placeholder {
+            color: #9C978D;
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .action-icon-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .action-icon-btn:hover {
+            color: var(--olive-primary);
+            transform: translateY(-1px);
+        }
+
+        .action-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.6;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            font-size: 0.68rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-count-badge.wishlist-badge {
+            background: #C0392B;
+        }
+
+        .badge-bounce {
+            transform: scale(1.4) !important;
+        }
+
+        /* ─── USER BADGE NEAR CART BADGE ─── */
+        .user-badge-dropdown-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px 6px 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            transition: all 0.3s ease;
+            user-select: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .user-badge-pill:hover,
+        .user-badge-dropdown-wrap.active .user-badge-pill {
+            border-color: var(--olive-primary);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.15);
+        }
+
+        .user-avatar-circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-avatar-circle svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .user-name-text {
+            max-width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-chevron {
+            width: 12px;
+            height: 12px;
+            stroke: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .user-badge-dropdown-wrap.active .user-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 220px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+            animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .user-badge-dropdown-wrap.active .user-dropdown-menu {
+            display: flex;
+        }
+
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-user-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dropdown-user-title {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .dropdown-user-email {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dropdown-session-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--olive-primary);
+            margin-top: 6px;
+        }
+
+        .dropdown-session-tag::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-soft);
+            margin: 2px 0;
+        }
+
+        .dropdown-logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            background: none;
+            border: 1px solid transparent;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: #D32F2F;
+            font-family: var(--font-sans, 'Open Sans', sans-serif);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-logout-btn:hover {
+            background: #FFF5F5;
+            border-color: rgba(211, 47, 47, 0.2);
+        }
+
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(248, 245, 240, 0.98);
+                flex-direction: column;
+                align-items: center;
+                padding: 24px 0;
+                gap: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+                border-bottom: 1px solid var(--border-soft);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+            .category-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* --- Page Layout --- */
+        .container { 
+            padding: 50px 7% 80px 7%; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+        }
+
+        .section-header-group {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-overline {
+            font-size: 0.76rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--olive-primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .section-title { 
+            font-size: clamp(2.4rem, 4.5vw, 3.4rem); 
+            letter-spacing: 2px;
+            color: var(--text-dark);
+            line-height: 1.15;
+            text-transform: uppercase;
+        }
+        
+        /* --- Gender Category Links --- */
+        .category-links { 
+            display: flex; 
+            justify-content: center; 
+            gap: 40px; 
+            margin-bottom: 40px; 
+            border-bottom: 1px solid var(--border-soft); 
+            padding-bottom: 16px; 
+        }
+
+        .category-link { 
+            font-family: 'Lora', serif; 
+            font-size: 1.35rem; 
+            font-weight: 600;
+            color: var(--text-muted); 
+            transition: var(--transition); 
+            position: relative; 
+            padding-bottom: 8px; 
+            letter-spacing: 1px;
+        }
+
+        .category-link:hover { 
+            color: var(--olive-primary); 
+        }
+
+        .category-link.active { 
+            color: var(--olive-primary); 
+        }
+
+        .category-link.active::after { 
+            content: ''; 
+            position: absolute; 
+            left: 0; 
+            bottom: -17px; 
+            width: 100%; 
+            height: 3px; 
+            background: var(--olive-primary); 
+        }
+
+        /* --- Filters --- */
+        /* --- Unified Dual Filter Hub (Price Range & Offers in the Same Row) --- */
+        .filter-controls-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 35px;
+            align-items: stretch;
+        }
+
+        .filter-panel {
+            background: #FAF8F5;
+            padding: 18px 22px;
+            border-radius: 18px;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .filter-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-panel-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .filter-panel-subtitle {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .filter-panel-subtitle strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .price-match-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: #FFFFFF;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(220, 215, 205, 0.75);
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--olive-primary);
+            font-family: 'Open Sans', sans-serif;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .match-indicator-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+            box-shadow: 0 0 0 3px rgba(104, 117, 71, 0.2);
+            display: inline-block;
+        }
+
+        .slider-interactive-track {
+            width: 100%;
+            position: relative;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            margin: 4px 0 2px 0;
+        }
+
+        .slider-track-bar {
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            border-radius: 6px;
+            background: #E5E0D8;
+            z-index: 1;
+        }
+
+        .slider-track-highlight {
+            position: absolute;
+            height: 6px;
+            border-radius: 6px;
+            background: var(--olive-primary);
+            z-index: 2;
+        }
+
+        .slider-interactive-track input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: none;
+            pointer-events: none;
+            margin: 0;
+            outline: none;
+            z-index: 3;
+        }
+
+        .slider-interactive-track input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            pointer-events: auto;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+            cursor: grab;
+            border: 2px solid #FFFFFF;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .slider-interactive-track input[type=range]::-webkit-slider-thumb:hover,
+        .slider-interactive-track input[type=range]::-webkit-slider-thumb:active {
+            transform: scale(1.18);
+            background: #566138;
+            cursor: grabbing;
+        }
+
+        .slider-interactive-track input[type=range]::-moz-range-thumb {
+            pointer-events: auto;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--olive-primary);
+            cursor: grab;
+            border: 2px solid #FFFFFF;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .slider-scale-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: #9C978D;
+            font-weight: 500;
+            padding: 0 2px;
+        }
+
+        .scale-point {
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .scale-point:hover {
+            color: var(--olive-primary);
+            font-weight: 600;
+        }
+
+        /* --- Offers & Badges Filter Pills Row --- */
+        .offer-filter-pills {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .offer-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 12px;
+            border-radius: 14px;
+            font-size: 0.70rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Open Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .offer-pill-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .offer-pill-btn.pill-all.active {
+            background: var(--text-dark);
+            color: #FFFFFF;
+            border-color: var(--text-dark);
+            box-shadow: 0 3px 8px rgba(30, 30, 30, 0.25);
+        }
+
+        .offer-pill-btn.pill-trending {
+            background: rgba(104, 117, 71, 0.08);
+            color: #556236;
+            border-color: rgba(104, 117, 71, 0.28);
+        }
+        .offer-pill-btn.pill-trending:hover,
+        .offer-pill-btn.pill-trending.active {
+            background: #556236;
+            color: #FFFFFF;
+            border-color: #556236;
+            box-shadow: 0 3px 10px rgba(85, 98, 54, 0.3);
+        }
+
+        .offer-pill-btn.pill-offer {
+            background: rgba(192, 57, 43, 0.08);
+            color: #B03A2E;
+            border-color: rgba(192, 57, 43, 0.28);
+        }
+        .offer-pill-btn.pill-offer:hover,
+        .offer-pill-btn.pill-offer.active {
+            background: #B03A2E;
+            color: #FFFFFF;
+            border-color: #B03A2E;
+            box-shadow: 0 3px 10px rgba(176, 58, 46, 0.3);
+        }
+
+        .offer-pill-btn.pill-popular {
+            background: rgba(212, 160, 23, 0.10);
+            color: #9A6B0A;
+            border-color: rgba(212, 160, 23, 0.28);
+        }
+        .offer-pill-btn.pill-popular:hover,
+        .offer-pill-btn.pill-popular.active {
+            background: #9A6B0A;
+            color: #FFFFFF;
+            border-color: #9A6B0A;
+            box-shadow: 0 3px 10px rgba(154, 107, 10, 0.3);
+        }
+
+        .offer-pill-btn.pill-limited {
+            background: rgba(30, 30, 30, 0.06);
+            color: #1E1E1E;
+            border-color: rgba(30, 30, 30, 0.22);
+        }
+        .offer-pill-btn.pill-limited:hover,
+        .offer-pill-btn.pill-limited.active {
+            background: #1E1E1E;
+            color: #FFFFFF;
+            border-color: #1E1E1E;
+            box-shadow: 0 3px 10px rgba(30, 30, 30, 0.3);
+        }
+
+        .offer-pill-btn.pill-exclusive {
+            background: rgba(104, 117, 71, 0.12);
+            color: var(--olive-primary);
+            border-color: var(--olive-primary);
+        }
+        .offer-pill-btn.pill-exclusive:hover,
+        .offer-pill-btn.pill-exclusive.active {
+            background: var(--olive-primary);
+            color: #FFFFFF;
+            border-color: var(--olive-primary);
+            box-shadow: 0 3px 10px rgba(104, 117, 71, 0.3);
+        }
+
+        @media (max-width: 860px) {
+            .filter-controls-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+        
+        /* --- Modern Minimalist Product Listing Grid --- */
+        .watch-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 260px)); 
+            gap: 22px; 
+            justify-content: center;
+            max-width: 1160px;
+            margin: 0 auto;
+        }
+
+        .watch-card { 
+            background: #FFFFFF; 
+            border-radius: 18px; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease; 
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            width: 100%;
+            height: 345px;
+            box-sizing: border-box;
+        }
+
+        .watch-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 16px 32px rgba(104, 117, 71, 0.12); 
+            border-color: rgba(104, 117, 71, 0.4);
+        }
+
+        /* Floating Minimalist Heart Button */
+        .card-heart-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            color: #1E1E1E;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .card-heart-btn:hover {
+            transform: scale(1.12);
+            background: #FFFFFF;
+            color: #C0392B;
+        }
+
+        .card-heart-btn.active {
+            background: #FFFFFF;
+            color: #C0392B;
+        }
+
+        .card-heart-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            fill: none;
+            transition: fill 0.2s ease, stroke 0.2s ease;
+        }
+
+        .card-heart-btn.active svg {
+            fill: #C0392B;
+            stroke: #C0392B;
+        }
+
+        /* Full-Bleed Product Image Stage */
+        .watch-image-container {
+            width: 100%;
+            height: 235px;
+            display: block;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background: #F7F5F2;
+        }
+
+        .watch-image { 
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .watch-card:hover .watch-image {
+            transform: scale(1.06);
+        }
+
+        /* Bottom Row: Editorial Typography Footer */
+        .card-bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 14px 16px 16px 16px;
+            background: #FFFFFF;
+            box-sizing: border-box;
+            flex-grow: 1;
+        }
+
+        /* Distinct Luxury Micro-Badge Tag */
+        .card-editorial-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.60rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-family: 'Open Sans', sans-serif;
+            margin-bottom: 5px;
+            width: fit-content;
+            line-height: 1;
+            transition: transform 0.2s ease;
+        }
+
+        .card-editorial-tag-spacer {
+            display: inline-block;
+            height: 18px;
+            margin-bottom: 5px;
+        }
+
+        .tag-trending, .tag-new-arrival {
+            background: #EFF3E6;
+            color: #4C5E2C;
+            border: 1px solid #D5DEC4;
+        }
+
+        .tag-offer, .tag-special-edition {
+            background: #FDF0ED;
+            color: #AD3224;
+            border: 1px solid #F5C6BE;
+        }
+
+        .tag-popular, .tag-best-seller {
+            background: #FEF7E6;
+            color: #A26E08;
+            border: 1px solid #F6DFAC;
+        }
+
+        .tag-limited {
+            background: #F0EFEF;
+            color: #2D2D2D;
+            border: 1px solid #D3D1D1;
+        }
+
+        .tag-exclusive, .tag-masterpiece, .tag-signature {
+            background: #E8F1F5;
+            color: #1F4D60;
+            border: 1px solid #BED7E2;
+        }
+
+        .card-info-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            cursor: pointer;
+            flex-grow: 1;
+            padding-right: 8px;
+            min-width: 0;
+        }
+
+        .card-title { 
+            font-family: 'Lora', serif;
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            color: #1E1E1E; 
+            letter-spacing: 0.1px;
+            line-height: 1.25;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-price { 
+            font-family: 'Lora', serif;
+            font-size: 0.90rem; 
+            font-weight: 600; 
+            color: #2E2E2E;
+            margin: 3px 0 0 0;
+        }
+
+        /* Floating Circular Cart Button */
+        .card-cart-btn {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            flex-shrink: 0;
+        }
+
+        .card-cart-btn:hover {
+            background: var(--olive-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(104, 117, 71, 0.28);
+        }
+
+        .card-cart-btn svg {
+            width: 17px;
+            height: 17px;
+            stroke: #1E1E1E;
+            stroke-width: 1.8;
+            fill: none;
+            transition: stroke 0.2s ease;
+        }
+
+        .card-cart-btn:hover svg {
+            stroke: #FFFFFF;
+        }
+
+        .card-cart-btn.in-cart {
+            background: var(--olive-primary);
+            box-shadow: 0 4px 14px rgba(104, 117, 71, 0.4);
+            transform: scale(1.04);
+        }
+
+        .card-cart-btn.in-cart svg {
+            stroke: #FFFFFF !important;
+            stroke-width: 2.2;
+        }
+
+        .card-cart-btn.in-cart:hover {
+            background: #566138;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 540px) {
+            .watch-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .watch-card {
+                height: 295px;
+                padding: 0;
+                border-radius: 16px;
+            }
+            .watch-image-container {
+                height: 185px;
+            }
+            .card-bottom-row {
+                padding: 10px 12px 12px 12px;
+            }
+            .card-editorial-tag {
+                font-size: 0.55rem;
+                padding: 2.5px 6px;
+                letter-spacing: 0.6px;
+            }
+            .card-editorial-tag-spacer {
+                height: 15px;
+            }
+            .card-title {
+                font-size: 0.82rem;
+            }
+            .card-price {
+                font-size: 0.80rem;
+            }
+            .card-cart-btn {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+            }
+            .card-cart-btn svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+        
+        .empty-cart-msg { 
+            text-align: center; 
+            padding: 50px 20px; 
+            grid-column: 1 / -1; 
+            font-size: 1.1rem; 
+            color: var(--text-muted); 
+            background: var(--bg-card); 
+            border: 1px dashed var(--border-soft); 
+            border-radius: 16px; 
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo-group">
+            <svg class="oryx-saturn-logo" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ORYX Emblem">
+                <defs>
+                    <clipPath id="saturn-back-clip"><path d="M 0 0 L 100 0 L 100 35 L 0 35 Z"/></clipPath>
+                    <clipPath id="saturn-front-clip"><path d="M 0 35 L 100 35 L 100 70 L 0 70 Z"/></clipPath>
+                    <clipPath id="saturn-sphere-clip"><circle cx="50" cy="35" r="23"/></clipPath>
+                </defs>
+                <!-- Back Ring -->
+                <g clip-path="url(#saturn-back-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+                <!-- Central Planetary Sphere -->
+                <circle cx="50" cy="35" r="23" class="saturn-globe-base" stroke="currentColor" stroke-width="2.6"/>
+                <!-- Longitudinal Fluted Meridian Ribs -->
+                <g clip-path="url(#saturn-sphere-clip)">
+                    <line x1="50" y1="10" x2="50" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 57 18, 57 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 64 18, 64 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 71 20, 71 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 43 18, 43 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 36 18, 36 52, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M 50 12 C 29 20, 29 50, 50 58" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </g>
+                <!-- Front Ring -->
+                <g clip-path="url(#saturn-front-clip)">
+                    <path d="M 6.5 44 C 4.5 39, 13 25, 41 21 C 70 17, 92 23, 93.5 28 C 95 33, 85 41, 64 46 C 41 51, 15 48, 6.5 44 Z
+                             M 16 43 C 22.5 46, 44 47.5, 62 43 C 80 39, 87 32, 86 29 C 85 26, 68 22, 44 25 C 20 28, 11 36, 16 43 Z"
+                          fill="currentColor" transform="rotate(-17 50 35)"/>
+                </g>
+            </svg>
+            <a href="index.html" class="logo-text">ORYX</a>
+        </div>
+
+        <nav id="nav-menu">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="collection.html" class="active">Collection</a></li>
+                <li><a href="brands.html">Brands</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <!-- Luxury Integrated Searchbar -->
+            <form class="nav-search-bar" action="collection.html" method="GET" role="search">
+                <svg class="search-bar-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="search" class="search-bar-input" placeholder="Search timepieces..." aria-label="Search timepieces">
+            </form>
+            
+            <!-- Wishlist -->
+            <a href="profile.html" class="action-icon-btn" title="Wishlist">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="cart-count-badge wishlist-badge" id="nav-wishlist-count">0</span>
+            </a>
+
+            <!-- Cart Bag with dynamic count -->
+            <a href="cart.html" class="action-icon-btn" title="Shopping Cart">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-count-badge" id="nav-cart-count">0</span>
+            </a>
+
+            <!-- User Badge near Cart Badge -->
+            <div class="user-badge-dropdown-wrap" id="user-badge-wrap">
+                <button type="button" class="user-badge-pill" id="user-badge-pill" aria-label="User Account">
+                    <span class="user-avatar-circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span class="user-name-text" id="nav-user-name">Guest</span>
+                    <svg class="user-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="user-dropdown-menu" id="user-dropdown-menu">
+                    <div class="dropdown-user-header">
+                        <span class="dropdown-user-title" id="dropdown-user-name">Guest</span>
+                        <span class="dropdown-user-email" id="dropdown-user-email">guest@oryx.com</span>
+                        <span class="dropdown-session-tag">Temporary Active</span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-logout-btn" id="logout-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="21" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Log Out</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer Hamburger Toggle -->
+            <button class="hamburger-btn" id="mobile-toggle" aria-label="Toggle navigation">
+                <svg width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="section-header-group">
+            <span class="section-overline">Curated Vault</span>
+            <h1 class="section-title" id="page-heading">The Collection</h1>
+        </div>
+        
+        <div class="category-links">
+            <a href="collection.html" class="category-link" id="link-all">All Timepieces</a>
+            <a href="collection.html?gender=men" class="category-link" id="link-men">Men's</a>
+            <a href="collection.html?gender=women" class="category-link" id="link-women">Women's</a>
+        </div>
+
+        <!-- Unified Filter Hub: Price Range on Left, Offers Filter on Right (In the Same Row) -->
+        <div class="filter-controls-row">
+            <!-- Left: Price Range Filter Panel -->
+            <div class="filter-panel price-filter-panel">
+                <div class="filter-panel-header">
+                    <span class="filter-panel-title">Price Range</span>
+                    <span class="filter-panel-subtitle">Showing: <strong id="price-slider-display">₹500 — ₹2,50,000 (All)</strong></span>
+                </div>
+                
+                <div class="slider-interactive-track">
+                    <div class="slider-track-bar"></div>
+                    <div class="slider-track-highlight" id="slider-track-highlight"></div>
+                    <input type="range" id="price-slider-min" min="0" max="100" step="1" value="0" oninput="onMinSliderIndex(this.value)" aria-label="Filter by minimum price">
+                    <input type="range" id="price-slider-max" min="0" max="100" step="1" value="100" oninput="onMaxSliderIndex(this.value)" aria-label="Filter by maximum price">
+                </div>
+
+                <div class="slider-scale-row">
+                    <span onclick="setPriceRangePreset(500, 2000)" class="scale-point">₹500 — ₹2,000</span>
+                    <span onclick="setPriceRangePreset(2000, 10000)" class="scale-point">₹2,000 — ₹10,000</span>
+                    <span onclick="setPriceRangePreset(10000, 50000)" class="scale-point">₹10k — ₹50k</span>
+                    <span onclick="setPriceRangePreset(50000, 250000)" class="scale-point">Lakhs (₹50k+)</span>
+                    <span onclick="setPriceRangePreset(500, 250000)" class="scale-point">All</span>
+                </div>
+            </div>
+
+            <!-- Right: Offers & Badges Filter Panel -->
+            <div class="filter-panel offers-filter-panel">
+                <div class="filter-panel-header">
+                    <span class="filter-panel-title">Curated Offers</span>
+                    <div class="price-match-indicator">
+                        <span class="match-indicator-dot"></span>
+                        <span id="price-match-count">10 Available</span>
+                    </div>
+                </div>
+
+                <div class="offer-filter-pills" id="offer-pills-group">
+                    <button type="button" class="offer-pill-btn pill-all active" onclick="setOfferFilter(null, this)">All</button>
+                    <button type="button" class="offer-pill-btn pill-trending" onclick="setOfferFilter('trending', this)">Trending</button>
+                    <button type="button" class="offer-pill-btn pill-offer" onclick="setOfferFilter('offer', this)">Offer</button>
+                    <button type="button" class="offer-pill-btn pill-popular" onclick="setOfferFilter('popular', this)">Popular</button>
+                    <button type="button" class="offer-pill-btn pill-limited" onclick="setOfferFilter('limited', this)">Limited</button>
+                    <button type="button" class="offer-pill-btn pill-exclusive" onclick="setOfferFilter('exclusive', this)">Exclusive</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="collection-grid" class="watch-grid"></div>
+    </main>
+
+    <script>
+        // Array with timepieces and categories (offer, popular, trending badges for select pieces)
+        const watches = [
+            { id: 1, name: "Oryx Apex", price: 1450, rating: 4.9, gender: "men", badge: "Trending", badgeType: "trending", desc: "Automatic movement, sapphire crystal.", image: "men1.jpg" },
+            { id: 2, name: "Starlight Chrono", price: 799, rating: 4.8, gender: "women", badge: "Offer", badgeType: "offer", desc: "Quartz precision with a midnight dial.", image: "women1.webp" },
+            { id: 3, name: "Deep Sea Diver", price: 2499, rating: 4.9, gender: "men", desc: "Water resistant to 300m, luminescent hands.", image: "men2.webp" },
+            { id: 4, name: "Heritage Gold", price: 8990, rating: 5.0, gender: "women", badge: "Popular", badgeType: "popular", desc: "18k gold plated, vintage aesthetic.", image: "women2.webp" },
+            { id: 5, name: "Obsidian Skeleton", price: 28500, rating: 4.9, gender: "men", badge: "Limited", badgeType: "limited", desc: "Exposed automatic movement, titanium case.", image: "men3.webp" },
+            { id: 6, name: "Celestial Moonphase", price: 14999, rating: 4.9, gender: "unisex", desc: "Meteorite dial, aventurine glass moonphase complication.", image: "unisex1.jpg" },
+            { id: 7, name: "Velocity Racing", price: 1850, rating: 4.7, gender: "men", badge: "Special Offer", badgeType: "offer", desc: "Tachymeter bezel, perforated rubber strap.", image: "men4.webp" },
+            { id: 8, name: "Minimalist Rose", price: 699, rating: 4.8, gender: "women", desc: "Ultra-thin profile, rose gold finish.", image: "women3.webp" },
+            { id: 9, name: "Aviation Pro", price: 3499, rating: 4.9, gender: "men", desc: "Pilot's watch with slide rule bezel.", image: "men5.jpg" },
+            { id: 10, name: "Sapphire Tourbillon", price: 145000, rating: 5.0, gender: "unisex", badge: "Exclusive", badgeType: "exclusive", desc: "Hand-wound tourbillon, limited edition.", image: "unisex2.webp" },
+            { id: 11, name: "Aquamaster Chrono", price: 4250, rating: 4.9, gender: "men", badge: "New Arrival", badgeType: "trending", desc: "Ceramic unidirectional bezel, 300m chronometer.", image: "men6.jpg" },
+            { id: 12, name: "Monaco Grand Prix", price: 1299, rating: 4.8, gender: "men", badge: "Special Edition", badgeType: "offer", desc: "Motorsport chronograph, panda sub-dials, calfskin strap.", image: "men7.jpg" },
+            { id: 13, name: "Royal Damascus Steel", price: 45000, rating: 5.0, gender: "men", badge: "Exclusive", badgeType: "exclusive", desc: "Forged Damascus steel case, hand-wound Swiss calibre.", image: "men8.jpg" },
+            { id: 14, name: "Polaris Field GMT", price: 950, rating: 4.8, gender: "men", badge: "Explorer Series", badgeType: "popular", desc: "Tactical dual-time GMT, high-contrast luminescent dial.", image: "men9.webp" },
+            { id: 15, name: "Vanguard Carbon Phantom", price: 85000, rating: 4.9, gender: "men", badge: "Limited", badgeType: "limited", desc: "Monobloc forged carbon case, stealth matte black finish.", image: "men10.jpg" },
+            { id: 16, name: "Serpentine Diamond", price: 3890, rating: 4.9, gender: "women", badge: "Best Seller", badgeType: "popular", desc: "Curved ergonomic silhouette, pavé diamond bezel, mother-of-pearl dial.", image: "women4.jpg" },
+            { id: 17, name: "Aurora Opaline", price: 850, rating: 4.8, gender: "women", badge: "Elegant", badgeType: "offer", desc: "Shimmering opaline dial with delicate Milanese rose gold mesh bracelet.", image: "women5.webp" },
+            { id: 18, name: "Petite Vendôme", price: 1650, rating: 4.9, gender: "women", badge: "Classic", badgeType: "trending", desc: "Art Deco rectangular tank case, guilloché Roman dial.", image: "women6.webp" },
+            { id: 19, name: "Luna Royale", price: 5490, rating: 5.0, gender: "women", badge: "Popular", badgeType: "popular", desc: "Diamond-embellished bezel with day-and-night complication.", image: "women7.webp" },
+            { id: 20, name: "Blossom Skeleton", price: 19500, rating: 4.9, gender: "women", badge: "Limited", badgeType: "limited", desc: "Intricate floral openworked bridges, exhibition caseback.", image: "women8.webp" },
+            { id: 21, name: "Eclipse Perpetual", price: 215000, rating: 5.0, gender: "unisex", badge: "Masterpiece", badgeType: "exclusive", desc: "Perpetual calendar complication, smoked sapphire dial.", image: "unisex3.jpg" },
+            { id: 22, name: "Chrono Titan Minimal", price: 2890, rating: 4.8, gender: "unisex", badge: "Contemporary", badgeType: "trending", desc: "Architectural Bauhaus unibody titanium casing.", image: "unisex4.webp" },
+            { id: 23, name: "Solaris Worldtimer", price: 12500, rating: 4.9, gender: "unisex", badge: "Signature", badgeType: "exclusive", desc: "24-city rotating world-time bezel with engraved relief map.", image: "unisex5.jpg" }
+        ];
+        
+        // --- Setup URL Parameter Logic ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentGenderFilter = urlParams.get('gender'); // Returns 'men', 'women', or null
+
+        // Highlight the correct tab based on the URL
+        if (currentGenderFilter === 'men') {
+            document.getElementById('link-men').classList.add('active');
+            document.getElementById('page-heading').innerText = "Men's Collection";
+        } else if (currentGenderFilter === 'women') {
+            document.getElementById('link-women').classList.add('active');
+            document.getElementById('page-heading').innerText = "Women's Collection";
+        } else {
+            document.getElementById('link-all').classList.add('active');
+        }
+
+        // --- Cart Logic ---
+        function getCart() {
+            return JSON.parse(localStorage.getItem('chronous_cart')) || [];
+        }
+
+        function saveCart(newCart) { 
+            localStorage.setItem('chronous_cart', JSON.stringify(newCart)); 
+            syncCartCount();
+        }
+
+        function syncCartCount() {
+            const currentCart = getCart();
+            const badge = document.getElementById('nav-cart-count');
+            if (badge) {
+                const totalCount = currentCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                badge.innerText = totalCount;
+                badge.classList.add('badge-bounce');
+                setTimeout(() => badge.classList.remove('badge-bounce'), 300);
+            }
+        }
+        
+        function getWishlist() {
+            return JSON.parse(localStorage.getItem('oryx_wishlist')) || [1, 6];
+        }
+
+        function syncWishlistCount() {
+            const currentWishlist = getWishlist();
+            const badge = document.getElementById('nav-wishlist-count');
+            if (badge) {
+                badge.innerText = currentWishlist.length;
+                badge.classList.add('badge-bounce');
+                setTimeout(() => badge.classList.remove('badge-bounce'), 300);
+            }
+        }
+
+        // Toggle item in cart: clicking an unadded item adds it; clicking an added item unclicks/removes it
+        function toggleCart(id, event) { 
+            if (event) event.stopPropagation();
+            let currentCart = getCart();
+            const existingIdx = currentCart.findIndex(item => item.id === id); 
+            if (existingIdx > -1) { 
+                currentCart = currentCart.filter(item => item.id !== id); 
+            } else {
+                const watch = watches.find(w => w.id === id); 
+                if (watch) { 
+                    currentCart.push({ ...watch, quantity: 1 }); 
+                }
+            }
+            saveCart(currentCart); 
+            filterCollection(); // Instantly updates the highlighted cart state
+        }
+
+        function addToCart(id, event) { 
+            toggleCart(id, event);
+        }
+
+        // --- Wishlist Logic ---
+        function toggleWishlist(id, event) {
+            if (event) event.stopPropagation();
+            let currentWishlist = getWishlist();
+            const idx = currentWishlist.indexOf(id);
+            if (idx > -1) {
+                currentWishlist.splice(idx, 1);
+            } else {
+                currentWishlist.push(id);
+            }
+            localStorage.setItem('oryx_wishlist', JSON.stringify(currentWishlist));
+            syncWishlistCount();
+            filterCollection();
+        }
+        
+        function goToProduct(id) { window.location.href = `product.html?id=${id}`; }
+        
+        // --- Smooth Multi-Tier Price Scale (100s, 1000s, 10,000s, Minimal Lakhs) ---
+        // 0 to 100 slider positions mapped smoothly across 100s, 1000s, and Lakhs
+        const PRICE_STEPS = [
+            500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 
+            2500, 3000, 3500, 4000, 4500, 5000, 6000, 7000, 8000, 9000, 10000,
+            12000, 15000, 18000, 20000, 25000, 30000, 35000, 40000, 45000, 50000,
+            60000, 75000, 85000, 100000, 125000, 150000, 175000, 200000, 225000, 250000
+        ];
+        const ABS_MIN_PRICE = PRICE_STEPS[0];
+        const ABS_MAX_PRICE = PRICE_STEPS[PRICE_STEPS.length - 1];
+
+        let currentMinPrice = ABS_MIN_PRICE;
+        let currentMaxPrice = ABS_MAX_PRICE;
+        let currentOfferFilter = null;
+
+        function indexToPrice(idx) {
+            const stepIndex = Math.round((idx / 100) * (PRICE_STEPS.length - 1));
+            return PRICE_STEPS[Math.max(0, Math.min(PRICE_STEPS.length - 1, stepIndex))];
+        }
+
+        function priceToIndex(price) {
+            let closestIdx = 0;
+            let minDiff = Infinity;
+            for (let i = 0; i < PRICE_STEPS.length; i++) {
+                const diff = Math.abs(PRICE_STEPS[i] - price);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestIdx = i;
+                }
+            }
+            return Math.round((closestIdx / (PRICE_STEPS.length - 1)) * 100);
+        }
+
+        function updateSliderHighlight() {
+            const highlight = document.getElementById('slider-track-highlight');
+            if (!highlight) return;
+            const minSlider = document.getElementById('price-slider-min');
+            const maxSlider = document.getElementById('price-slider-max');
+            const leftPercent = minSlider ? parseFloat(minSlider.value) : 0;
+            const rightPercent = maxSlider ? parseFloat(maxSlider.value) : 100;
+            highlight.style.left = `${leftPercent}%`;
+            highlight.style.width = `${rightPercent - leftPercent}%`;
+        }
+
+        function formatRupee(val) {
+            if (val >= 100000) {
+                const lakhs = (val / 100000).toFixed(val % 100000 === 0 ? 0 : 2);
+                return `₹${lakhs} Lakh${lakhs > 1 ? 's' : ''}`;
+            }
+            return `₹${val.toLocaleString("en-IN")}`;
+        }
+
+        function updatePriceDisplay() {
+            const display = document.getElementById('price-slider-display');
+            if (!display) return;
+            const minStr = `₹${currentMinPrice.toLocaleString("en-IN")}`;
+            const maxStr = formatRupee(currentMaxPrice);
+            if (currentMinPrice === ABS_MIN_PRICE && currentMaxPrice === ABS_MAX_PRICE) {
+                display.innerText = `₹500 — ₹2,50,000 (All)`;
+            } else if (currentMaxPrice === ABS_MAX_PRICE) {
+                display.innerText = `${minStr} and above`;
+            } else if (currentMinPrice === ABS_MIN_PRICE) {
+                display.innerText = `Up to ${maxStr}`;
+            } else {
+                display.innerText = `${minStr} — ${maxStr}`;
+            }
+        }
+
+        function onMinSliderIndex(val) {
+            let idx = parseInt(val);
+            const maxSlider = document.getElementById('price-slider-max');
+            const maxIdx = maxSlider ? parseInt(maxSlider.value) : 100;
+            if (idx > maxIdx - 3) {
+                idx = Math.max(0, maxIdx - 3);
+                document.getElementById('price-slider-min').value = idx;
+            }
+            currentMinPrice = indexToPrice(idx);
+            updateSliderHighlight();
+            updatePriceDisplay();
+            filterCollection();
+        }
+
+        function onMaxSliderIndex(val) {
+            let idx = parseInt(val);
+            const minSlider = document.getElementById('price-slider-min');
+            const minIdx = minSlider ? parseInt(minSlider.value) : 0;
+            if (idx < minIdx + 3) {
+                idx = Math.min(100, minIdx + 3);
+                document.getElementById('price-slider-max').value = idx;
+            }
+            currentMaxPrice = indexToPrice(idx);
+            updateSliderHighlight();
+            updatePriceDisplay();
+            filterCollection();
+        }
+
+        function setPriceRangePreset(minVal, maxVal) {
+            currentMinPrice = minVal;
+            currentMaxPrice = maxVal;
+            const minSlider = document.getElementById('price-slider-min');
+            const maxSlider = document.getElementById('price-slider-max');
+            if (minSlider) minSlider.value = priceToIndex(minVal);
+            if (maxSlider) maxSlider.value = priceToIndex(maxVal);
+            updateSliderHighlight();
+            updatePriceDisplay();
+            filterCollection();
+        }
+
+        // --- Offers & Badges Filter Logic ---
+        function setOfferFilter(badgeType, btnElement) {
+            // Toggle off if re-clicking the same active badge (except "All")
+            if (currentOfferFilter === badgeType && badgeType !== null) {
+                currentOfferFilter = null;
+            } else {
+                currentOfferFilter = badgeType;
+            }
+
+            // Sync active visual state on pills
+            const buttons = document.querySelectorAll('.offer-pill-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            if (currentOfferFilter === null) {
+                const allBtn = document.querySelector('.offer-pill-btn.pill-all');
+                if (allBtn) allBtn.classList.add('active');
+            } else if (btnElement) {
+                btnElement.classList.add('active');
+            }
+
+            filterCollection();
+        }
+
+        // --- Filtering Logic ---
+        function filterCollection() {
+            const navSearchInput = document.querySelector('.search-bar-input');
+            const searchTerm = (navSearchInput ? navSearchInput.value : '').toLowerCase().trim();
+            const container = document.getElementById('collection-grid');
+            
+            const filteredWatches = watches.filter(w => {
+                const matchesSearch = !searchTerm || w.name.toLowerCase().includes(searchTerm) || w.desc.toLowerCase().includes(searchTerm);
+                
+                // Price Range: matches from all (0) up to the specified last price
+                const matchesPrice = (w.price >= currentMinPrice && w.price <= currentMaxPrice);
+                
+                let matchesGender = true; 
+                if (currentGenderFilter) {
+                    matchesGender = (w.gender === currentGenderFilter || w.gender === 'unisex');
+                }
+
+                // Offers & Badges Filter
+                let matchesOffer = true;
+                if (currentOfferFilter) {
+                    matchesOffer = (w.badgeType === currentOfferFilter) || 
+                                   (currentOfferFilter === 'offer' && (w.badgeType === 'offer' || (w.badge && w.badge.toLowerCase().includes('offer'))));
+                }
+
+                return matchesSearch && matchesPrice && matchesGender && matchesOffer;
+            });
+
+            const matchCountEl = document.getElementById('price-match-count');
+            if (matchCountEl) {
+                matchCountEl.innerText = `${filteredWatches.length} Available`;
+            }
+            
+            if (filteredWatches.length === 0) { 
+                container.innerHTML = `<div class="empty-cart-msg">No timepieces match your criteria. Try adjusting the price range or offer filters.</div>`; 
+                return; 
+            }
+            
+            const currentCart = getCart();
+            const currentWishlist = getWishlist();
+            container.innerHTML = filteredWatches.map(watch => {
+                const isWishlisted = currentWishlist.includes(watch.id);
+                const isInCart = currentCart.some(item => item.id === watch.id);
+                return `
+                <div class="watch-card">
+                    <!-- Wishlist Heart Overlay -->
+                    <button class="card-heart-btn ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist(${watch.id}, event)" title="${isWishlisted ? 'Remove from Wishlist' : 'Save to Vault'}" aria-label="Save to Vault">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Full-Bleed Image Container -->
+                    <div class="watch-image-container" onclick="goToProduct(${watch.id})">
+                        <img src="${watch.image}" alt="${watch.name}" class="watch-image">
+                    </div>
+
+                    <!-- Bottom Row: Tag Overline + Title + Price & Floating Cart Button -->
+                    <div class="card-bottom-row">
+                        <div class="card-info-group" onclick="goToProduct(${watch.id})">
+                            ${watch.badge ? `<span class="card-editorial-tag tag-${watch.badgeType || 'trending'}">${watch.badge}</span>` : `<span class="card-editorial-tag-spacer"></span>`}
+                            <h3 class="card-title">${watch.name}</h3>
+                            <p class="card-price">₹${watch.price.toLocaleString("en-IN")}</p>
+                        </div>
+                        <button class="card-cart-btn ${isInCart ? 'in-cart' : ''}" onclick="toggleCart(${watch.id}, event)" title="${isInCart ? 'Remove from Cart' : 'Add to Cart'}" aria-label="${isInCart ? 'Remove from Cart' : 'Add to Cart'}">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            syncCartCount();
+            syncWishlistCount();
+            
+            const incomingSearch = urlParams.get('search');
+            const navSearchInput = document.querySelector('.search-bar-input');
+            if (incomingSearch && navSearchInput) {
+                navSearchInput.value = incomingSearch;
+            }
+
+            updateSliderHighlight();
+            filterCollection();
+            
+            if (navSearchInput) {
+                navSearchInput.addEventListener('input', filterCollection);
+            }
+            
+            // Mobile Menu Drawer Toggle
+            const toggle = document.getElementById('mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (toggle && navLinks) {
+                toggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+    
+
+        // Header Sync handled by top-level syncCartCount & syncWishlistCount
+
+        // --- User Badge Navigation & Auth Management ---
+        function initUserAuthNav() {
+            const isLoggedIn = sessionStorage.getItem('oryx_logged_in') === 'true' || localStorage.getItem('oryx_logged_in') === 'true';
+            if (!isLoggedIn) {
+                window.location.replace('login.html');
+                return;
+            }
+
+            const userName = sessionStorage.getItem('oryx_user_name') || localStorage.getItem('oryx_user_name') || 'Guest';
+            const userEmail = sessionStorage.getItem('oryx_user_email') || localStorage.getItem('oryx_user_email') || 'guest@oryx.com';
+
+            const navNameEl = document.getElementById('nav-user-name');
+            const dropNameEl = document.getElementById('dropdown-user-name');
+            const dropEmailEl = document.getElementById('dropdown-user-email');
+            if (navNameEl) navNameEl.textContent = userName;
+            if (dropNameEl) dropNameEl.textContent = userName;
+            if (dropEmailEl) dropEmailEl.textContent = userEmail;
+
+            const wrap = document.getElementById('user-badge-wrap');
+            const btn = document.getElementById('user-badge-pill');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (btn && wrap) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    wrap.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!wrap.contains(e.target)) {
+                        wrap.classList.remove('active');
+                    }
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.removeItem('oryx_logged_in');
+                    sessionStorage.removeItem('oryx_user_name');
+                    sessionStorage.removeItem('oryx_user_email');
+                    localStorage.removeItem('oryx_logged_in');
+                    localStorage.removeItem('oryx_user_name');
+                    localStorage.removeItem('oryx_user_email');
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserAuthNav();
+            syncCartCount();
+            syncWishlistCount();
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navMenu = document.querySelector('.nav-links');
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    
+</script>
+</body>
+</html>
